@@ -14,7 +14,7 @@ import {
   Avatar,
 } from "@heroui/react";
 import { jwtDecode, JwtPayload } from "jwt-decode";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import toast from "react-hot-toast";
 import { create } from "src/app/actions/izin-layar";
@@ -26,7 +26,14 @@ interface Payload extends JwtPayload {
 
 export default function IzinLayar({ access_token, clientId }: any) {
   const params = useSearchParams();
+  const pathname = usePathname();
   const router = useRouter();
+
+  const parameter = `${pathname}?client_name=${params.get(
+    "client_name"
+  )}&client_id=${params.get("client_id")}&redirect_uri=${params.get(
+    "redirect_uri"
+  )}&response_type=${params.get("response_type")}`;
 
   // access_token
   const access_token_decode = jwtDecode<Payload>(access_token);
@@ -52,7 +59,7 @@ export default function IzinLayar({ access_token, clientId }: any) {
     // RUN SOME VALIDATION HERE
 
     startTransition(() => {
-      return logout(nip, clientId, access_token);
+      return logout(nip, clientId, access_token, parameter);
     });
   };
   return (

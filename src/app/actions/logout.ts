@@ -7,7 +7,8 @@ import RevokeTokenClient from "@/data/revoke_token_client";
 export async function logout(
   userId: string,
   clientId: string,
-  access_token: string
+  access_token: string,
+  parameter: string
 ) {
   const cookieStore = await cookies();
 
@@ -15,9 +16,8 @@ export async function logout(
     cookieStore.delete("sso_token");
     cookieStore.delete("sso_code");
   }
-
   const revoke = await RevokeTokenClient(userId, clientId, access_token);
   if (revoke) {
-    permanentRedirect("/");
+    permanentRedirect(parameter);
   }
 }
