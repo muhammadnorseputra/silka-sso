@@ -250,7 +250,7 @@ export default function Login({ client }: any) {
             <Link
               color="primary"
               prefetch={false}
-              href="/auth/lupa-password"
+              href="/lupa-password"
               className="text-blue-500 hover:text-blue-800">
               Lupa Password ?
             </Link>
@@ -265,7 +265,7 @@ export default function Login({ client }: any) {
         </CardBody>
         <CardFooter className="flex flex-col md:flex-row items-center md:items-end justify-between dark:bg-transparent">
           <span className="text-gray-300 dark:text-gray-600 text-sm text-ellipsis">
-            &copy; Dikembangakan oleh Bidang PPIK.
+            &copy; Dikembangakan oleh Bidang PPIK BKPSDM.
           </span>
         </CardFooter>
       </Card>

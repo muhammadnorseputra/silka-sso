@@ -4,9 +4,15 @@ import {
   ArrowRightEndOnRectangleIcon,
   CheckCircleIcon,
   FingerPrintIcon,
-  XCircleIcon,
 } from "@heroicons/react/24/solid";
-import { Card, CardHeader, CardBody, CardFooter, Button } from "@heroui/react";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Button,
+  Avatar,
+} from "@heroui/react";
 import { jwtDecode, JwtPayload } from "jwt-decode";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useTransition } from "react";
@@ -24,7 +30,7 @@ export default function IzinLayar({ access_token, clientId }: any) {
 
   // access_token
   const access_token_decode = jwtDecode<Payload>(access_token);
-  const { nip } = access_token_decode.data;
+  const { nip, nama_lengkap, picture } = access_token_decode.data;
 
   const [isPending, startTransition] = useTransition();
   useEffect(() => {
@@ -69,6 +75,17 @@ export default function IzinLayar({ access_token, clientId }: any) {
               </span>{" "}
               untuk menggunakan akun silka anda.
             </p>
+            <div className="flex justify-start items-center gap-4 mb-2 mt-4 py-2 px-4 border rounded-full w-full">
+              <Avatar
+                isBordered
+                as="button"
+                name={nama_lengkap}
+                size="md"
+                src={picture}
+                className="w-12"
+              />
+              {nama_lengkap} {nip}
+            </div>
             <ul className="space-y-2 mt-4">
               <li className="flex items-center space-x-2">
                 <CheckCircleIcon className="text-green-600 size-5" />
@@ -116,7 +133,6 @@ export default function IzinLayar({ access_token, clientId }: any) {
             size="lg"
             className="font-bold mt-6">
             Batal
-            <XCircleIcon className="size-6" />
           </Button>
           <div className="flex items-center my-6">
             <div className="flex-grow border-t border-gray-300"></div>
@@ -137,7 +153,7 @@ export default function IzinLayar({ access_token, clientId }: any) {
         </CardBody>
         <CardFooter className="flex flex-col md:flex-row items-center md:items-end justify-between dark:bg-transparent">
           <span className="text-gray-300 text-sm text-ellipsis">
-            &copy; Dikembangakan oleh Bidang PPIK.
+            &copy; Dikembangakan oleh Bidang PPIK BKPSDM.
           </span>
         </CardFooter>
       </Card>

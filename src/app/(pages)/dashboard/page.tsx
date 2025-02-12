@@ -1,4 +1,6 @@
 import { DashboardContent } from "@/components/dashboard-content";
+import ListClients from "src/app/data/list-client";
 export default async function Page() {
-  return <DashboardContent />;
+  const clients = await ListClients();
+  return <DashboardContent clients={clients} />;
 }
