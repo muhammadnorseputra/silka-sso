@@ -31,8 +31,8 @@ export default function IzinLayar({ access_token, clientId }: any) {
 
   const parameter = `${pathname}?client_name=${params.get(
     "client_name"
-  )}&client_id=${params.get("client_id")}&redirect_uri=${params.get(
-    "redirect_uri"
+  )}&client_id=${params.get("client_id")}&redirect_uri=${encodeURIComponent(
+    params.get("redirect_uri") as string
   )}&response_type=${params.get("response_type")}`;
 
   // access_token
