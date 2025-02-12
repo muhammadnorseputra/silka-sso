@@ -9,19 +9,31 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
+    "@heroui/react": "^2.6.14",
+    "@tanstack/react-query": "^5.66.0",
+    "crypto-js": "^4.2.0",
+    "framer-motion": "^12.0.6",
+    "heroui-cli": "^1.0.0",
+    "jwt-decode": "^4.0.0",
+    "next": "15.1.6",
+    "next-themes": "^0.4.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.1.6"
+    "react-hook-form": "^7.54.2",
+    "react-hot-toast": "^2.5.1"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
+    "@types/crypto-js": "^4.2.2",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
+    "cookies-next": "^5.1.0",
     "eslint": "^9",
     "eslint-config-next": "15.1.6",
-    "@eslint/eslintrc": "^3"
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
   }
 }
