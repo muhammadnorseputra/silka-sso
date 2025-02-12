@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import getSession from "./app/hooks/session_server";
+import getSession from "./hooks/session_server";
 
 export async function middleware(req: NextRequest) {
   // Retrieve the token from the request

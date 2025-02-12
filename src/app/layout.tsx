@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import "./globals.css";
-import { Providers } from "./services/providers";
-import { ReactQueryProvider } from "./services/FetchQueryProvider";
+import "@/app/globals.css";
+import { ReactQueryProvider } from "@/services/FetchQueryProvider";
 import { Toaster } from "react-hot-toast";
 import { Roboto } from "next/font/google";
+import Providers from "@/services/providers";
 
 export const metadata: Metadata = {
   title: "SSO - SILKa Online",

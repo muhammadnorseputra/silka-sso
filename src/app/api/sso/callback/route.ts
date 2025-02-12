@@ -1,12 +1,20 @@
-"use server";
-
+import AccessToken from "@/data/access_token";
 import { AES } from "crypto-js";
 import { cookies } from "next/headers";
-import { permanentRedirect } from "next/navigation";
-import AccessToken from "src/app/data/access_token";
 
-export async function create(code: string | undefined) {
+export async function GET(req: any) {
+  const { host, protocol, searchParams } = new URL(req.url);
+  const code = searchParams.get("code");
   const cookieStore = await cookies();
+
+  const fullHost = `${protocol}//${host}`; // Contoh: http://localhost:3000
+
+  if (!code) {
+    return Response.json(
+      { status: false, message: "Kode tidak ditemukan" },
+      { status: 400 }
+    );
+  }
 
   const userinfo = await AccessToken(code as string);
   if (userinfo.response.status) {
@@ -23,7 +31,8 @@ export async function create(code: string | undefined) {
       maxAge: 3600,
       secure: process.env.NODE_ENV === "production",
     });
-    // return permanentRedirect("/dashboard");
+    return Response.redirect(`${fullHost}/dashboard`, 302);
   }
-  return permanentRedirect("/dashboard");
+
+  return Response.json(userinfo);
 }

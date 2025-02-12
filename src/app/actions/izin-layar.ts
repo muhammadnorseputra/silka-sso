@@ -1,7 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
-import CodeWithAccesToken from "../data/code_with_access_token";
+import CodeWithAccesToken from "@/data/code_with_access_token";
 import { AES, enc } from "crypto-js";
 import { redirect } from "next/navigation";
 

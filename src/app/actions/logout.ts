@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 import { permanentRedirect } from "next/navigation";
-import RevokeTokenClient from "../data/revoke_token_client";
+import RevokeTokenClient from "@/data/revoke_token_client";
 
 export async function logout(
   userId: string,

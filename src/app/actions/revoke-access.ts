@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 import { permanentRedirect } from "next/navigation";
-import RevokeToken from "../data/revoke_token";
+import RevokeToken from "@/data/revoke_token";
 import { AES, enc } from "crypto-js";
 import { jwtDecode, JwtPayload } from "jwt-decode";
 

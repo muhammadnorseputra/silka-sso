@@ -1,5 +1,5 @@
 "use server";
-import verifyClient from "../../../data/verify-client";
+import verifyClient from "@/data/verify-client";
 import Login from "./login";
 import { unauthorized } from "next/navigation";
 import { cookies } from "next/headers";

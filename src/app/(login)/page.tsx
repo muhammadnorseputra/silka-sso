@@ -1,5 +1,5 @@
 import { permanentRedirect } from "next/navigation";
-import getSession from "../hooks/session_server";
+import getSession from "@/hooks/session_server";
 import Login from "../oauth/sso/authorize/login";
 import { AES, enc } from "crypto-js";
 import { cookies } from "next/headers";

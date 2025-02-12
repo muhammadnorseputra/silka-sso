@@ -27,7 +27,7 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { permanentRedirect } from "next/navigation";
-import AuthVerify from "../../../data/auth-actions";
+import AuthVerify from "@/data/auth-actions";
 
 export default function Login({ client }: any) {
   const [isVisible, setIsVisible] = useState(false);

@@ -1,6 +1,6 @@
 import { DashboardHeader } from "@/components/dashboard-header";
 import { DashboardSidebar } from "@/components/dashboard-sidebar";
-import getSession from "../hooks/session_server";
+import getSession from "@/hooks/session_server";
 
 export default async function Layout({
   children,
