@@ -68,7 +68,7 @@ export default function IzinLayar({ access_token, clientId }: any) {
         isFooterBlurred
         fullWidth={false}
         shadow="sm"
-        className="px-4 md:px-8 py-3 md:py-6 md:max-w-lg lg:max-w-md border border-gray-100 dark:border-slate-900 bg-white dark:bg-slate-900/70 backdrop-blur-xl">
+        className="px-4 md:px-8 py-3 md:py-6 md:max-w-lg lg:max-w-md border border-gray-100 dark:border-slate-900 bg-white dark:bg-slate-900/80 backdrop-blur-xl">
         <CardHeader>
           <div className="flex flex-col">
             <h3 className="text-3xl fw-bold flex items-center justify-start gap-x-3">

@@ -98,7 +98,7 @@ export default function Login({ client }: any) {
       <Card
         fullWidth={false}
         shadow="sm"
-        className="px-4 md:px-8 py-3 md:py-6 md:max-w-lg lg:max-w-md border border-gray-100 dark:border-gray-900 bg-white dark:bg-gray-900/70 backdrop-blur-xl">
+        className="px-4 mx-auto z-10 md:px-8 py-3 md:py-6 md:max-w-lg lg:max-w-md border border-gray-100 dark:border-gray-900 bg-white dark:bg-black/90 backdrop-blur-xl">
         <CardHeader>
           <div className="flex flex-col">
             <h3 className="text-3xl fw-bold flex items-center justify-start gap-x-3">
@@ -264,7 +264,7 @@ export default function Login({ client }: any) {
           </form>
         </CardBody>
         <CardFooter className="flex flex-col md:flex-row items-center md:items-end justify-between dark:bg-transparent">
-          <span className="text-gray-300 dark:text-gray-600 text-sm text-ellipsis">
+          <span className="text-gray-400 dark:text-gray-600 text-sm text-ellipsis">
             &copy; Dikembangakan oleh Bidang PPIK BKPSDM.
           </span>
         </CardFooter>
