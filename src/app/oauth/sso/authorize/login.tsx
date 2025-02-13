@@ -29,7 +29,7 @@ import toast from "react-hot-toast";
 import { permanentRedirect } from "next/navigation";
 import AuthVerify from "@/data/auth-actions";
 
-export default function Login({ client }: any) {
+export default function Login({ client, state, scope }: any) {
   const [isVisible, setIsVisible] = useState(false);
   const [loadingBtn, setLoadingBtn] = useState(false);
 
@@ -48,6 +48,7 @@ export default function Login({ client }: any) {
 
     const result = await AuthVerify(
       Object.assign({}, FormFileds, {
+        scope,
         client_id:
           client?.data.client_id ?? "d0929547-5810-4d60-a653-2d39927a1755",
         client_secret:
@@ -87,7 +88,7 @@ export default function Login({ client }: any) {
       // toast.remove("AUTH_TOAST_ID");
       // setLoadingBtn(false); comment => agar selalu loading hingga halaman dialihkan
       permanentRedirect(
-        `${result?.response.data.redirect_uri}?code=${result?.response.data.code}`
+        `${result?.response.data.redirect_uri}?state=${state}&code=${result?.response.data.code}`
       );
       // }, 3000);
     }
@@ -97,8 +98,9 @@ export default function Login({ client }: any) {
     <>
       <Card
         fullWidth={false}
-        shadow="sm"
-        className="px-4 mx-auto z-10 md:px-8 py-3 md:py-6 md:max-w-lg lg:max-w-md border border-gray-100 dark:border-gray-900 bg-white dark:bg-black/90 backdrop-blur-xl">
+        shadow="lg"
+        radius="lg"
+        className="px-4 mx-auto z-10 md:px-8 py-3 md:py-6 md:max-w-lg lg:max-w-md bg-white dark:bg-gradient-to-b dark:from-black dark:to-blue-950 backdrop-blur-xl">
         <CardHeader>
           <div className="flex flex-col">
             <h3 className="text-3xl fw-bold flex items-center justify-start gap-x-3">
@@ -265,7 +267,7 @@ export default function Login({ client }: any) {
         </CardBody>
         <CardFooter className="flex flex-col md:flex-row items-center md:items-end justify-between dark:bg-transparent">
           <span className="text-gray-400 dark:text-gray-600 text-sm text-ellipsis">
-            &copy; Dikembangakan oleh Bidang PPIK BKPSDM.
+            &copy; Dikembangakan oleh Bidang PPIK BKPSDM Balangan.
           </span>
         </CardFooter>
       </Card>

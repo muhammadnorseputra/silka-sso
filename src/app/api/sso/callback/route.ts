@@ -11,7 +11,7 @@ export async function GET(req: any) {
 
   if (!code) {
     return Response.json(
-      { status: false, message: "Kode tidak ditemukan" },
+      { status: false, message: "Code not provide" },
       { status: 400 }
     );
   }

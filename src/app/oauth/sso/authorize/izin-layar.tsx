@@ -24,16 +24,21 @@ interface Payload extends JwtPayload {
   data: any;
 }
 
-export default function IzinLayar({ access_token, clientId }: any) {
+export default function IzinLayar({ access_token, state, clientId }: any) {
   const params = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
 
+  // cek parameter scope apakah ada atau tidak
+  const scope = params.get("scope") ? `&scope=${params.get("scope")}` : "";
+
   const parameter = `${pathname}?client_name=${params.get(
     "client_name"
-  )}&client_id=${params.get("client_id")}&redirect_uri=${encodeURIComponent(
+  )}${scope}&client_id=${params.get(
+    "client_id"
+  )}&redirect_uri=${encodeURIComponent(
     params.get("redirect_uri") as string
-  )}&response_type=${params.get("response_type")}`;
+  )}&response_type=${params.get("response_type")}&state=${state}`;
 
   // access_token
   const access_token_decode = jwtDecode<Payload>(access_token);
@@ -48,7 +53,11 @@ export default function IzinLayar({ access_token, clientId }: any) {
   const handleIzin = async () => {
     // RUN SOME VALIDATION HERE
     startTransition(async () => {
-      const createIzin = await create(clientId);
+      const createIzin = await create(
+        clientId,
+        state,
+        params.get("scope") as string
+      );
       if (createIzin.status === false) {
         toast.error(createIzin.message);
       }
@@ -65,14 +74,14 @@ export default function IzinLayar({ access_token, clientId }: any) {
   return (
     <>
       <Card
-        isFooterBlurred
+        isFooterBlurred={false}
         fullWidth={false}
-        shadow="sm"
-        className="px-4 md:px-8 py-3 md:py-6 md:max-w-lg lg:max-w-md border border-gray-100 dark:border-slate-900 bg-white dark:bg-slate-900/80 backdrop-blur-xl">
+        shadow="lg"
+        className="px-4 mx-auto z-10 md:px-8 py-3 md:py-6 md:max-w-lg lg:max-w-md bg-white dark:bg-gradient-to-b dark:from-black dark:to-blue-950 backdrop-blur-xl">
         <CardHeader>
           <div className="flex flex-col">
             <h3 className="text-3xl fw-bold flex items-center justify-start gap-x-3">
-              Access Permission{" "}
+              Authorized Access{" "}
               <FingerPrintIcon className="size-12 text-gray-300" />
             </h3>
             <p className="text-lg text-default-400 mt-4 dark:text-white/70">
@@ -160,7 +169,7 @@ export default function IzinLayar({ access_token, clientId }: any) {
         </CardBody>
         <CardFooter className="flex flex-col md:flex-row items-center md:items-end justify-between dark:bg-transparent">
           <span className="text-gray-300 text-sm text-ellipsis">
-            &copy; Dikembangakan oleh Bidang PPIK BKPSDM.
+            &copy; Dikembangakan oleh Bidang PPIK BKPSDM Balangan.
           </span>
         </CardFooter>
       </Card>

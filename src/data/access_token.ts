@@ -1,6 +1,6 @@
 "use server";
 
-export default async function AccessToken(code: string) {
+export default async function AccessToken(code: string, scope: string) {
   try {
     const base_url = `${process.env.NEXT_PUBLIC_SILKA_BASE_URL}/${process.env.NEXT_PUBLIC_VERSION}/oauth/sso/access_token`;
     const response = await fetch(base_url, {
@@ -12,6 +12,7 @@ export default async function AccessToken(code: string) {
       },
       body: JSON.stringify({
         code,
+        scope,
       }),
     });
     const data = await response.json();

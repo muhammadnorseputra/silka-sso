@@ -1,11 +1,11 @@
 "use server";
 import verifyClient from "@/data/verify-client";
 import Login from "./login";
-import { unauthorized } from "next/navigation";
 import { cookies } from "next/headers";
 
 import IzinLayar from "./izin-layar";
 import { AES, enc } from "crypto-js";
+import { unauthorized } from "next/navigation";
 
 export default async function Page({
   searchParams,
@@ -19,6 +19,7 @@ export default async function Page({
   const responseType = query?.response_type;
   const redirectUri = query?.redirect_uri;
   const state = query?.state;
+  const scope = query?.scope;
 
   const response = await verifyClient(
     clientId as string,
@@ -51,12 +52,6 @@ export default async function Page({
 
   if (!response.status) {
     unauthorized();
-    // retrun json from reseponse
-    // return (
-    //   <div className="text-center text-red-400 bg-white p-10 rounded-xl">
-    //     {response.message}
-    //   </div>
-    // );
   }
 
   // Izin Layar
@@ -68,8 +63,15 @@ export default async function Page({
       sso_token?.value,
       process.env.KEY_PASSPHRASE as string
     ).toString(enc.Utf8);
-    return <IzinLayar access_token={access_token} clientId={clientId} />;
+    return (
+      <IzinLayar
+        access_token={access_token}
+        state={state}
+        scope={scope}
+        clientId={clientId}
+      />
+    );
   }
 
-  return <Login client={response} />;
+  return <Login client={response} state={state} scope={scope} />;
 }
