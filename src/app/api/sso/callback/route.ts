@@ -10,14 +10,14 @@ export async function GET(req: any) {
 
   const fullHost = `${protocol}//${host}`; // Contoh: http://localhost:3000
 
-  if (!scope) {
+  if (!code) {
     return Response.json(
       { status: false, message: "Code not provide" },
       { status: 400 }
     );
   }
 
-  const userinfo = await AccessToken(code as string, scope);
+  const userinfo = await AccessToken(code as string, scope ?? "");
   if (userinfo.response.status) {
     const tokenEnkripsi = AES.encrypt(
       userinfo.response.access_token,
