@@ -5,18 +5,19 @@ import { cookies } from "next/headers";
 export async function GET(req: any) {
   const { host, protocol, searchParams } = new URL(req.url);
   const code = searchParams.get("code");
+  const scope = searchParams.get("scope");
   const cookieStore = await cookies();
 
   const fullHost = `${protocol}//${host}`; // Contoh: http://localhost:3000
 
-  if (!code) {
+  if (!scope) {
     return Response.json(
       { status: false, message: "Code not provide" },
       { status: 400 }
     );
   }
 
-  const userinfo = await AccessToken(code as string);
+  const userinfo = await AccessToken(code as string, scope);
   if (userinfo.response.status) {
     const tokenEnkripsi = AES.encrypt(
       userinfo.response.access_token,
