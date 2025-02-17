@@ -7,7 +7,9 @@ import { cookies } from "next/headers";
 export default async function Page({
   searchParams,
 }: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  readonly searchParams: Promise<{
+    readonly [key: string]: string | string[] | undefined;
+  }>;
 }) {
   const session = await getSession();
   const code = (await cookies()).get("sso_code");

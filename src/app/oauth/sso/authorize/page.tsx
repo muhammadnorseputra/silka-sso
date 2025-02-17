@@ -10,7 +10,7 @@ import { unauthorized } from "next/navigation";
 export default async function Page({
   searchParams,
 }: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  readonly searchParams: Promise<{ readonly [key: string]: string | string[] | undefined }>;
 }) {
   const query = await searchParams;
 
@@ -29,6 +29,11 @@ export default async function Page({
     state as string
   );
 
+  /**
+   *
+   * ? Jika sudah login dan memiliki access token auto redirect ke client
+   *
+   */
   // const code = (await cookies()).get("sso_code");
   // const access_token = (await cookies()).get("sso_token");
   // if (access_token?.name && code?.name) {

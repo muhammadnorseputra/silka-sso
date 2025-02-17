@@ -95,182 +95,177 @@ export default function Login({ client, state, scope }: any) {
   };
 
   return (
-    <>
-      <Card
-        fullWidth={false}
-        shadow="lg"
-        radius="lg"
-        className="px-4 mx-auto z-10 md:px-8 py-3 md:py-6 md:max-w-lg lg:max-w-md bg-white dark:bg-gradient-to-b dark:from-black dark:to-blue-950 backdrop-blur-xl">
-        <CardHeader>
-          <div className="flex flex-col">
-            <h3 className="text-3xl fw-bold flex items-center justify-start gap-x-3">
-              Single Sign-On{" "}
-              <FingerPrintIcon className="size-12 text-gray-300" />
-            </h3>
-            <p className="font-bold">Sistem Informasi Layanan Kepegawaian</p>
-            <p className="text-sm text-default-400 mt-4 dark:text-white/70">
-              Silahkan masukan username dan password kepegawaian anda yang
-              terdaftar pada portal SILka.
-            </p>
-          </div>
-        </CardHeader>
-        <CardBody>
-          <form
-            onSubmit={handleSubmit(isSubmit)}
-            method="POST"
-            autoComplete="off"
-            noValidate
-            className="flex flex-col gap-y-4">
-            <Select
-              isRequired
-              isDisabled={isLoading || isSubmitting || loadingBtn}
-              selectorIcon={<ChevronUpDownIcon className="size-8" />}
-              label="Login sebagai ?"
-              placeholder="Pilih type account"
-              size="lg"
-              radius="sm"
-              variant="bordered"
-              labelPlacement="inside"
-              isInvalid={errors?.type ? true : false}
-              errorMessage={errors?.type?.message && `${errors.type.message}`}
-              {...register("type", {
-                required: "Pilih type account",
-              })}>
-              <SelectItem key="PERSONAL" value="PERSONAL" textValue="PERSONAL">
-                <div className="flex flex-row items-center justify-start gap-x-2 p-4">
-                  <UserCircleIcon className="size-6" />
-                  <span className="font-bold">Personal PNS</span>
-                </div>
-              </SelectItem>
-              <SelectItem key="UMPEG" value="UMPEG" textValue="UMPEG">
-                <div className="flex flex-row items-center justify-start gap-x-2 p-4">
-                  <UserGroupIcon className="size-6" />
-                  <span className="font-bold">Pengelola Kepegawaian</span>
-                </div>
-              </SelectItem>
-            </Select>
-            <Input
-              isRequired
-              isDisabled={isLoading || isSubmitting || loadingBtn}
-              variant="underlined"
-              type="text"
-              radius="sm"
-              label="Username"
-              labelPlacement="outside"
-              placeholder="Enter your username"
-              size="lg"
-              isInvalid={errors?.username ? true : false}
-              errorMessage={
-                errors?.username?.message && `${errors.username.message}`
-              }
-              {...register("username", {
-                required: "Username wajib diisi",
-                minLength: {
-                  value: 3,
-                  message: "Masukan minimal 3 karakter",
-                },
-              })}
-              startContent={
-                <UserIcon className="size-5 text-default-400 pointer-events-none flex-shrink-0" />
-              }
-            />
-            <Input
-              isRequired
-              isDisabled={isLoading || isSubmitting || loadingBtn}
-              label="Password"
-              variant="underlined"
-              size="lg"
-              // color={errors?.password ? "danger" : "default"}
-              isInvalid={errors?.password ? true : false}
-              radius="sm"
-              labelPlacement="outside"
-              placeholder="Enter your password"
-              {...register("password", {
-                required: "Password wajib diisi",
-              })}
-              errorMessage={
-                errors?.password?.message && `${errors.password.message}`
-              }
-              startContent={
-                <KeyIcon className="size-5 text-default-400 pointer-events-none flex-shrink-0" />
-              }
-              endContent={
-                <Tooltip
-                  content={
-                    !isVisible ? "Lihat Password" : "Sembuyikan Password"
-                  }>
-                  <button
-                    className="focus:outline-none"
-                    type="button"
-                    tabIndex={-1}
-                    onClick={toggleVisibility}
-                    aria-label="toggle password visibility">
-                    {!isVisible ? (
-                      <EyeSlashIcon className="size-6 text-gray-400 dark:text-gray-200" />
-                    ) : (
-                      <EyeIcon className="size-6 text-gray-800 dark:text-gray-400" />
-                    )}
-                  </button>
-                </Tooltip>
-              }
-              type={isVisible ? "text" : "password"}
-            />
-            <Button
-              isDisabled={isLoading || isSubmitting || loadingBtn || !isValid}
-              isLoading={isLoading || isSubmitting || loadingBtn}
-              type="submit"
-              fullWidth
-              color="primary"
-              size="lg"
-              variant="solid"
-              spinner={
-                <svg
-                  className="animate-spin h-5 w-5 text-current"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  />
-                  <path
-                    className="opacity-75"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    fill="currentColor"
-                  />
-                </svg>
-              }
-              radius="sm"
-              className="mt-3">
-              Login Sekarang
-            </Button>
+    <Card
+      fullWidth={false}
+      shadow="lg"
+      radius="lg"
+      className="px-4 mx-auto z-10 md:px-8 py-3 md:py-6 md:max-w-lg lg:max-w-md bg-white dark:bg-gradient-to-b dark:from-black dark:to-blue-950 backdrop-blur-xl">
+      <CardHeader>
+        <div className="flex flex-col">
+          <h3 className="text-3xl fw-bold flex items-center justify-start gap-x-3">
+            Single Sign-On <FingerPrintIcon className="size-12 text-gray-300" />
+          </h3>
+          <p className="font-bold">Sistem Informasi Layanan Kepegawaian</p>
+          <p className="text-sm text-default-400 mt-4 dark:text-white/70">
+            Silahkan masukan username dan password kepegawaian anda yang
+            terdaftar pada portal SILka.
+          </p>
+        </div>
+      </CardHeader>
+      <CardBody>
+        <form
+          onSubmit={handleSubmit(isSubmit)}
+          method="POST"
+          autoComplete="off"
+          noValidate
+          className="flex flex-col gap-y-4">
+          <Select
+            isRequired
+            isDisabled={isLoading || isSubmitting || loadingBtn}
+            selectorIcon={<ChevronUpDownIcon className="size-8" />}
+            label="Login sebagai ?"
+            placeholder="Pilih type account"
+            size="lg"
+            radius="sm"
+            variant="bordered"
+            labelPlacement="inside"
+            isInvalid={errors?.type ? true : false}
+            errorMessage={errors?.type?.message && `${errors.type.message}`}
+            {...register("type", {
+              required: "Pilih type account",
+            })}>
+            <SelectItem key="PERSONAL" value="PERSONAL" textValue="PERSONAL">
+              <div className="flex flex-row items-center justify-start gap-x-2 p-4">
+                <UserCircleIcon className="size-6" />
+                <span className="font-bold">Personal PNS</span>
+              </div>
+            </SelectItem>
+            <SelectItem key="UMPEG" value="UMPEG" textValue="UMPEG">
+              <div className="flex flex-row items-center justify-start gap-x-2 p-4">
+                <UserGroupIcon className="size-6" />
+                <span className="font-bold">Pengelola Kepegawaian</span>
+              </div>
+            </SelectItem>
+          </Select>
+          <Input
+            isRequired
+            isDisabled={isLoading || isSubmitting || loadingBtn}
+            variant="underlined"
+            type="text"
+            radius="sm"
+            label="Username"
+            labelPlacement="outside"
+            placeholder="Enter your username"
+            size="lg"
+            isInvalid={errors?.username ? true : false}
+            errorMessage={
+              errors?.username?.message && `${errors.username.message}`
+            }
+            {...register("username", {
+              required: "Username wajib diisi",
+              minLength: {
+                value: 3,
+                message: "Masukan minimal 3 karakter",
+              },
+            })}
+            startContent={
+              <UserIcon className="size-5 text-default-400 pointer-events-none flex-shrink-0" />
+            }
+          />
+          <Input
+            isRequired
+            isDisabled={isLoading || isSubmitting || loadingBtn}
+            label="Password"
+            variant="underlined"
+            size="lg"
+            // color={errors?.password ? "danger" : "default"}
+            isInvalid={errors?.password ? true : false}
+            radius="sm"
+            labelPlacement="outside"
+            placeholder="Enter your password"
+            {...register("password", {
+              required: "Password wajib diisi",
+            })}
+            errorMessage={
+              errors?.password?.message && `${errors.password.message}`
+            }
+            startContent={
+              <KeyIcon className="size-5 text-default-400 pointer-events-none flex-shrink-0" />
+            }
+            endContent={
+              <Tooltip
+                content={!isVisible ? "Lihat Password" : "Sembuyikan Password"}>
+                <button
+                  className="focus:outline-none"
+                  type="button"
+                  tabIndex={-1}
+                  onClick={toggleVisibility}
+                  aria-label="toggle password visibility">
+                  {!isVisible ? (
+                    <EyeSlashIcon className="size-6 text-gray-400 dark:text-gray-200" />
+                  ) : (
+                    <EyeIcon className="size-6 text-gray-800 dark:text-gray-400" />
+                  )}
+                </button>
+              </Tooltip>
+            }
+            type={isVisible ? "text" : "password"}
+          />
+          <Button
+            isDisabled={isLoading || isSubmitting || loadingBtn || !isValid}
+            isLoading={isLoading || isSubmitting || loadingBtn}
+            type="submit"
+            fullWidth
+            color="primary"
+            size="lg"
+            variant="solid"
+            spinner={
+              <svg
+                className="animate-spin h-5 w-5 text-current"
+                fill="none"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  fill="currentColor"
+                />
+              </svg>
+            }
+            radius="sm"
+            className="mt-3">
+            Login Sekarang
+          </Button>
 
-            <Link
-              color="primary"
-              prefetch={false}
-              href="/lupa-password"
-              className="text-blue-500 hover:text-blue-800">
-              Lupa Password ?
-            </Link>
-            <div className="flex items-center my-6">
-              <div className="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
-              <span className="px-4 text-gray-500">
-                <LockClosedIcon className="size-6 text-gray-300" />
-              </span>
-              <div className="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
-            </div>
-          </form>
-        </CardBody>
-        <CardFooter className="flex flex-col md:flex-row items-center md:items-end justify-between dark:bg-transparent">
-          <span className="text-gray-400 dark:text-gray-600 text-sm text-ellipsis">
-            &copy; Dikembangakan oleh Bidang PPIK BKPSDM Balangan.
-          </span>
-        </CardFooter>
-      </Card>
-    </>
+          <Link
+            color="primary"
+            prefetch={false}
+            href="/lupa-password"
+            className="text-blue-500 hover:text-blue-800">
+            Lupa Password ?
+          </Link>
+          <div className="flex items-center my-6">
+            <div className="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
+            <span className="px-4 text-gray-500">
+              <LockClosedIcon className="size-6 text-gray-300" />
+            </span>
+            <div className="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
+          </div>
+        </form>
+      </CardBody>
+      <CardFooter className="flex flex-col md:flex-row items-center md:items-end justify-between dark:bg-transparent">
+        <span className="text-gray-400 dark:text-gray-600 text-sm text-ellipsis">
+          &copy; Dikembangakan oleh Bidang PPIK BKPSDM Balangan.
+        </span>
+      </CardFooter>
+    </Card>
   );
 }
