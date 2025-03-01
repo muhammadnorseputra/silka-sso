@@ -50,9 +50,10 @@ export default function Login({ client, state, scope }: any) {
       Object.assign({}, FormFileds, {
         scope,
         client_id:
-          client?.data.client_id ?? process.env.NEXT_PUBLIC_SSO_CLIENT_ID,
+          client?.data.client_id ?? "d0929547-5810-4d60-a653-2d39927a1755",
         client_secret:
-          client?.data.client_secret ?? process.env.NEXT_PUBLIC_SSO_SECRET_KEY,
+          client?.data.client_secret ??
+          "IU67[Y$.7F?NR(2%tllq]crmDdepYS]3a+a_]v]F88uP&!Y5`gpc#s47Z*Df'/w",
       })
     );
 

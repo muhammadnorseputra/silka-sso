@@ -6,7 +6,7 @@ export default function Loading() {
     <section className="flex items-center justify-center min-h-screen">
       <Spinner
         classNames={{ label: "text-foreground mt-4" }}
-        label="spinner"
+        label="Please Wait ..."
         variant="spinner"
         color="primary"
         size="lg"
