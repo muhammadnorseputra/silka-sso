@@ -10,10 +10,11 @@ import {
   Select,
   SelectItem,
   Tooltip,
+  Spinner,
+  addToast,
 } from "@heroui/react";
 import Link from "next/link";
 import {
-  ChevronUpDownIcon,
   EyeIcon,
   EyeSlashIcon,
   FingerPrintIcon,
@@ -25,7 +26,6 @@ import {
 } from "@heroicons/react/24/solid";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import { permanentRedirect } from "next/navigation";
 import AuthVerify from "@/data/auth-actions";
 
@@ -49,40 +49,29 @@ export default function Login({ client, state, scope }: any) {
     const result = await AuthVerify(
       Object.assign({}, FormFileds, {
         scope,
-        client_id:
-          client?.data.client_id ?? "d0929547-5810-4d60-a653-2d39927a1755",
-        client_secret:
-          client?.data.client_secret ??
-          "IU67[Y$.7F?NR(2%tllq]crmDdepYS]3a+a_]v]F88uP&!Y5`gpc#s47Z*Df'/w",
+        client_id: client?.data.client_id ?? process.env.SSO_CLIENT_ID,
+        client_secret: client?.data.client_secret ?? process.env.SSO_SECRET_KEY,
       })
     );
 
     if (!result.response.status) {
       setLoadingBtn(false);
-      toast.error(result?.response.message, {
-        id: "AUTH_TOAST_ID",
-      });
-    }
-
-    // pesan error jik false
-    if (!result.response.status) {
-      setLoadingBtn(false);
-      toast.error(result?.response.message, {
-        id: "AUTH_TOAST_ID",
+      addToast({
+        title: "Galat",
+        description: result?.response.message,
+        color: "danger",
+        variant: "bordered",
       });
     }
 
     // pesan success jik true dan redirect ke dashboard
     if (result.response.status) {
-      toast.success(result?.response.message, {
-        id: "AUTH_TOAST_ID",
+      addToast({
+        title: "Success",
+        description: result?.response.message,
+        color: "success",
+        variant: "bordered",
       });
-
-      // setTimeout(() => {
-      //   toast.loading("Mengalihkan halaman, mohon tunggu", {
-      //     id: "AUTH_TOAST_ID",
-      //   });
-      // }, 500);
 
       // setTimeout(() => {
       // toast.remove("AUTH_TOAST_ID");
@@ -122,28 +111,27 @@ export default function Login({ client, state, scope }: any) {
           <Select
             isRequired
             isDisabled={isLoading || isSubmitting || loadingBtn}
-            selectorIcon={<ChevronUpDownIcon className="size-8" />}
             label="Login sebagai ?"
             placeholder="Pilih type account"
             size="lg"
             radius="sm"
-            variant="bordered"
-            labelPlacement="inside"
-            isInvalid={errors?.type ? true : false}
+            variant="underlined"
+            labelPlacement="outside"
+            isInvalid={!!errors?.type ? true : false}
             errorMessage={errors?.type?.message && `${errors.type.message}`}
             {...register("type", {
               required: "Pilih type account",
             })}>
-            <SelectItem key="PERSONAL" value="PERSONAL" textValue="PERSONAL">
+            <SelectItem key="PERSONAL" textValue="PERSONAL">
               <div className="flex flex-row items-center justify-start gap-x-2 p-4">
                 <UserCircleIcon className="size-6" />
-                <span className="font-bold">Personal PNS</span>
+                <span className="font-bold">Personal - PNS</span>
               </div>
             </SelectItem>
-            <SelectItem key="UMPEG" value="UMPEG" textValue="UMPEG">
+            <SelectItem key="UMPEG" textValue="UMPEG">
               <div className="flex flex-row items-center justify-start gap-x-2 p-4">
                 <UserGroupIcon className="size-6" />
-                <span className="font-bold">Pengelola Kepegawaian</span>
+                <span className="font-bold">Pengelola Kepegawaian (UMPEG)</span>
               </div>
             </SelectItem>
           </Select>
@@ -169,7 +157,7 @@ export default function Login({ client, state, scope }: any) {
               },
             })}
             startContent={
-              <UserIcon className="size-5 text-default-400 pointer-events-none flex-shrink-0" />
+              <UserIcon className="size-5 text-default-400 pointer-events-none flex-shrink-0 mr-2" />
             }
           />
           <Input
@@ -190,7 +178,7 @@ export default function Login({ client, state, scope }: any) {
               errors?.password?.message && `${errors.password.message}`
             }
             startContent={
-              <KeyIcon className="size-5 text-default-400 pointer-events-none flex-shrink-0" />
+              <KeyIcon className="size-5 text-default-400 pointer-events-none flex-shrink-0 mr-2" />
             }
             endContent={
               <Tooltip
@@ -219,30 +207,10 @@ export default function Login({ client, state, scope }: any) {
             color="primary"
             size="lg"
             variant="solid"
-            spinner={
-              <svg
-                className="animate-spin h-5 w-5 text-current"
-                fill="none"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg">
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                />
-                <path
-                  className="opacity-75"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  fill="currentColor"
-                />
-              </svg>
-            }
+            spinner={<Spinner color="default" variant="spinner" size="sm" />}
             radius="sm"
             className="mt-3">
-            Login Sekarang
+            {isLoading || isSubmitting || loadingBtn ? "" : "Login Sekarang"}
           </Button>
 
           <Link
@@ -250,7 +218,7 @@ export default function Login({ client, state, scope }: any) {
             prefetch={false}
             href="/lupa-password"
             className="text-blue-500 hover:text-blue-800">
-            Lupa Password ?
+            Lupa atau Ganti Password ?
           </Link>
           <div className="flex items-center my-6">
             <div className="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
@@ -262,8 +230,9 @@ export default function Login({ client, state, scope }: any) {
         </form>
       </CardBody>
       <CardFooter className="flex flex-col md:flex-row items-center md:items-end justify-between dark:bg-transparent">
-        <span className="text-gray-400 dark:text-gray-600 text-sm text-ellipsis">
-          &copy; Dikembangakan oleh Bidang PPIK BKPSDM Balangan.
+        <span className="text-gray-400 dark:text-gray-600 text-sm text-ellipsis text-center">
+          &copy; Dikembangakan oleh Bidang Pengadaan, Pemberhetian dan Informasi
+          Kepegawaian (PPIK) <br /> BKPSDM Kab. Balangan Tahun 2025.
         </span>
       </CardFooter>
     </Card>

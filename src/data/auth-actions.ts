@@ -26,7 +26,7 @@ export default async function AuthVerify(formData: any) {
     });
     const data = await response.json();
     if (data.status) {
-      const userinfo = await AccessToken(data.data.code, formData.scope);
+      const userinfo = await AccessToken(data.data.code);
       if (userinfo.response.status) {
         const codeEnkripsi = AES.encrypt(
           data.data.code,

@@ -6,8 +6,8 @@ import { Roboto } from "next/font/google";
 import Providers from "@/services/providers";
 
 export const metadata: Metadata = {
-  title: "SSO - SILKa Online",
-  description: "Login Aplikasi Layanan Integrasi SILKa",
+  title: "Single Sign On | SILKa Online",
+  description: "SSO Layanan Kepegawaian Integrasi SILKa",
 };
 const roboto = Roboto({
   weight: "400",
