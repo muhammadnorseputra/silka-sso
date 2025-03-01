@@ -49,8 +49,10 @@ export default function Login({ client, state, scope }: any) {
     const result = await AuthVerify(
       Object.assign({}, FormFileds, {
         scope,
-        client_id: client?.data.client_id ?? process.env.SSO_CLIENT_ID,
-        client_secret: client?.data.client_secret ?? process.env.SSO_SECRET_KEY,
+        client_id:
+          client?.data.client_id ?? process.env.NEXT_PUBLIC_SSO_CLIENT_ID,
+        client_secret:
+          client?.data.client_secret ?? process.env.NEXT_PUBLIC_SSO_SECRET_KEY,
       })
     );
 
