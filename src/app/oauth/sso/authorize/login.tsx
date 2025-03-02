@@ -133,7 +133,7 @@ export default function Login({ client, state = uuidv4(), scope }: any) {
                   {String(item[0].key) === "PERSONAL" ? (
                     <UserCircleIcon className="size-6 text-blue-500" />
                   ) : (
-                    <UserGroupIcon className="size-6 text-green-500" />
+                    <UserGroupIcon className="size-6 text-pink-500" />
                   )}
                   <span className="font-bold">
                     {String(item[0].key) === "PERSONAL"
@@ -225,7 +225,7 @@ export default function Login({ client, state = uuidv4(), scope }: any) {
             isLoading={isLoading || isSubmitting || loadingBtn}
             type="submit"
             fullWidth
-            color="primary"
+            className="bg-gradient-to-tr from-pink-500 to-blue-500 text-white shadow-lg"
             size="lg"
             variant="shadow"
             spinner={<Spinner color="default" variant="spinner" size="sm" />}
@@ -238,7 +238,7 @@ export default function Login({ client, state = uuidv4(), scope }: any) {
             prefetch={false}
             href="/lupa-password"
             className="text-blue-500 hover:text-blue-800">
-            Lupa atau Ganti Password ?
+            Lupa atau ganti password ?
           </Link>
           <div className="flex items-center my-6">
             <div className="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
