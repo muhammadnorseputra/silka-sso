@@ -28,8 +28,9 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { permanentRedirect } from "next/navigation";
 import AuthVerify from "@/data/auth-actions";
+import { v4 as uuidv4 } from "uuid";
 
-export default function Login({ client, state, scope }: any) {
+export default function Login({ client, state = uuidv4(), scope }: any) {
   const [isVisible, setIsVisible] = useState(false);
   const [loadingBtn, setLoadingBtn] = useState(false);
 
@@ -54,6 +55,7 @@ export default function Login({ client, state, scope }: any) {
         client_secret:
           client?.data.client_secret ??
           "IU67[Y$.7F?NR(2%tllq]crmDdepYS]3a+a_]v]F88uP&!Y5`gpc#s47Z*Df'/w",
+        state,
       })
     );
 

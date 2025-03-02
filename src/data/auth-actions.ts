@@ -32,6 +32,14 @@ export default async function AuthVerify(formData: any) {
           data.data.code,
           process.env.KEY_PASSPHRASE as string
         );
+        // AUTH STATE
+        cookieStore.set({
+          name: "sso_state",
+          value: formData.state,
+          httpOnly: true,
+          maxAge: 60,
+          secure: process.env.NODE_ENV === "production",
+        });
         // AUTH CODE
         cookieStore.set({
           name: "sso_code",

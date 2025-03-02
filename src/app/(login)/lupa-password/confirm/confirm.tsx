@@ -45,17 +45,18 @@ export default function Confirm({ access_token, decoded }: any) {
         type: decoded.type,
       })
     );
+
+    if (result.responseCode === 401) {
+      return unauthorized();
+    }
+
     if (!result.status) {
-      addToast({
+      return addToast({
         title: "Galat",
         description: result.message,
         color: "danger",
         variant: "bordered",
       });
-      if (result.responseCode === 401) {
-        return unauthorized();
-      }
-      return;
     }
 
     toast.success(result.message);
