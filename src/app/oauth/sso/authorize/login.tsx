@@ -91,9 +91,9 @@ export default function Login({ client, state = uuidv4(), scope }: any) {
   return (
     <Card
       fullWidth={false}
-      shadow="lg"
+      shadow="sm"
       radius="lg"
-      className="px-4 mx-auto z-10 md:px-8 py-3 md:py-6 md:max-w-lg lg:max-w-md bg-white dark:bg-gradient-to-b dark:from-black dark:to-blue-950 backdrop-blur-xl">
+      className="px-4 mx-auto z-10 md:px-8 py-3 md:py-6 md:max-w-lg lg:max-w-md bg-white/90 dark:bg-gradient-to-b dark:from-black/80 dark:to-blue-950 backdrop-blur-xl">
       <CardHeader>
         <div className="flex flex-col">
           <h3 className="text-3xl fw-bold flex items-center justify-start gap-x-3">
@@ -126,7 +126,23 @@ export default function Login({ client, state = uuidv4(), scope }: any) {
             errorMessage={errors?.type?.message && `${errors.type.message}`}
             {...register("type", {
               required: "Pilih type account",
-            })}>
+            })}
+            renderValue={(item) => {
+              return (
+                <div className="flex flex-row items-center justify-start gap-x-3">
+                  {String(item[0].key) === "PERSONAL" ? (
+                    <UserCircleIcon className="size-6 text-blue-500" />
+                  ) : (
+                    <UserGroupIcon className="size-6 text-green-500" />
+                  )}
+                  <span className="font-bold">
+                    {String(item[0].key) === "PERSONAL"
+                      ? "Personal - PNS"
+                      : "Pengelola Kepegawaian (UMPEG)"}
+                  </span>
+                </div>
+              );
+            }}>
             <SelectItem key="PERSONAL" textValue="PERSONAL">
               <div className="flex flex-row items-center justify-start gap-x-2 p-4">
                 <UserCircleIcon className="size-6" />
@@ -211,10 +227,9 @@ export default function Login({ client, state = uuidv4(), scope }: any) {
             fullWidth
             color="primary"
             size="lg"
-            variant="solid"
+            variant="shadow"
             spinner={<Spinner color="default" variant="spinner" size="sm" />}
-            radius="sm"
-            className="mt-3">
+            radius="sm">
             {isLoading || isSubmitting || loadingBtn ? "" : "Login Sekarang"}
           </Button>
 
