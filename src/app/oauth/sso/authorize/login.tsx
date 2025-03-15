@@ -23,6 +23,7 @@ import {
   UserCircleIcon,
   UserGroupIcon,
   UserIcon,
+  UsersIcon,
 } from "@heroicons/react/24/solid";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
@@ -127,22 +128,39 @@ export default function Login({ client, state = uuidv4(), scope }: any) {
             {...register("type", {
               required: "Pilih type account",
             })}
-            renderValue={(item) => {
-              return (
-                <div className="flex flex-row items-center justify-start gap-x-3">
-                  {String(item[0].key) === "PERSONAL" ? (
-                    <UserCircleIcon className="size-6 text-blue-500" />
-                  ) : (
-                    <UserGroupIcon className="size-6 text-pink-500" />
-                  )}
-                  <span className="font-bold">
-                    {String(item[0].key) === "PERSONAL"
-                      ? "Personal - PNS"
-                      : "Pengelola Kepegawaian (UMPEG)"}
-                  </span>
-                </div>
-              );
+            renderValue={(items: any) => {
+              switch (items[0].key) {
+                case "NONASN":
+                  return (
+                    <div className="flex flex-row items-center justify-start">
+                      <UsersIcon className="size-6 mr-3 text-blue-500" />
+                      <span className="font-bold">Personal - NON ASN</span>
+                    </div>
+                  );
+                case "PERSONAL":
+                  return (
+                    <div className="flex flex-row items-center justify-start">
+                      <UserCircleIcon className="size-6 mr-3 text-green-500" />
+                      <span className="font-bold">Personal - PNS</span>
+                    </div>
+                  );
+                case "UMPEG":
+                  return (
+                    <div className="flex flex-row items-center justify-start">
+                      <UserGroupIcon className="size-6 mr-3 text-pink-500" />
+                      <span className="font-bold">
+                        Pengelola Kepegawaian (UMPEG)
+                      </span>
+                    </div>
+                  );
+              }
             }}>
+            <SelectItem key="NONASN" textValue="NONASN">
+              <div className="flex flex-row items-center justify-start gap-x-2 p-4">
+                <UsersIcon className="size-6" />
+                <span className="font-bold">Personal - NON ASN</span>
+              </div>
+            </SelectItem>
             <SelectItem key="PERSONAL" textValue="PERSONAL">
               <div className="flex flex-row items-center justify-start gap-x-2 p-4">
                 <UserCircleIcon className="size-6" />
@@ -252,7 +270,7 @@ export default function Login({ client, state = uuidv4(), scope }: any) {
       <CardFooter className="flex flex-col md:flex-row items-center md:items-end justify-between dark:bg-transparent">
         <span className="text-gray-400 dark:text-gray-600 text-sm text-ellipsis text-center">
           &copy; Dikembangakan oleh Bidang Pengadaan, Pemberhetian dan Informasi
-          Kepegawaian (PPIK) <br /> BKPSDM Kab. Balangan Tahun 2025.
+          Kepegawaian (PPIK) - BKPSDM Kab. Balangan Tahun 2025.
         </span>
       </CardFooter>
     </Card>
