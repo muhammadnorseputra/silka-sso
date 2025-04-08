@@ -35,7 +35,7 @@ export default function Login({
   client,
   state = uuidv4(),
   scope,
-  redirectUri,
+  redirectUri = "/",
 }: any) {
   const [isVisible, setIsVisible] = useState(false);
   const [loadingBtn, setLoadingBtn] = useState(false);
