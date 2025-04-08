@@ -31,7 +31,12 @@ import { permanentRedirect } from "next/navigation";
 import AuthVerify from "@/data/auth-actions";
 import { v4 as uuidv4 } from "uuid";
 
-export default function Login({ client, state = uuidv4(), scope }: any) {
+export default function Login({
+  client,
+  state = uuidv4(),
+  scope,
+  redirectUri,
+}: any) {
   const [isVisible, setIsVisible] = useState(false);
   const [loadingBtn, setLoadingBtn] = useState(false);
 
@@ -83,7 +88,7 @@ export default function Login({ client, state = uuidv4(), scope }: any) {
       // toast.remove("AUTH_TOAST_ID");
       // setLoadingBtn(false); comment => agar selalu loading hingga halaman dialihkan
       permanentRedirect(
-        `${result?.response.data.redirect_uri}?state=${state}&code=${result?.response.data.code}`
+        `${redirectUri}?state=${state}&code=${result?.response.data.code}`
       );
       // }, 3000);
     }

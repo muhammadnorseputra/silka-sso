@@ -10,7 +10,9 @@ import { unauthorized } from "next/navigation";
 export default async function Page({
   searchParams,
 }: {
-  readonly searchParams: Promise<{ readonly [key: string]: string | string[] | undefined }>;
+  readonly searchParams: Promise<{
+    readonly [key: string]: string | string[] | undefined;
+  }>;
 }) {
   const query = await searchParams;
 
@@ -74,9 +76,17 @@ export default async function Page({
         state={state}
         scope={scope}
         clientId={clientId}
+        redirectUri={redirectUri as string}
       />
     );
   }
 
-  return <Login client={response} state={state} scope={scope} />;
+  return (
+    <Login
+      client={response}
+      state={state}
+      scope={scope}
+      redirectUri={redirectUri as string}
+    />
+  );
 }

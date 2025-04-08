@@ -24,7 +24,7 @@ interface Payload extends JwtPayload {
   data: any;
 }
 
-export default function IzinLayar({ access_token, state, clientId }: any) {
+export default function IzinLayar({ access_token, state, clientId, redirectUri }: any) {
   const params = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -56,7 +56,8 @@ export default function IzinLayar({ access_token, state, clientId }: any) {
       const createIzin = await create(
         clientId,
         state,
-        params.get("scope") as string
+        params.get("scope") as string,
+        redirectUri
       );
       if (createIzin.status === false) {
         toast.error(createIzin.message);
