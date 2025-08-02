@@ -9,7 +9,7 @@ export default async function AuthVerify(formData: any) {
   try {
     const base_url = `${process.env.NEXT_PUBLIC_SILKA_BASE_URL}/${process.env.NEXT_PUBLIC_VERSION}/oauth/sso/login`;
     const account = {
-      type: formData.type,
+      type: cookieStore.get("type_account")?.value,
       username: formData.username,
       password: formData.password,
       client_id: formData.client_id,

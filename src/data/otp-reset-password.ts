@@ -7,7 +7,7 @@ export async function cekMailOTP(FormFileds: any) {
   const cookieStore = await cookies();
   try {
     const reqbody = {
-      type: FormFileds.type,
+      type: cookieStore.get("type_account")?.value,
       email: FormFileds.email,
     };
     const req = await fetch(

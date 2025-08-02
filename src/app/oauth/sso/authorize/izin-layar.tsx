@@ -24,7 +24,12 @@ interface Payload extends JwtPayload {
   data: any;
 }
 
-export default function IzinLayar({ access_token, state, clientId, redirectUri }: any) {
+export default function IzinLayar({
+  access_token,
+  state,
+  clientId,
+  redirectUri,
+}: any) {
   const params = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -77,7 +82,7 @@ export default function IzinLayar({ access_token, state, clientId, redirectUri }
       isFooterBlurred={false}
       fullWidth={false}
       shadow="lg"
-      className="px-4 mx-auto z-10 md:px-8 py-3 md:py-6 md:max-w-lg lg:max-w-md bg-white dark:bg-gradient-to-b dark:from-black dark:to-blue-950 backdrop-blur-xl">
+      className="px-4 mx-auto z-10 md:px-8 py-3 md:py-6 md:max-w-lg lg:max-w-md bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
       <CardHeader>
         <div className="flex flex-col">
           <h3 className="text-3xl fw-bold flex items-center justify-start gap-x-3">

@@ -13,6 +13,12 @@ export default async function Page({
 }) {
   const session = await getSession();
   const code = (await cookies()).get("sso_code");
+  const type_account = (await cookies()).get("type_account");
+
+  if (!type_account || !type_account?.value) {
+    return permanentRedirect("/");
+  }
+
   const query = await searchParams;
   if (code?.name && session?.cookie.name && query?.redirect_uri) {
     const decode = AES.decrypt(
@@ -27,5 +33,5 @@ export default async function Page({
     return permanentRedirect("/dashboard");
   }
 
-  return <Login />;
+  return <Login typeAccount={type_account.value as string} />;
 }

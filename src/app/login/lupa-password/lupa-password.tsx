@@ -1,15 +1,7 @@
 "use client";
 
 import type React from "react";
-import {
-  Button,
-  Input,
-  Card,
-  CardBody,
-  Select,
-  SelectItem,
-  Spinner,
-} from "@heroui/react";
+import { Button, Input, Card, CardBody, Spinner } from "@heroui/react";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -35,7 +27,7 @@ export default function ForgotPassword() {
       });
     }
     toast.success(result.message);
-    router.push("/lupa-password/confirm?state=" + result.state);
+    router.push("/login/lupa-password/confirm?state=" + result.state);
   };
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
@@ -43,7 +35,7 @@ export default function ForgotPassword() {
         <Card className="w-full">
           <CardBody className="p-6">
             <Link
-              href="/"
+              href="/login"
               className="flex items-center text-blue-600 mb-6 gap-1 w-fit">
               <ChevronLeftIcon className="size-4" />
               Back to Login
@@ -64,43 +56,26 @@ export default function ForgotPassword() {
               autoComplete="off"
               noValidate
               className="space-y-6">
-              <Select
+              <Input
                 isRequired
-                isInvalid={!!errors?.type}
-                errorMessage={errors?.type && `${errors?.type?.message}`}
-                color={errors?.type ? "danger" : "default"}
-                label="Jenis Akun"
-                {...register("type", {
-                  required: "Pilih type account",
+                label="Email"
+                labelPlacement="inside"
+                id="email"
+                variant="faded"
+                placeholder="Enter your email"
+                type="email"
+                description="Kode OTP akan dikirimkan ke email anda."
+                isInvalid={!!errors?.email}
+                errorMessage={errors?.email && `${errors?.email.message}`}
+                color={errors?.email ? "danger" : "default"}
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: "invalid email address",
+                  },
                 })}
-                placeholder="Pilih jenis akun">
-                <SelectItem key="PERSONAL">PERSONAL - PNS</SelectItem>
-                <SelectItem key="UMPEG">
-                  PENGELOLA KEPEGAWAIAN (UMPEG)
-                </SelectItem>
-              </Select>
-              <div className="space-y-2">
-                <Input
-                  isRequired
-                  label="Email"
-                  labelPlacement="inside"
-                  id="email"
-                  placeholder="Enter your email"
-                  type="email"
-                  description="Kode OTP akan dikirimkan ke email anda."
-                  isInvalid={!!errors?.email}
-                  errorMessage={errors?.email && `${errors?.email.message}`}
-                  color={errors?.email ? "danger" : "default"}
-                  {...register("email", {
-                    required: "Email is required",
-                    pattern: {
-                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                      message: "invalid email address",
-                    },
-                  })}
-                  variant="flat"
-                />
-              </div>
+              />
 
               <Button
                 isLoading={isLoading || isSubmitting}

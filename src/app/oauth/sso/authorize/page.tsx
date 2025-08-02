@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 
 import IzinLayar from "./izin-layar";
 import { AES, enc } from "crypto-js";
-import { unauthorized } from "next/navigation";
+import { permanentRedirect, unauthorized } from "next/navigation";
 
 export default async function Page({
   searchParams,
@@ -81,12 +81,23 @@ export default async function Page({
     );
   }
 
+  // Type Account Check
+  const typeAccount = (await cookies()).get("type_account");
+  if (!typeAccount || typeAccount.value === "undefined") {
+    permanentRedirect(
+      `/#oauth/sso/authorize?client_name=${clientName}&client_id=${clientId}&redirect_uri=${encodeURIComponent(
+        redirectUri as string
+      )}&response_type=code&scope=${scope}&state=${state}`
+    );
+  }
+
   return (
     <Login
       client={response}
       state={state}
       scope={scope}
       redirectUri={redirectUri as string}
+      typeAccount={typeAccount.value as string}
     />
   );
 }

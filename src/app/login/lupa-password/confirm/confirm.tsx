@@ -77,7 +77,7 @@ export default function Confirm({ access_token, decoded }: any) {
         <Card className="w-full mt-4 min-w-[450px]">
           <CardBody className="p-6">
             <Link
-              href="/lupa-password"
+              href="/login/lupa-password"
               className="flex items-center text-blue-600 mb-6 gap-1 w-fit">
               <ChevronLeftIcon className="size-4" />
               Batal
@@ -124,6 +124,7 @@ export default function Confirm({ access_token, decoded }: any) {
                   </Tooltip>
                 }
                 type={isVisible ? "text" : "password"}
+                variant="faded"
               />
               <InputOtp
                 isRequired

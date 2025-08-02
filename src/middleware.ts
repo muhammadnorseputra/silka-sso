@@ -10,7 +10,6 @@ export async function middleware(req: NextRequest) {
     // Redirect to the homepage if the session is invalid or missing
     return NextResponse.redirect(new URL("/", req.url));
   }
-
   // Proceed with the request if the session is valid
   return NextResponse.next();
 }
