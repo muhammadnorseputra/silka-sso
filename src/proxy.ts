@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import getSession from "./hooks/session_server";
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   // Retrieve the token from the request
   const session = await getSession();
   // Check if the token exists and has the necessary properties
