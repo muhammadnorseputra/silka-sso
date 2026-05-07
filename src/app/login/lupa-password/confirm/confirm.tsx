@@ -34,7 +34,7 @@ export default function Confirm({ access_token, decoded }: any) {
     register,
     handleSubmit,
     watch,
-    formState: { errors, isLoading, isSubmitting, isValid },
+    formState: { errors, isLoading, isSubmitting },
   } = useForm();
 
   // Watch the first password field to compare it with the second
