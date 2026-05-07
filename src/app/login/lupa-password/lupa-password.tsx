@@ -41,8 +41,8 @@ export default function ForgotPassword() {
               Back to Login
             </Link>
 
-            <h1 className="text-3xl font-bold mb-4 text-gray-800 dark:text-white">
-              Lupa password anda ?
+            <h1 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">
+              Lupa atau Ganti Password ?
             </h1>
 
             <p className="text-gray-600 dark:text-gray-300 mb-4">

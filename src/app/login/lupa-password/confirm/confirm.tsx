@@ -28,14 +28,24 @@ import { useState } from "react";
 export default function Confirm({ access_token, decoded }: any) {
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
+  const [isVisibleConfirmPassword, setIsVisibleConfirmPassword] =
+    useState(false);
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isLoading, isSubmitting, isValid },
   } = useForm();
 
+  // Watch the first password field to compare it with the second
+  const new_password = watch("new_password");
+
   function toggleVisibility() {
     return setIsVisible(!isVisible);
+  }
+
+  function toggleVisibilityConfirmPassword() {
+    return setIsVisibleConfirmPassword(!isVisibleConfirmPassword);
   }
 
   const onSubmit = async (FormFileds: any) => {
@@ -43,7 +53,7 @@ export default function Confirm({ access_token, decoded }: any) {
       Object.assign(FormFileds, {
         access_token,
         type: decoded.type,
-      })
+      }),
     );
 
     if (result.responseCode === 401) {
@@ -93,6 +103,7 @@ export default function Confirm({ access_token, decoded }: any) {
                 size="lg"
                 label="New Password"
                 placeholder="Masukan password baru"
+                description="Password must contain uppercase, lowercase, number, and special character"
                 isInvalid={!!errors?.new_password}
                 errorMessage={
                   errors?.new_password && `${errors?.new_password?.message}`
@@ -100,6 +111,16 @@ export default function Confirm({ access_token, decoded }: any) {
                 color={errors?.new_password ? "danger" : "default"}
                 {...register("new_password", {
                   required: "Please enter the new password",
+                  minLength: {
+                    value: 8,
+                    message: "Password must be at least 8 characters",
+                  },
+                  pattern: {
+                    value:
+                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                    message:
+                      "Password must contain uppercase, lowercase, number, and special character",
+                  },
                 })}
                 endContent={
                   <Tooltip
@@ -126,6 +147,49 @@ export default function Confirm({ access_token, decoded }: any) {
                 type={isVisible ? "text" : "password"}
                 variant="faded"
               />
+              <Input
+                isRequired
+                size="lg"
+                label="Retype Password"
+                placeholder="Masukan password yang sama"
+                isInvalid={!!errors?.confirmPassword}
+                errorMessage={
+                  errors?.confirmPassword &&
+                  `${errors?.confirmPassword?.message}`
+                }
+                color={errors?.confirmPassword ? "danger" : "default"}
+                {...register("confirmPassword", {
+                  required: "Please confirm your password",
+                  validate: (value) =>
+                    value === new_password || "Passwords do not match",
+                })}
+                endContent={
+                  <Tooltip
+                    showArrow={true}
+                    color="primary"
+                    content={
+                      !isVisibleConfirmPassword
+                        ? "Lihat Password"
+                        : "Sembuyikan Password"
+                    }>
+                    <Button
+                      className="focus:outline-none"
+                      tabIndex={-1}
+                      size="sm"
+                      radius="full"
+                      onPress={toggleVisibilityConfirmPassword}
+                      aria-label="toggle password visibility">
+                      {!isVisibleConfirmPassword ? (
+                        <EyeSlashIcon className="size-6 text-gray-400 dark:text-gray-200" />
+                      ) : (
+                        <EyeIcon className="size-6 text-gray-800 dark:text-gray-400" />
+                      )}
+                    </Button>
+                  </Tooltip>
+                }
+                type={isVisibleConfirmPassword ? "text" : "password"}
+                variant="faded"
+              />
               <InputOtp
                 isRequired
                 length={6}
@@ -138,9 +202,9 @@ export default function Confirm({ access_token, decoded }: any) {
               <Button
                 type="submit"
                 color="primary"
-                className="w-full h-12 text-base font-medium disabled:hover:opacity-10 disabled:opacity-10 disabled:cursor-not-allowed"
+                className="w-full h-12 text-base font-medium disabled:hover:opacity-40 disabled:opacity-20 disabled:cursor-not-allowed"
                 isLoading={isLoading || isSubmitting}
-                isDisabled={isLoading || isSubmitting || !isValid}
+                // isDisabled={isLoading || isSubmitting || !isValid}
                 spinner={
                   <Spinner color="default" variant="spinner" size="sm" />
                 }>

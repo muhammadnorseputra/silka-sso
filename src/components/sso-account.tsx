@@ -26,7 +26,7 @@ export default function SSOAccount() {
         onPress={() => handleAccount("UMPEG")}>
         Masuk sebagai Pengelola Kepegawaian - UMPEG
       </Button>
-      <Button
+      {/* <Button
         className="py-8 hover:shadow-xl hover:scale-110"
         fullWidth
         size="lg"
@@ -36,7 +36,7 @@ export default function SSOAccount() {
         startContent={<UserCircleIcon />}
         onPress={() => handleAccount("PNS")}>
         Masuk sebagai Personal - PNS
-      </Button>
+      </Button> */}
       {/* <Button
         className="py-8 hover:shadow-xl hover:scale-110"
         fullWidth
