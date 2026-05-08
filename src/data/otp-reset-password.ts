@@ -7,7 +7,7 @@ export async function cekMailOTP(FormFileds: any) {
   const cookieStore = await cookies();
   try {
     const reqbody = {
-      type: cookieStore.get("type_account")?.value,
+      type: cookieStore.get("type_account")?.value || "UMPEG",
       email: FormFileds.email,
     };
     const req = await fetch(
@@ -20,7 +20,7 @@ export async function cekMailOTP(FormFileds: any) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(reqbody),
-      }
+      },
     );
 
     const result = await req.json();

@@ -84,7 +84,7 @@ export default function Confirm({ access_token, decoded }: any) {
             variant="faded"
           />
         )}
-        <Card className="w-full mt-4 min-w-[450px]">
+        <Card className="w-full mt-4 min-w-112.5">
           <CardBody className="p-6">
             <Link
               href="/login/lupa-password"
@@ -204,7 +204,7 @@ export default function Confirm({ access_token, decoded }: any) {
                 color="primary"
                 className="w-full h-12 text-base font-medium disabled:hover:opacity-40 disabled:opacity-20 disabled:cursor-not-allowed"
                 isLoading={isLoading || isSubmitting}
-                // isDisabled={isLoading || isSubmitting || !isValid}
+                isDisabled={isLoading || isSubmitting}
                 spinner={
                   <Spinner color="default" variant="spinner" size="sm" />
                 }>
