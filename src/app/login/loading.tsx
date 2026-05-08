@@ -1,7 +1,7 @@
 "use client";
 import { UserCircleIcon } from "@heroicons/react/20/solid";
 import { EyeIcon, FingerPrintIcon, KeyIcon } from "@heroicons/react/24/solid";
-import { Card, Skeleton, Chip } from "@heroui/react";
+import { Card, CardBody, Skeleton, Chip } from "@heroui/react";
 
 export default function Loading() {
   return (
@@ -27,6 +27,7 @@ export default function Loading() {
 
       {/* Main Card */}
       <Card className="w-full max-w-md shadow-xl">
+        <CardBody className="p-8">
         {/* Info Text with Badge */}
         <div className="mb-6 text-center">
           <div className="flex items-center justify-center gap-2 flex-wrap">
@@ -107,6 +108,7 @@ export default function Loading() {
             </button>
           </Skeleton>
         </div>
+        </CardBody>
       </Card>
 
       {/* Footer */}
