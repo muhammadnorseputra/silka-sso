@@ -130,7 +130,7 @@ export default function Confirm({ access_token, decoded }: any) {
                       !isVisible ? "Lihat Password" : "Sembuyikan Password"
                     }>
                     <Button
-                      className="focus:outline-none"
+                      className="focus:outline-hidden"
                       tabIndex={-1}
                       size="sm"
                       radius="full"
@@ -173,7 +173,7 @@ export default function Confirm({ access_token, decoded }: any) {
                         : "Sembuyikan Password"
                     }>
                     <Button
-                      className="focus:outline-none"
+                      className="focus:outline-hidden"
                       tabIndex={-1}
                       size="sm"
                       radius="full"

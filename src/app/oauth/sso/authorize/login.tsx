@@ -61,7 +61,7 @@ export default function Login({
           client?.data.client_secret ??
           "IU67[Y$.7F?NR(2%tllq]crmDdepYS]3a+a_]v]F88uP&!Y5`gpc#s47Z*Df'/w",
         state,
-      })
+      }),
     );
 
     if (!result.response.status) {
@@ -87,7 +87,7 @@ export default function Login({
       // toast.remove("AUTH_TOAST_ID");
       // setLoadingBtn(false); comment => agar selalu loading hingga halaman dialihkan
       permanentRedirect(
-        `${redirectUri}?state=${state}&code=${result?.response.data.code}`
+        `${redirectUri}?state=${state}&code=${result?.response.data.code}`,
       );
       // }, 3000);
     }
@@ -206,7 +206,7 @@ export default function Login({
                 },
               })}
               startContent={
-                <UserIcon className="size-5 text-default-400 pointer-events-none flex-shrink-0 mr-2" />
+                <UserIcon className="size-5 text-default-400 pointer-events-none shrink-0 mr-2" />
               }
             />
             <Input
@@ -227,7 +227,7 @@ export default function Login({
                 errors?.password?.message && `${errors.password.message}`
               }
               startContent={
-                <KeyIcon className="size-5 text-default-400 pointer-events-none flex-shrink-0 mr-2" />
+                <KeyIcon className="size-5 text-default-400 pointer-events-none shrink-0 mr-2" />
               }
               endContent={
                 <Tooltip
@@ -235,7 +235,7 @@ export default function Login({
                     !isVisible ? "Lihat Password" : "Sembuyikan Password"
                   }>
                   <button
-                    className="focus:outline-none"
+                    className="focus:outline-hidden"
                     type="button"
                     tabIndex={-1}
                     onClick={toggleVisibility}
@@ -282,11 +282,11 @@ export default function Login({
               </Link>
             </div>
             {/* <div className="flex items-center my-6">
-              <div className="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
+              <div className="grow border-t border-gray-300 dark:border-gray-600"></div>
               <span className="px-4 text-gray-500">
                 <LockClosedIcon className="size-6 text-gray-300" />
               </span>
-              <div className="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
+              <div className="grow border-t border-gray-300 dark:border-gray-600"></div>
             </div> */}
           </form>
         </CardBody>
