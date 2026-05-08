@@ -8,7 +8,7 @@ export async function create(type: string, hash: string) {
 
   cookieStore.set({
     name: "type_account",
-    value: type,
+    value: type || "UMPEG",
     httpOnly: true,
     path: "/",
   });
