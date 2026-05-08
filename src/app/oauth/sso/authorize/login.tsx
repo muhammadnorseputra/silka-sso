@@ -8,7 +8,6 @@ import {
   Input,
   Tooltip,
   Spinner,
-  addToast,
 } from "@heroui/react";
 import Link from "next/link";
 // import { Link as HeroLink } from "@heroui/react";
@@ -20,6 +19,7 @@ import {
   UserIcon,
 } from "@heroicons/react/24/solid";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { useState } from "react";
 import { permanentRedirect } from "next/navigation";
 import AuthVerify from "@/data/auth-actions";
@@ -66,22 +66,12 @@ export default function Login({
 
     if (!result.response.status) {
       setLoadingBtn(false);
-      addToast({
-        title: "Galat",
-        description: result?.response.message,
-        color: "danger",
-        variant: "bordered",
-      });
+      toast.error(result?.response.message);
     }
 
     // pesan success jik true dan redirect ke dashboard
     if (result.response.status) {
-      addToast({
-        title: "Success",
-        description: result?.response.message,
-        color: "success",
-        variant: "bordered",
-      });
+      toast.success(result?.response.message);
 
       // setTimeout(() => {
       // toast.remove("AUTH_TOAST_ID");

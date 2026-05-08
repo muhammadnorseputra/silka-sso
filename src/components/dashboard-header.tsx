@@ -9,9 +9,9 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-  addToast,
 } from "@heroui/react";
 import { RevokeAccess } from "src/app/actions/revoke-access";
+import toast from "react-hot-toast";
 
 export function DashboardHeader({ user }: any) {
   return (
@@ -53,10 +53,10 @@ export function DashboardHeader({ user }: any) {
               key="logout"
               color="danger"
               onPress={() =>
-                addToast({
-                  title: "Processing",
-                  description: "Mohon tunggu, menghapus session anda...",
-                  promise: RevokeAccess(),
+                toast.promise(RevokeAccess(), {
+                  loading: "Processing",
+                  success: "Successfully logged out",
+                  error: "Failed to log out",
                 })
               }>
               Log Out

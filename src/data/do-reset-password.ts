@@ -6,6 +6,7 @@ export async function doResetPassword(FormFileds: any) {
   try {
     const reqbody = {
       new_password: FormFileds.new_password,
+      confirm_password: FormFileds.confirmPassword,
       type: FormFileds.type,
       otp: FormFileds.otp,
     };
@@ -20,7 +21,7 @@ export async function doResetPassword(FormFileds: any) {
           Authorization: `Bearer ${FormFileds.access_token}`,
         },
         body: JSON.stringify(reqbody),
-      }
+      },
     );
 
     const result = await req.json();

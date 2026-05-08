@@ -2,7 +2,6 @@
 
 import type React from "react";
 import {
-  addToast,
   Alert,
   Button,
   Card,
@@ -61,12 +60,7 @@ export default function Confirm({ access_token, decoded }: any) {
     }
 
     if (!result.status) {
-      return addToast({
-        title: "Galat",
-        description: result.message,
-        color: "danger",
-        variant: "bordered",
-      });
+      return toast.error(result.message);
     }
 
     toast.success(result.message);
