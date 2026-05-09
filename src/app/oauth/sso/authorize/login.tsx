@@ -85,6 +85,11 @@ export default function Login({
 
   return (
     <>
+      {/* Gradient Background */}
+      <div className="absolute inset-0">
+        <div className="absolute top-0 left-0 w-125 h-125 bg-blue-500/10 blur-3xl rounded-full" />
+        <div className="absolute bottom-0 right-0 w-125 h-125 bg-fuchsia-500/10 blur-3xl rounded-full" />
+      </div>
       <div>
         <h3 className="text-3xl fw-bold flex items-center justify-center gap-x-3">
           Single Sign-On{" "}
@@ -96,13 +101,11 @@ export default function Login({
         fullWidth={false}
         shadow="sm"
         radius="lg"
-        className="px-4 mx-auto z-10 md:px-8 py-3 md:pb-3 md:max-w-lg lg:max-w-md bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
-        <CardHeader>
-          <div className="flex flex-col">
-            <div className="text-sm text-default-400 mt-4 dark:text-white/70">
-              Gunakan AKUN <ChipComponent name={typeAccount} /> untuk mengakses
-              berbagai layanan kepegawaian.
-            </div>
+        className="relative w-full max-w-lg rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl p-8">
+        <CardHeader className="flex flex-col">
+          <div className="rounded-2xl border border-blue-500/20 bg-blue-500/10 px-4 py-3 text-sm dark:text-blue-200">
+            silahkan gunakan akun <ChipComponent name={typeAccount} /> untuk
+            mengakses berbagai layanan kepegawaian.
           </div>
         </CardHeader>
         <CardBody>
@@ -179,7 +182,7 @@ export default function Login({
               isDisabled={isLoading || isSubmitting || loadingBtn}
               variant="faded"
               type="text"
-              radius="sm"
+              radius="lg"
               label="Username"
               labelPlacement="outside"
               placeholder="Enter your username"
@@ -207,7 +210,7 @@ export default function Login({
               size="lg"
               // color={errors?.password ? "danger" : "default"}
               isInvalid={errors?.password ? true : false}
-              radius="sm"
+              radius="lg"
               labelPlacement="outside"
               placeholder="Enter your password"
               {...register("password", {

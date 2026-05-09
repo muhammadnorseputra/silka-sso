@@ -10,9 +10,9 @@ export default async function Page() {
     permanentRedirect("/dashboard");
   }
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex flex-col sm:flex-row">
       {/* Left Side - Blue Section */}
-      <div className="flex-1 max-w-[600px] rounded-r-2xl bg-[url('/bg-home.png')] bg-cover p-12 flex flex-col justify-center text-white">
+      <div className="flex-1 sm:max-w-150 sm:rounded-r-2xl bg-[url('/bg-home.png')] bg-cover p-12 flex flex-col justify-center text-white">
         <div className="max-w-md">
           {/* Logo */}
           <div className="mb-8">

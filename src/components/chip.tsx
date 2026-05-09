@@ -8,7 +8,7 @@ export default function ChipComponent({ ...props }: any) {
         content: "drop-shadow shadow-black text-white",
       }}
       color="warning"
-      size="lg"
+      size="sm"
       variant="flat">
       {props.name}
     </Chip>

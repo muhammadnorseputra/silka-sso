@@ -23,7 +23,7 @@ export default async function Page({
   if (code?.name && session?.cookie.name && query?.redirect_uri) {
     const decode = AES.decrypt(
       code?.value,
-      process.env.KEY_PASSPHRASE as string
+      process.env.KEY_PASSPHRASE as string,
     );
     const uri = `${query?.redirect_uri}?code=${decode.toString(enc.Utf8)}`;
     return permanentRedirect(uri);

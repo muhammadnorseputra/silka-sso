@@ -8,6 +8,7 @@ const useHash = () => {
 
   useEffect(() => {
     const currentHash = window.location.hash.replace("#", "");
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setHash(currentHash);
   }, [params]);
 
