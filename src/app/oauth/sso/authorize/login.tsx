@@ -8,6 +8,7 @@ import {
   Input,
   Tooltip,
   Spinner,
+  Alert,
 } from "@heroui/react";
 import Link from "next/link";
 // import { Link as HeroLink } from "@heroui/react";
@@ -87,8 +88,8 @@ export default function Login({
     <>
       {/* Gradient Background */}
       <div className="absolute inset-0">
-        <div className="absolute top-0 left-0 w-125 h-125 bg-blue-500/10 blur-3xl rounded-full" />
-        <div className="absolute bottom-0 right-0 w-125 h-125 bg-fuchsia-500/10 blur-3xl rounded-full" />
+        <div className="absolute top-0 left-0 md:w-125 md:h-125 bg-blue-500/10 blur-3xl rounded-full" />
+        <div className="absolute bottom-0 right-0 md:w-125 md:h-125 bg-fuchsia-500/10 blur-3xl rounded-full" />
       </div>
       <div>
         <h3 className="text-3xl fw-bold flex items-center justify-center gap-x-3">
@@ -101,11 +102,16 @@ export default function Login({
         fullWidth={false}
         shadow="sm"
         radius="lg"
-        className="relative w-full max-w-lg rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl p-8">
+        className="relative w-full max-w-lg rounded-3xl border border-white dark:border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl p-2 sm:p-6 md:p-8">
         <CardHeader className="flex flex-col">
-          <div className="rounded-2xl border border-blue-500/20 bg-blue-500/10 px-4 py-3 text-sm dark:text-blue-200">
-            silahkan gunakan akun <ChipComponent name={typeAccount} /> untuk
-            mengakses berbagai layanan kepegawaian.
+          <div className="flex items-center justify-center w-full">
+            <Alert
+              color="primary"
+              description="Silahkan gunakan akun anda untuk mengakses berbagai
+            layanan kepegawaian."
+              endContent={<ChipComponent name={typeAccount} />}
+              variant="faded"
+            />
           </div>
         </CardHeader>
         <CardBody>
@@ -180,7 +186,7 @@ export default function Login({
             <Input
               isRequired
               isDisabled={isLoading || isSubmitting || loadingBtn}
-              variant="faded"
+              variant="bordered"
               type="text"
               radius="lg"
               label="Username"
@@ -206,7 +212,7 @@ export default function Login({
               isRequired
               isDisabled={isLoading || isSubmitting || loadingBtn}
               label="Password"
-              variant="faded"
+              variant="bordered"
               size="lg"
               // color={errors?.password ? "danger" : "default"}
               isInvalid={errors?.password ? true : false}
@@ -268,7 +274,7 @@ export default function Login({
               </HeroLink> */}
               <Link
                 color="primary"
-                prefetch={false}
+                prefetch
                 href="/login/lupa-password"
                 className="text-blue-500 hover:text-blue-600 hover:underline">
                 Lupa atau ganti password ?

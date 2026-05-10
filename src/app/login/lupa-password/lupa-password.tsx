@@ -1,8 +1,8 @@
 "use client";
 
 import type React from "react";
-import { Button, Input, Card, CardBody, Spinner } from "@heroui/react";
-import { ChevronLeftIcon } from "@heroicons/react/24/solid";
+import { Button, Input, Card, CardBody, Spinner, Alert } from "@heroui/react";
+import { ChevronLeftIcon, EnvelopeIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { cekMailOTP } from "@/data/otp-reset-password";
@@ -33,13 +33,13 @@ export default function ForgotPassword() {
     <>
       {/* Gradient Background */}
       <div className="absolute inset-0">
-        <div className="absolute top-0 left-0 w-125 h-125 bg-blue-500/10 blur-3xl rounded-full" />
-        <div className="absolute bottom-0 right-0 w-125 h-125 bg-fuchsia-500/10 blur-3xl rounded-full" />
+        <div className="absolute top-0 left-0 md:w-125 md:h-125 bg-blue-500/10 blur-3xl rounded-full" />
+        <div className="absolute bottom-0 right-0 md:w-125 md:h-125 bg-fuchsia-500/10 blur-3xl rounded-full" />
       </div>
       <div className="flex flex-col items-center justify-center min-h-screen p-4">
         <div className="w-full">
-          <Card className="relative w-full max-w-lg rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl p-8">
-            <CardBody className="p-6">
+          <Card className="relative w-full max-w-lg rounded-3xl border border-white dark:border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl p-2 sm:p-6 md:p-8">
+            <CardBody>
               <Link
                 href="/login"
                 className="flex items-center text-blue-600 mb-6 gap-1 w-fit hover:underline">
@@ -47,14 +47,18 @@ export default function ForgotPassword() {
                 Back to Login
               </Link>
 
-              <h1 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">
+              <h1 className="text-2xl font-extrabold mb-4 text-gray-800 dark:text-white">
                 Lupa atau Ganti Password ?
               </h1>
 
-              <p className="rounded-2xl border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm dark:text-amber-200 mb-6">
-                Silahkan isi email anda yang terdaftar pada portal SILKa untuk
-                mendapatkan Kode OTP dan melakukan reset password.
-              </p>
+              <Alert
+                hideIconWrapper
+                color="warning"
+                description="Silahkan isi email anda yang terdaftar pada portal SILKa untuk
+                mendapatkan Kode OTP dan melakukan reset password."
+                variant="faded"
+                className="mb-6"
+              />
 
               <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -65,9 +69,10 @@ export default function ForgotPassword() {
                 <Input
                   isRequired
                   label="Email"
-                  labelPlacement="inside"
+                  labelPlacement="outside"
                   id="email"
-                  variant="faded"
+                  size="lg"
+                  variant="bordered"
                   placeholder="Enter your email"
                   type="email"
                   description="Kode OTP akan dikirimkan ke email anda."
@@ -81,18 +86,29 @@ export default function ForgotPassword() {
                       message: "invalid email address",
                     },
                   })}
+                  startContent={
+                    <EnvelopeIcon className="size-5 text-default-400 pointer-events-none shrink-0 mr-2" />
+                  }
                 />
 
                 <Button
                   isLoading={isLoading || isSubmitting}
                   type="submit"
                   color="primary"
-                  className="w-full h-12 text-base font-medium disabled:hover:opacity-10 disabled:opacity-10 disabled:cursor-not-allowed"
+                  variant="shadow"
+                  className="w-full h-12 text-base font-medium disabled:hover:opacity-40 disabled:opacity-40 disabled:cursor-not-allowed"
                   isDisabled={isLoading || isSubmitting || !isValid}
                   spinner={
-                    <Spinner color="default" variant="spinner" size="sm" />
+                    <Spinner
+                      color="default"
+                      variant="spinner"
+                      size="sm"
+                      classNames={{
+                        spinnerBars: "border",
+                      }}
+                    />
                   }>
-                  {isLoading || isSubmitting ? "" : "Submit"}
+                  {isLoading || isSubmitting ? "" : "Kirim"}
                 </Button>
               </form>
             </CardBody>

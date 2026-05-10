@@ -60,8 +60,7 @@ export default async function Page() {
           <div className="mt-12 text-center">
             <p className="text-sm text-gray-400">
               &copy; 2024 | Dikembangakan oleh Bidang PPIK - BKPSDM Kab.
-              Balangan. All Rights Reserved. Semua Hak Cipta Dilindungi
-              Undang-Undang.
+              Balangan.
             </p>
           </div>
         </div>

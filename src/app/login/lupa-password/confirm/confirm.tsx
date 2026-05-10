@@ -70,8 +70,8 @@ export default function Confirm({ access_token, decoded }: any) {
     <>
       {/* Gradient Background */}
       <div className="absolute inset-0">
-        <div className="absolute top-0 left-0 w-125 h-125 bg-blue-500/10 blur-3xl rounded-full" />
-        <div className="absolute bottom-0 right-0 w-125 h-125 bg-fuchsia-500/10 blur-3xl rounded-full" />
+        <div className="absolute top-0 left-0 md:w-125 md:h-125 bg-blue-500/10 blur-3xl rounded-full" />
+        <div className="absolute bottom-0 right-0 md:w-125 md:h-125 bg-fuchsia-500/10 blur-3xl rounded-full" />
       </div>
       <div className="flex flex-col items-center justify-center min-h-screen p-4">
         <div className="w-full max-w-lg min-w-lg">
@@ -84,8 +84,8 @@ export default function Confirm({ access_token, decoded }: any) {
               variant="faded"
             />
           )}
-          <Card className="relative w-full rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl p-8 mt-4">
-            <CardBody className="p-6">
+          <Card className="relative w-full rounded-3xl border border-white dark:border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl p-2 sm:p-6 md:p-8 mt-4">
+            <CardBody>
               <Link
                 href="/login/lupa-password"
                 className="flex items-center text-blue-600 mb-6 gap-1 w-fit hover:underline">
@@ -194,6 +194,7 @@ export default function Confirm({ access_token, decoded }: any) {
                   isRequired
                   length={6}
                   variant="bordered"
+                  size="lg"
                   description="Silahkan masukan kode OTP yang telah dikirimkan ke email anda"
                   {...register("otp", {
                     required: "Please enter the OTP",
