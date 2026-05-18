@@ -1,45 +1,12 @@
 "use server";
 
-import { cookies, headers } from "next/headers";
-import AccessToken from "./access_token";
+import { cookies } from "next/headers";
 import { AES } from "crypto-js";
-import { userAgent } from "next/server";
+import AccessToken from "./access_token";
 
 export default async function AuthVerify(formData: any) {
   const cookieStore = await cookies();
-  const headersList = await headers();
-
-  /**
-   * Get IP Address
-   * Support:
-   * - Vercel
-   * - Nginx
-   * - Cloudflare
-   * - Localhost
-   */
-  const forwardedFor = headersList.get("x-forwarded-for");
-  const realIp = headersList.get("x-real-ip");
-  const cfConnectingIp = headersList.get("cf-connecting-ip");
-
-  const ip =
-    cfConnectingIp ||
-    realIp ||
-    forwardedFor?.split(",")[0]?.trim() ||
-    "127.0.0.1";
-
-  /**
-   * Get User Agent
-   */
-  const ua = headersList.get("user-agent") || "";
-
-  const { isBot, browser, device, os } = userAgent({
-    headers: {
-      get(name: string) {
-        return headersList.get(name);
-      },
-    },
-  } as any);
-
+  
   try {
     const base_url = `${process.env.NEXT_PUBLIC_SILKA_BASE_URL}/${process.env.NEXT_PUBLIC_VERSION}/oauth/sso/login`;
 
@@ -67,17 +34,6 @@ export default async function AuthVerify(formData: any) {
     const data = await response.json();
 
     if (data.status) {
-      console.log("========== USER INFO ==========");
-      console.log(`IP Address : ${ip}`);
-      console.log(`User Agent : ${ua}`);
-      console.log(`Browser    : ${browser.name}`);
-      console.log(`Device     : ${device.type || "desktop"}`);
-      console.log(`Model      : ${device.model || "-"}`);
-      console.log(`Vendor     : ${device.vendor || "-"}`);
-      console.log(`OS         : ${os.name}`);
-      console.log(`Bot        : ${isBot}`);
-      console.log("================================");
-
       const userinfo = await AccessToken(data.data.code);
 
       if (userinfo.response.status) {
