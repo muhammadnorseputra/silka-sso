@@ -31,6 +31,8 @@ import { v4 as uuidv4 } from "uuid";
 import ChipComponent from "@/components/chip";
 // import { destroy } from "@/app/actions/revoke-type";
 
+import { useReCaptcha } from "next-recaptcha-v3";
+
 export default function Login({
   client,
   state = uuidv4(),
@@ -39,6 +41,7 @@ export default function Login({
   typeAccount,
 }: any) {
   const router = useRouter();
+  const { executeRecaptcha } = useReCaptcha();
   const [isVisible, setIsVisible] = useState(false);
   const [loadingBtn, setLoadingBtn] = useState(false);
 
@@ -55,8 +58,11 @@ export default function Login({
   const isSubmit = async (FormFileds: any) => {
     try {
       setLoadingBtn(true);
+      // Generate ReCaptcha token
+      const token = await executeRecaptcha("form_submit");
 
       const payload = {
+        token,
         ...FormFileds,
         scope,
         client_id:

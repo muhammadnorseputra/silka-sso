@@ -2,15 +2,7 @@
 
 import RegisterDevicesId from "@/data/register-devices-id";
 import { ChevronLeftIcon } from "@heroicons/react/16/solid";
-import {
-  addToast,
-  Button,
-  Card,
-  CardBody,
-  Input,
-  Snippet,
-  Spinner,
-} from "@heroui/react";
+import { Button, Card, CardBody, Input, Snippet, Spinner } from "@heroui/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { Activity } from "react";

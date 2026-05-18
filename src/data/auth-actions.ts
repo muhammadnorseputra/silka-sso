@@ -6,7 +6,7 @@ import AccessToken from "./access_token";
 
 export default async function AuthVerify(formData: any) {
   const cookieStore = await cookies();
-  
+
   try {
     const base_url = `${process.env.NEXT_PUBLIC_SILKA_BASE_URL}/${process.env.NEXT_PUBLIC_VERSION}/oauth/sso/login`;
 
@@ -54,7 +54,7 @@ export default async function AuthVerify(formData: any) {
           httpOnly: true,
           sameSite: "lax",
           maxAge: 60,
-          secure: process.env.NODE_ENV === "production",
+          secure: true,
         });
 
         /**
@@ -66,7 +66,7 @@ export default async function AuthVerify(formData: any) {
           httpOnly: true,
           sameSite: "lax",
           maxAge: 3600,
-          secure: process.env.NODE_ENV === "production",
+          secure: true,
         });
 
         /**
@@ -86,7 +86,7 @@ export default async function AuthVerify(formData: any) {
           httpOnly: true,
           sameSite: "lax",
           maxAge: 3600,
-          secure: process.env.NODE_ENV === "production",
+          secure: true,
         });
       }
     }
