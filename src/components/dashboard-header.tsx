@@ -12,8 +12,11 @@ import {
 } from "@heroui/react";
 import { RevokeAccess } from "src/app/actions/revoke-access";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export function DashboardHeader({ user }: any) {
+  const router = useRouter();
+
   return (
     <header className="flex items-center justify-between border-b dark:border-gray-800 px-6 py-4">
       <div className="flex items-center">
@@ -55,8 +58,18 @@ export function DashboardHeader({ user }: any) {
               onPress={() =>
                 toast.promise(RevokeAccess(), {
                   loading: "Processing",
-                  success: "Successfully logged out",
-                  error: "Failed to log out",
+                  success: (result) => {
+                    if (!result.status) {
+                      return result.message;
+                    }
+                    router.replace("/");
+                    return result.message || "Logged out successfully.";
+                  },
+                  error: (error) => {
+                    return (
+                      error.message || "An error occurred while logging out."
+                    );
+                  },
                 })
               }>
               Log Out

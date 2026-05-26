@@ -27,9 +27,7 @@ import { useState } from "react";
 import { permanentRedirect, useRouter } from "next/navigation";
 import AuthVerify from "@/data/auth-actions";
 import { v4 as uuidv4 } from "uuid";
-// import { ChevronLeftIcon } from "@heroicons/react/16/solid";
 import ChipComponent from "@/components/chip";
-// import { destroy } from "@/app/actions/revoke-type";
 
 import { useReCaptcha } from "next-recaptcha-v3";
 
@@ -37,7 +35,7 @@ export default function Login({
   client,
   state = uuidv4(),
   scope,
-  redirectUri = "/",
+  redirectUri = `${process.env.NEXT_PUBLIC_PORTAL_SSO_BASE_URL as string}/${process.env.NEXT_PUBLIC_PORTAL_SSO_CALLBACK as string}`,
   typeAccount,
 }: any) {
   const router = useRouter();
@@ -102,7 +100,7 @@ export default function Login({
         <div className="absolute top-0 left-0 md:w-125 md:h-125 bg-blue-500/10 blur-3xl rounded-full" />
         <div className="absolute bottom-0 right-0 md:w-125 md:h-125 bg-fuchsia-500/10 blur-3xl rounded-full" />
       </div>
-      <div>
+      <div className="relative z-10 max-w-2xl mx-auto text-center space-y-4">
         <h3 className="text-3xl fw-bold flex items-center justify-center gap-x-3">
           Single Sign-On{" "}
           <FingerPrintIcon className="size-12 text-gray-800 dark:text-white" />
@@ -261,6 +259,7 @@ export default function Login({
               type={isVisible ? "text" : "password"}
             />
             <Button
+              className="disabled:cursor-not-allowed disabled:opacity-60"
               isDisabled={isLoading || isSubmitting || loadingBtn || !isValid}
               isLoading={isLoading || isSubmitting || loadingBtn}
               type="submit"
@@ -268,7 +267,7 @@ export default function Login({
               size="lg"
               color="primary"
               variant="shadow"
-              spinner={<Spinner color="default" variant="spinner" size="sm" />}
+              spinner={<Spinner color="default" variant="dots" size="sm" />}
               radius="sm">
               {isLoading || isSubmitting || loadingBtn ? "" : "Login Sekarang"}
             </Button>
@@ -307,7 +306,7 @@ export default function Login({
               color="secondary"
               startContent={<DevicePhoneMobileIcon />}
               variant="bordered">
-              Daftar Perangkat
+              Registrasi Perangkat
             </Button>
           </form>
         </CardBody>

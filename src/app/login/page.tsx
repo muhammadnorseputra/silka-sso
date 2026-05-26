@@ -14,6 +14,7 @@ export default async function Page({
   const session = await getSession();
   const code = (await cookies()).get("sso_code");
   const type_account = (await cookies()).get("type_account");
+  const shouldRedirect = true;
 
   if (!type_account || !type_account?.value) {
     return permanentRedirect("/");
@@ -29,9 +30,11 @@ export default async function Page({
     return permanentRedirect(uri);
   }
 
-  if (code?.name && session?.cookie.name) {
-    return permanentRedirect("/dashboard");
+  if (code?.name && session?.cookie.name && shouldRedirect) {
+    return permanentRedirect(
+      `${process.env.NEXT_PUBLIC_PORTAL_SSO_BASE_URL as string}/${process.env.NEXT_PUBLIC_PORTAL_SSO_PATH as string}`,
+    );
   }
 
-  return <Login typeAccount={type_account.value as string} />;
+  return <Login typeAccount={type_account.value} />;
 }

@@ -12,6 +12,7 @@ import {
   CardFooter,
   Button,
   Avatar,
+  Spinner,
 } from "@heroui/react";
 import { jwtDecode, JwtPayload } from "jwt-decode";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -38,11 +39,11 @@ export default function IzinLayar({
   const scope = params.get("scope") ? `&scope=${params.get("scope")}` : "";
 
   const parameter = `${pathname}?client_name=${params.get(
-    "client_name"
+    "client_name",
   )}${scope}&client_id=${params.get(
-    "client_id"
+    "client_id",
   )}&redirect_uri=${encodeURIComponent(
-    params.get("redirect_uri") as string
+    params.get("redirect_uri") as string,
   )}&response_type=${params.get("response_type")}&state=${state}`;
 
   // access_token
@@ -62,7 +63,7 @@ export default function IzinLayar({
         clientId,
         state,
         params.get("scope") as string,
-        redirectUri
+        redirectUri,
       );
       if (createIzin.status === false) {
         toast.error(createIzin.message);
@@ -138,7 +139,7 @@ export default function IzinLayar({
           color="primary"
           className="font-bold">
           {isPending ? (
-            ""
+            <Spinner color="default" variant="dots" size="sm" />
           ) : (
             <>
               Lanjutkan
@@ -169,7 +170,11 @@ export default function IzinLayar({
           color="danger"
           size="lg"
           className="font-bold">
-          {isPending ? "" : "Logout Akun"}
+          {isPending ? (
+            <Spinner color="default" variant="dots" size="sm" />
+          ) : (
+            "Logout Akun"
+          )}
         </Button>
       </CardBody>
       <CardFooter className="flex flex-col md:flex-row items-center md:items-end justify-between dark:bg-transparent">

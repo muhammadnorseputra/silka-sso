@@ -6,16 +6,22 @@ import useHash from "@/utils/useHash";
 import UserGroupIcon from "@heroicons/react/20/solid/UserGroupIcon";
 // import UsersIcon from "@heroicons/react/20/solid/UsersIcon";
 import { Button } from "@heroui/react";
+import React from "react";
 
 export default function SSOAccount() {
   const currentHash = useHash();
+  const [loading, setLoading] = React.useState(false);
 
-  const handleAccount = (type: string) => {
-    create(type, currentHash ?? "");
+  const handleAccount = async (type: string) => {
+    setLoading(true);
+    await create(type, currentHash ?? "");
+    setLoading(false);
   };
   return (
     <>
       <Button
+        isDisabled={false}
+        isLoading={loading}
         className="py-8 hover:shadow-xl hover:scale-110"
         fullWidth
         size="lg"
@@ -24,7 +30,10 @@ export default function SSOAccount() {
         disableRipple={true}
         startContent={<UserGroupIcon />}
         onPress={() => handleAccount("UMPEG")}>
-        Masuk sebagai Pengelola Kepegawaian - UMPEG
+        <span className="font-bold hidden sm:inline">
+          Masuk sebagai Pengelola Kepegawaian -
+        </span>{" "}
+        UMPEG
       </Button>
       {/* <Button
         className="py-8 hover:shadow-xl hover:scale-110"

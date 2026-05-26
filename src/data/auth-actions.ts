@@ -3,9 +3,63 @@
 import { cookies } from "next/headers";
 import { AES } from "crypto-js";
 import AccessToken from "./access_token";
+import GetDevicesInfo from "./get-devices-info";
+
+async function CaptchaVerify(token: string) {
+  const url = `https://www.google.com/recaptcha/api/siteverify`;
+
+  if (!token) {
+    return {
+      status: false,
+      message:
+        "Token captcha tidak ditemukan, pastikan Anda telah menyelesaikan captcha.",
+    };
+  }
+
+  try {
+    const req = await fetch(url, {
+      method: "POST",
+      cache: "no-store",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`,
+    });
+
+    const result = await req.json();
+    return result;
+  } catch (error) {
+    return {
+      status: false,
+      message: `Gagal koneksi ke server ${url} error: ${error}`,
+    };
+  }
+}
 
 export default async function AuthVerify(formData: any) {
   const cookieStore = await cookies();
+  const { device_id } = await GetDevicesInfo();
+  const captchaResult = await CaptchaVerify(formData.token);
+
+  if (!captchaResult.success && captchaResult.score < 0.5) {
+    return {
+      response: {
+        status: false,
+        message:
+          "Verifikasi captcha gagal, pastikan Anda telah menyelesaikan captcha dengan benar.",
+      },
+    };
+  }
+
+  if (!device_id) {
+    return {
+      response: {
+        status: false,
+        message:
+          "Device ID tidak ditemukan, pastikan Anda telah melakukan pendaftaran perangkat.",
+      },
+    };
+  }
 
   try {
     const base_url = `${process.env.NEXT_PUBLIC_SILKA_BASE_URL}/${process.env.NEXT_PUBLIC_VERSION}/oauth/sso/login`;
@@ -16,6 +70,7 @@ export default async function AuthVerify(formData: any) {
       password: formData.password,
       client_id: formData.client_id,
       client_secret: formData.client_secret,
+      device_id,
     };
 
     /**

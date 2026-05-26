@@ -113,14 +113,7 @@ export default function ForgotPassword() {
                   className="w-full h-12 text-base font-medium disabled:hover:opacity-40 disabled:opacity-40 disabled:cursor-not-allowed"
                   isDisabled={isLoading || isSubmitting || !isValid}
                   spinner={
-                    <Spinner
-                      color="default"
-                      variant="spinner"
-                      size="sm"
-                      classNames={{
-                        spinnerBars: "border",
-                      }}
-                    />
+                    <Spinner color="default" variant="dots" size="sm" />
                   }>
                   {isLoading || isSubmitting ? "" : "Kirim"}
                 </Button>
