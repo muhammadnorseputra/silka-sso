@@ -5,9 +5,12 @@ import { permanentRedirect } from "next/navigation";
 
 export default async function Page() {
   const session = await getSession();
-  if (session) {
+  const shouldRedirect = true;
+  if (session && shouldRedirect) {
     // Redirect to the dashboard if the user is already logged in
-    permanentRedirect("/dashboard");
+    permanentRedirect(
+      `${process.env.NEXT_PUBLIC_PORTAL_SSO_BASE_URL as string}/${process.env.NEXT_PUBLIC_PORTAL_SSO_PATH as string}`,
+    );
   }
   return (
     <div className="min-h-screen flex flex-col sm:flex-row">
@@ -21,16 +24,17 @@ export default async function Page() {
               alt="Logo Pemerintah Kabupaten Balangan"
               width={80}
               height={80}
+              sizes="100vw"
             />
           </div>
 
           {/* Main Heading */}
-          <h1 className="text-4xl font-bold mb-6 leading-tight">
+          <h1 className="text-2xl sm:text-4xl font-bold mb-6 leading-tight">
             Akses Semua Layanan Kepegawaian Dengan Satu Portal SSO!
           </h1>
 
           {/* Description */}
-          <p className="text-lg text-blue-100 leading-relaxed">
+          <p className="text-sm sm:text-lg text-blue-100 leading-relaxed">
             Anda kini dapat mengunakan untuk berbagai platform. Nikmati
             kemudahan akses ke portal layanan kepegawaian melalui Single Sign On
             dalam satu akun.

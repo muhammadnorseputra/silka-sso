@@ -11,6 +11,9 @@ export async function create(type: string, hash: string) {
     value: type || "UMPEG",
     httpOnly: true,
     path: "/",
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 60 * 60 * 24 * 1, // 1 day
   });
 
   redirect(hash ? `/${hash}` : "/login");

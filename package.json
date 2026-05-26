@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "repository": "https://github.com/muhammadnorseputra/silka-sso.git",
+  "author": "Putrabungsu6 <muhammadnorseputra@gmail.com>",
+  "license": "MIT",
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "dev": "next dev",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint ."
   },
@@ -14,7 +17,7 @@
     "@heroui/react": "2.8.10",
     "@tanstack/react-query": "^5.66.0",
     "crypto-js": "^4.2.0",
-    "framer-motion": "^12.38.0",
+    "framer-motion": "^12.40.0",
     "install": "^0.13.0",
     "jwt-decode": "^4.0.0",
     "next": "16.2.5",
@@ -29,7 +32,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.4",
     "@types/crypto-js": "^4.2.2",
-    "@types/node": "^20",
+    "@types/node": "^25.9.1",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "cookies-next": "^5.1.0",

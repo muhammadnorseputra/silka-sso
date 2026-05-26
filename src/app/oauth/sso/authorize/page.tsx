@@ -28,7 +28,7 @@ export default async function Page({
     clientName as string,
     responseType as string,
     redirectUri as string,
-    state as string
+    state as string,
   );
 
   /**
@@ -36,24 +36,6 @@ export default async function Page({
    * ? Jika sudah login dan memiliki access token auto redirect ke client
    *
    */
-  // const code = (await cookies()).get("sso_code");
-  // const access_token = (await cookies()).get("sso_token");
-  // if (access_token?.name && code?.name) {
-  //   const getAccessToken = AES.decrypt(
-  //     access_token?.value,
-  //     process.env.KEY_PASSPHRASE as string
-  //   );
-  //   const result = await CodeWithAccesToken(
-  //     clientId as string,
-  //     getAccessToken.toString(enc.Utf8)
-  //   );
-  //   if (result.response.status) {
-  //     return permanentRedirect(
-  //       `${result.response.data.redirect_uri}?code=${result.response.data.code}`
-  //     );
-  //   }
-  //   return permanentRedirect(redirectUri as string);
-  // }
 
   // Ensure the response is a plain object
 
@@ -68,7 +50,7 @@ export default async function Page({
   if (sso_token?.name && code?.name) {
     const access_token = AES.decrypt(
       sso_token?.value,
-      process.env.KEY_PASSPHRASE as string
+      process.env.KEY_PASSPHRASE as string,
     ).toString(enc.Utf8);
     return (
       <IzinLayar
@@ -86,8 +68,8 @@ export default async function Page({
   if (!typeAccount || typeAccount.value === "undefined") {
     permanentRedirect(
       `/#oauth/sso/authorize?client_name=${clientName}&client_id=${clientId}&redirect_uri=${encodeURIComponent(
-        redirectUri as string
-      )}&response_type=code&scope=${scope}&state=${state}`
+        redirectUri as string,
+      )}&response_type=code&scope=${scope}&state=${state}`,
     );
   }
 
@@ -97,7 +79,7 @@ export default async function Page({
       state={state}
       scope={scope}
       redirectUri={redirectUri as string}
-      typeAccount={typeAccount.value as string}
+      typeAccount={typeAccount.value}
     />
   );
 }

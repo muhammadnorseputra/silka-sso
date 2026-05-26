@@ -58,9 +58,9 @@ export default function FormDevice({ device }: any) {
         <div className="absolute top-0 left-0 md:w-125 md:h-125 bg-blue-500/10 blur-3xl rounded-full" />
         <div className="absolute bottom-0 right-0 md:w-125 md:h-125 bg-fuchsia-500/10 blur-3xl rounded-full" />
       </div>
-      <div className="flex flex-col items-center justify-center min-h-screen p-4">
-        <div className="px-3 sm:px-0 w-max sm:min-w-125">
-          <Card className="relative w-full max-w-lg rounded-3xl border border-white dark:border-white/10 bg-white/15 backdrop-blur-xl shadow-2xl p-2 sm:p-6 md:p-8">
+      <div className="flex flex-col items-center justify-center min-h-screen m-0 sm:m-8">
+        <div className="px-0 min-w-full sm:min-w-125">
+          <Card className="relative rounded-3xl border border-white dark:border-white/10 bg-white/15 backdrop-blur-xl shadow-2xl p-6 sm:p-6 md:p-8">
             <CardBody>
               <Link
                 href="/login"
@@ -179,9 +179,7 @@ export default function FormDevice({ device }: any) {
                   size="lg"
                   color="primary"
                   variant="solid"
-                  spinner={
-                    <Spinner color="default" variant="spinner" size="sm" />
-                  }
+                  spinner={<Spinner color="default" variant="dots" size="sm" />}
                   radius="sm">
                   {isLoading || isSubmitting ? "" : "Simpan"}
                 </Button>
