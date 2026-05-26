@@ -74,7 +74,7 @@ export default function Confirm({ access_token, decoded }: any) {
         <div className="absolute bottom-0 right-0 md:w-125 md:h-125 bg-fuchsia-500/10 blur-3xl rounded-full" />
       </div>
       <div className="flex flex-col items-center justify-center min-h-screen p-4">
-        <div className="w-full max-w-lg min-w-lg">
+        <div className="w-full sm:min-w-125">
           {access_token && (
             <Alert
               icon={<InboxArrowDownIcon className="size-6 text-green-300" />}

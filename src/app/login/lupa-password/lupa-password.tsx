@@ -1,6 +1,5 @@
 "use client";
 
-import type React from "react";
 import { Button, Input, Card, CardBody, Spinner, Alert } from "@heroui/react";
 import { ChevronLeftIcon, EnvelopeIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
@@ -19,15 +18,29 @@ export default function ForgotPassword() {
   } = useForm();
 
   const onSubmit = async (FormFileds: any) => {
-    const result = await cekMailOTP(FormFileds);
-    if (!result.status) {
-      return setError("email", {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const result = await toast.promise(cekMailOTP(FormFileds), {
+        loading: "Mengirim permintaan...",
+        success: (result) => {
+          if (!result.status) {
+            return setError("email", {
+              type: "manual",
+              message: result.message,
+            });
+          }
+
+          router.push("/login/lupa-password/confirm?state=" + result.state);
+          return result.message;
+        },
+        error: (err) => err.message || "Terjadi kesalahan",
+      });
+    } catch (error) {
+      setError("email", {
         type: "manual",
-        message: result.message,
+        message: error instanceof Error ? error.message : "Terjadi kesalahan",
       });
     }
-    toast.success(result.message);
-    router.push("/login/lupa-password/confirm?state=" + result.state);
   };
   return (
     <>
@@ -67,6 +80,7 @@ export default function ForgotPassword() {
                 noValidate
                 className="space-y-6">
                 <Input
+                  className="text-gray-800 dark:text-white"
                   isRequired
                   label="Email"
                   labelPlacement="outside"

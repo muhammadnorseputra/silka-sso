@@ -13,21 +13,25 @@ import {
 import Link from "next/link";
 // import { Link as HeroLink } from "@heroui/react";
 import {
+  DevicePhoneMobileIcon,
   EyeIcon,
   EyeSlashIcon,
   FingerPrintIcon,
   KeyIcon,
+  LockClosedIcon,
   UserIcon,
 } from "@heroicons/react/24/solid";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useState } from "react";
-import { permanentRedirect } from "next/navigation";
+import { permanentRedirect, useRouter } from "next/navigation";
 import AuthVerify from "@/data/auth-actions";
 import { v4 as uuidv4 } from "uuid";
 // import { ChevronLeftIcon } from "@heroicons/react/16/solid";
 import ChipComponent from "@/components/chip";
 // import { destroy } from "@/app/actions/revoke-type";
+
+import { useReCaptcha } from "next-recaptcha-v3";
 
 export default function Login({
   client,
@@ -36,7 +40,8 @@ export default function Login({
   redirectUri = "/",
   typeAccount,
 }: any) {
-  // const router = useRouter();
+  const router = useRouter();
+  const { executeRecaptcha } = useReCaptcha();
   const [isVisible, setIsVisible] = useState(false);
   const [loadingBtn, setLoadingBtn] = useState(false);
 
@@ -51,10 +56,14 @@ export default function Login({
   }
 
   const isSubmit = async (FormFileds: any) => {
-    setLoadingBtn(true);
+    try {
+      setLoadingBtn(true);
+      // Generate ReCaptcha token
+      const token = await executeRecaptcha("form_submit");
 
-    const result = await AuthVerify(
-      Object.assign({}, FormFileds, {
+      const payload = {
+        token,
+        ...FormFileds,
         scope,
         client_id:
           client?.data.client_id ?? "d0929547-5810-4d60-a653-2d39927a1755",
@@ -62,25 +71,27 @@ export default function Login({
           client?.data.client_secret ??
           "IU67[Y$.7F?NR(2%tllq]crmDdepYS]3a+a_]v]F88uP&!Y5`gpc#s47Z*Df'/w",
         state,
-      }),
-    );
+      };
 
-    if (!result.response.status) {
+      const result = await toast.promise(AuthVerify(payload), {
+        loading: "Memverifikasi akun...",
+        success: (result) => {
+          if (!result.response.status) {
+            throw new Error(result.response.message);
+          }
+
+          return result.response.message;
+        },
+        error: (err) => err.message || "Terjadi kesalahan saat verifikasi",
+      });
+
+      if (result?.response.status) {
+        permanentRedirect(
+          `${redirectUri}?state=${state}&code=${result?.response.data.code}`,
+        );
+      }
+    } finally {
       setLoadingBtn(false);
-      toast.error(result?.response.message);
-    }
-
-    // pesan success jik true dan redirect ke dashboard
-    if (result.response.status) {
-      toast.success(result?.response.message);
-
-      // setTimeout(() => {
-      // toast.remove("AUTH_TOAST_ID");
-      // setLoadingBtn(false); comment => agar selalu loading hingga halaman dialihkan
-      permanentRedirect(
-        `${redirectUri}?state=${state}&code=${result?.response.data.code}`,
-      );
-      // }, 3000);
     }
   };
 
@@ -280,13 +291,24 @@ export default function Login({
                 Lupa atau ganti password ?
               </Link>
             </div>
-            {/* <div className="flex items-center my-6">
+            <div className="flex items-center my-6">
               <div className="grow border-t border-gray-300 dark:border-gray-600"></div>
               <span className="px-4 text-gray-500">
                 <LockClosedIcon className="size-6 text-gray-300" />
               </span>
               <div className="grow border-t border-gray-300 dark:border-gray-600"></div>
-            </div> */}
+            </div>
+            <Button
+              onPress={() => {
+                router.push("login/perangkat");
+              }}
+              fullWidth
+              size="lg"
+              color="secondary"
+              startContent={<DevicePhoneMobileIcon />}
+              variant="bordered">
+              Daftar Perangkat
+            </Button>
           </form>
         </CardBody>
       </Card>
