@@ -19,6 +19,7 @@
     "crypto-js": "^4.2.0",
     "framer-motion": "^12.40.0",
     "install": "^0.13.0",
+    "jsonwebtoken": "^9.0.3",
     "jwt-decode": "^4.0.0",
     "next": "16.2.5",
     "next-recaptcha-v3": "^1.5.3",
@@ -32,6 +33,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.4",
     "@types/crypto-js": "^4.2.2",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.9.1",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",

@@ -11,7 +11,6 @@ import {
   Alert,
 } from "@heroui/react";
 import Link from "next/link";
-// import { Link as HeroLink } from "@heroui/react";
 import {
   DevicePhoneMobileIcon,
   EyeIcon,

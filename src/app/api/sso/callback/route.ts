@@ -14,14 +14,14 @@ export async function GET(req: any) {
   if (!code) {
     return Response.json(
       { status: false, message: "Code not provide" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
   if (state !== cookieStore.get("sso_state")?.value) {
     return Response.json(
       { status: false, message: "State not match" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -30,7 +30,7 @@ export async function GET(req: any) {
   if (userinfo.response.status) {
     const tokenEnkripsi = AES.encrypt(
       userinfo.response.access_token,
-      process.env.KEY_PASSPHRASE as string
+      process.env.KEY_PASSPHRASE as string,
     );
     // ACCESS TOKEN
     cookieStore.set({
