@@ -56,7 +56,7 @@ export default async function AuthVerify(formData: any) {
       response: {
         status: false,
         message:
-          "Device ID tidak ditemukan, pastikan Anda telah melakukan pendaftaran perangkat.",
+          "Device ID tidak ditemukan, pastikan anda telah melakukan pendaftaran perangkat.",
       },
     };
   }

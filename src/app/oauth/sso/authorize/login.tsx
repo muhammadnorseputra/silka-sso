@@ -299,7 +299,7 @@ export default function Login({
             </div>
             <Button
               onPress={() => {
-                router.push("login/perangkat");
+                router.push("/login/perangkat");
               }}
               fullWidth
               size="lg"
