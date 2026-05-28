@@ -107,9 +107,9 @@ export default async function AuthVerify(formData: any) {
           name: "sso_state",
           value: formData.state,
           httpOnly: true,
-          sameSite: "lax",
           maxAge: 60,
-          secure: true,
+          secure: process.env.NODE_ENV === "production" ? true : false,
+          sameSite: "lax",
         });
 
         /**
@@ -119,9 +119,9 @@ export default async function AuthVerify(formData: any) {
           name: "sso_code",
           value: codeEnkripsi.toString(),
           httpOnly: true,
-          sameSite: "lax",
           maxAge: 3600,
-          secure: true,
+          secure: process.env.NODE_ENV === "production" ? true : false,
+          sameSite: "lax",
         });
 
         /**
@@ -139,9 +139,9 @@ export default async function AuthVerify(formData: any) {
           name: "sso_token",
           value: tokenEnkripsi.toString(),
           httpOnly: true,
-          sameSite: "lax",
           maxAge: 3600,
-          secure: true,
+          secure: process.env.NODE_ENV === "production" ? true : false,
+          sameSite: "lax",
         });
       }
     }

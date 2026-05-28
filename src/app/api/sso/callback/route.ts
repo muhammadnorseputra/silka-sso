@@ -37,7 +37,7 @@ export async function GET(req: any) {
       name: "sso_token",
       value: tokenEnkripsi.toString(),
       httpOnly: true,
-      sameSite: "strict",
+      sameSite: "lax",
       maxAge: 3600,
       secure: process.env.NODE_ENV === "production",
     });
