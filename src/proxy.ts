@@ -25,5 +25,5 @@ export async function proxy(req: NextRequest) {
 
 // Routes Middleware should not run on
 export const config = {
-  matcher: ["/redirecting"],
+  matcher: ["/checking"],
 };
