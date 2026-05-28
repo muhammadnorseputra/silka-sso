@@ -4,8 +4,8 @@ import Login from "./login";
 import { cookies } from "next/headers";
 
 import IzinLayar from "./izin-layar";
-// import { AES, enc } from "crypto-js";
 import { permanentRedirect, unauthorized } from "next/navigation";
+import { AES, enc } from "crypto-js";
 
 export default async function Page({
   searchParams,
@@ -45,18 +45,16 @@ export default async function Page({
 
   // Izin Layar
   const code = (await cookies()).get("sso_code");
-  const code_plain = (await cookies()).get("sso_code_plain");
   const sso_token = (await cookies()).get("sso_token");
-  const sso_token_plain = (await cookies()).get("sso_token_plain");
 
-  if (sso_token_plain?.name && code_plain?.name) {
-    // const access_token = AES.decrypt(
-    //   sso_token?.value,
-    //   process.env.KEY_PASSPHRASE as string,
-    // ).toString(enc.Utf8);
+  if (sso_token?.name && code?.name) {
+    const access_token = AES.decrypt(
+      sso_token?.value,
+      process.env.KEY_PASSPHRASE as string,
+    ).toString(enc.Utf8);
     return (
       <IzinLayar
-        access_token={sso_token_plain.value}
+        access_token={access_token}
         state={state}
         scope={scope}
         clientId={clientId}

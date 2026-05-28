@@ -19,7 +19,6 @@ export default async function Page({
   );
 
   const code = (await cookies()).get("sso_code");
-  const code_plain = (await cookies()).get("sso_code_plain");
   const type_account = (await cookies()).get("type_account");
   const shouldRedirect = true;
 
@@ -38,8 +37,12 @@ export default async function Page({
   }
 
   if (code?.name && sessionFromDB.status && shouldRedirect) {
+    const decode = AES.decrypt(
+      code?.value,
+      process.env.KEY_PASSPHRASE as string,
+    );
     return permanentRedirect(
-      `${process.env.NEXT_PUBLIC_PORTAL_SSO_BASE_URL}/${process.env.NEXT_PUBLIC_PORTAL_SSO_CALLBACK}?code=${code_plain?.value}`,
+      `${process.env.NEXT_PUBLIC_PORTAL_SSO_BASE_URL}/${process.env.NEXT_PUBLIC_PORTAL_SSO_CALLBACK}?code=${decode}`,
     );
   }
 

@@ -124,15 +124,6 @@ export default async function AuthVerify(formData: any) {
           secure: true,
         });
 
-        cookieStore.set({
-          name: "sso_code_plain",
-          value: data.data.code,
-          httpOnly: true,
-          sameSite: "none",
-          maxAge: 3600,
-          secure: true,
-        });
-
         /**
          * Encrypt Access Token
          */
@@ -147,15 +138,6 @@ export default async function AuthVerify(formData: any) {
         cookieStore.set({
           name: "sso_token",
           value: tokenEnkripsi.toString(),
-          httpOnly: true,
-          sameSite: "none",
-          maxAge: 3600,
-          secure: true,
-        });
-
-        cookieStore.set({
-          name: "sso_token_plain",
-          value: userinfo.response.access_token,
           httpOnly: true,
           sameSite: "none",
           maxAge: 3600,
