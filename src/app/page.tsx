@@ -12,7 +12,7 @@ export default async function Page() {
     session?.token_plain as string,
   );
 
-  if (sessionFromDB && shouldRedirect) {
+  if (sessionFromDB.status && shouldRedirect) {
     // Redirect to the dashboard if the user is already logged in
     permanentRedirect(
       `${process.env.NEXT_PUBLIC_PORTAL_SSO_BASE_URL as string}/${process.env.NEXT_PUBLIC_PORTAL_SSO_PATH as string}`,
