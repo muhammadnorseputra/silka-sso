@@ -1,15 +1,21 @@
 import SSOAccount from "@/components/sso-account";
 import getSession from "@/hooks/session_server";
+import { getSessionFromDatabase } from "@/services/session-store";
 import Image from "next/image";
 import { permanentRedirect } from "next/navigation";
 
 export default async function Page() {
   const session = await getSession();
   const shouldRedirect = true;
-  if (session && shouldRedirect) {
+
+  const sessionFromDB = await getSessionFromDatabase(
+    session?.token_plain as string,
+  );
+
+  if (sessionFromDB && shouldRedirect) {
     // Redirect to the dashboard if the user is already logged in
     permanentRedirect(
-      `${process.env.NEXT_PUBLIC_PORTAL_SSO_BASE_URL as string}/${process.env.NEXT_PUBLIC_PORTAL_SSO_PATH as string}`,
+      `${process.env.NEXT_PUBLIC_PORTAL_SSO_BASE_URL as string}/${process.env.NEXT_PUBLIC_PORTAL_SSO_PATH as string}/dashboard`,
     );
   }
   return (
