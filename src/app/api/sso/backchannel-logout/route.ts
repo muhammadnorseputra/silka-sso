@@ -10,8 +10,7 @@ const CLIENT_APP = [
   {
     client_id: "client-app-1",
     client_name: "Client App 1",
-    logoutUri:
-      "https://silka-sso-panel.vercel.app/api/oauth/backchannel-logout",
+    logoutUri: "http://localhost:4000/api/oauth/backchannel-logout",
   },
 ];
 
@@ -85,8 +84,8 @@ export async function POST(request: Request) {
     status: true,
     message: "SSO pusat telah logout, semua aplikasi klien telah diberitahu.",
   });
-  cookieStore.delete("sso_token");
-  cookieStore.delete("sso_code");
-
+  response.cookies.delete("sso_token");
+  response.cookies.delete("sso_code");
+  response.cookies.delete("sso_state");
   return response;
 }

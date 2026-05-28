@@ -96,6 +96,7 @@ export default async function GetDevicesInfo() {
   if (deviceInfo.status) {
     return {
       user_id: deviceInfo.data.user_id,
+      user_label: deviceInfo.data.user_label,
       device_id: deviceInfo.data.device_id,
       isBot: deviceInfo.data.is_bot,
       ip: deviceInfo.data.ip,
@@ -110,6 +111,7 @@ export default async function GetDevicesInfo() {
 
   return {
     user_id: null,
+    user_label: null,
     device_id: device_id_from_cookie,
     ip,
     userAgent: ua,

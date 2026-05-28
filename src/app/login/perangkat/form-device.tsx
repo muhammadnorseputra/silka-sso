@@ -27,11 +27,18 @@ export default function FormDevice({ device }: any) {
       const result = await toast.promise(RegisterDevicesId(FormFileds), {
         loading: "Sedang memproses...",
         success: (result) => {
-          console.log(result);
           if (result.message.user_id) {
             setError("user_id", {
               type: "manual",
               message: result.message.user_id || "Gagal mendapatkan user_id",
+            });
+          }
+
+          if (result.message.user_label) {
+            setError("user_label", {
+              type: "manual",
+              message:
+                result.message.user_label || "Gagal mendapatkan user_label",
             });
           }
 
@@ -54,13 +61,10 @@ export default function FormDevice({ device }: any) {
   return (
     <>
       {/* Gradient Background */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-0 md:w-125 md:h-125 bg-blue-500/10 blur-3xl rounded-full" />
-        <div className="absolute bottom-0 right-0 md:w-125 md:h-125 bg-fuchsia-500/10 blur-3xl rounded-full" />
-      </div>
+
       <div className="flex flex-col items-center justify-center min-h-screen m-0 sm:m-8">
         <div className="px-0 min-w-full sm:min-w-125">
-          <Card className="relative rounded-3xl border border-white dark:border-white/10 bg-white/15 backdrop-blur-xl shadow-2xl p-6 sm:p-6 md:p-8">
+          <Card className="w-full sm:max-w-lg rounded-3xl border border-white dark:border-white/10 bg-white/15 backdrop-blur-xl shadow-2xl p-6 sm:p-6 md:p-8">
             <CardBody>
               <Link
                 href="/login"
@@ -117,6 +121,28 @@ export default function FormDevice({ device }: any) {
                   })}
                 />
                 <Input
+                  fullWidth
+                  defaultValue={device.user_label}
+                  label="Label Perangkat - Nama Pengguna"
+                  placeholder="Masukan Label disini ..."
+                  description="Silahkan buat label perangkat. Contoh: Laptop Kantor - Fitriani"
+                  type="text"
+                  variant="underlined"
+                  isInvalid={!!errors?.user_label}
+                  errorMessage={
+                    errors?.user_label && `${errors?.user_label.message}`
+                  }
+                  color={errors?.user_label ? "danger" : "default"}
+                  {...register("user_label", {
+                    required: "Label wajib diisi",
+                    pattern: {
+                      value: /^[a-zA-Z0-9\s\-]+$/,
+                      message:
+                        "Label hanya boleh mengandung huruf, angka, spasi dan -",
+                    },
+                  })}
+                />
+                <Input
                   isDisabled
                   fullWidth
                   isReadOnly
@@ -143,7 +169,7 @@ export default function FormDevice({ device }: any) {
                   type="text"
                   variant="underlined"
                 />
-                <Input
+                {/* <Input
                   isDisabled
                   fullWidth
                   isReadOnly
@@ -169,7 +195,7 @@ export default function FormDevice({ device }: any) {
                   label="VENDOR"
                   type="text"
                   variant="underlined"
-                />
+                /> */}
                 <Button
                   isDisabled={isLoading || isSubmitting}
                   className="disabled:cursor-not-allowed disabled:opacity-60 disabled:bg-gray-600"

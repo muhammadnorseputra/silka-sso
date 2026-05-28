@@ -11,6 +11,7 @@ export default async function RegisterDevicesId(FormFileds: any) {
 
   const sendRequest = {
     user_id: devicesInfo.user_id || FormFileds.user_id,
+    user_label: devicesInfo.user_label || FormFileds.user_label,
     device_id: device_id || "",
     user_agent: devicesInfo.userAgent,
     ip: devicesInfo.ip,
