@@ -41,7 +41,7 @@ export async function GET(req: any) {
       maxAge: 3600,
       secure: process.env.NODE_ENV === "production",
     });
-    return Response.redirect(`${fullHost}/dashboard`, 302);
+    return Response.redirect(`${fullHost}/redirecting`, 302);
   }
 
   return Response.json(userinfo);
