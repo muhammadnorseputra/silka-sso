@@ -1,23 +1,24 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import getSession from "./hooks/session_server";
+import { getSessionFromDatabase } from "./services/session-store";
 
 export async function proxy(req: NextRequest) {
   // Retrieve the token from the request
-  const session = await getSession();
-  // const { isBot, browser, device, os } = userAgent(req);
-  // const ip = req.headers.get("x-forwarded-for") || "127.0.0.1";
-  // Check if the token exists and has the necessary properties
-  if (!session || !session.cookie.name) {
-    // Redirect to the homepage if the session is invalid or missing
-    return NextResponse.redirect(new URL("/", req.url));
+  const token = await getSession();
+
+  const sessionFromDB = await getSessionFromDatabase(
+    token?.token_plain as string,
+  );
+
+  console.log(sessionFromDB);
+  if (!sessionFromDB) {
+    const res = NextResponse.redirect(new URL("/", req.url));
+    res.cookies.delete("sso_token");
+    res.cookies.delete("sso_token_plain");
+    return res;
   }
 
-  // console.log(
-  //   `User Agent: ${browser.name} | ${device.type}, ${device.model}, ${device.vendor} | ${os.name} (Bot: ${isBot})`,
-  // );
-  // console.log(`IP Address: ${ip}`);
-  // Proceed with the request if the session is valid
   return NextResponse.next();
 }
 

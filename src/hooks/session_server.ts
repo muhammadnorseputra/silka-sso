@@ -15,6 +15,7 @@ export default async function getSession() {
     return {
       cookie,
       decoded,
+      token_plain: tokenDycript,
     };
   }
 }
