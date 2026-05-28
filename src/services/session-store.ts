@@ -11,11 +11,17 @@ export async function getSessionFromDatabase(token: string) {
     return {
       status: sessionDB.response.status,
       message: sessionDB.response.message,
+      data: {
+        access_token: token,
+      },
     };
   }
 
   return {
     status: true,
     message: "access_token valid",
+    data: {
+      access_token: token,
+    },
   };
 }
