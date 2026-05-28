@@ -39,7 +39,7 @@ export default async function Page({
 
   if (code?.name && sessionFromDB.status && shouldRedirect) {
     return permanentRedirect(
-      `${process.env.NEXT_PUBLIC_PORTAL_SSO_BASE_URL}/${process.env.NEXT_PUBLIC_PORTAL_SSO_CALLBACK}?code=${code_plain}`,
+      `${process.env.NEXT_PUBLIC_PORTAL_SSO_BASE_URL}/${process.env.NEXT_PUBLIC_PORTAL_SSO_CALLBACK}?code=${code_plain?.value}`,
     );
   }
 
