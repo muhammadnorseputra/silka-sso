@@ -35,10 +35,6 @@ export async function GET(req: any) {
     // ACCESS TOKEN
     cookieStore.set({
       name: "sso_token",
-      domain:
-        process.env.NODE_ENV === "production"
-          ? "silka-sso.vercel.app"
-          : "localhost",
       value: tokenEnkripsi.toString(),
       httpOnly: true,
       sameSite: "strict",
