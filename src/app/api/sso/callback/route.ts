@@ -37,11 +37,11 @@ export async function GET(req: any) {
       name: "sso_token",
       domain:
         process.env.NODE_ENV === "production"
-          ? ".silka-sso.vercel.app"
+          ? "silka-sso.vercel.app"
           : "localhost",
       value: tokenEnkripsi.toString(),
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: "strict",
       maxAge: 3600,
       secure: process.env.NODE_ENV === "production",
     });

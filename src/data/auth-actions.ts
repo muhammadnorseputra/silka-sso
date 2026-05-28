@@ -107,7 +107,7 @@ export default async function AuthVerify(formData: any) {
           name: "sso_state",
           value: formData.state,
           httpOnly: true,
-          sameSite: "lax",
+          sameSite: "strict",
           maxAge: 60,
           secure: true,
         });
@@ -119,7 +119,7 @@ export default async function AuthVerify(formData: any) {
           name: "sso_code",
           value: codeEnkripsi.toString(),
           httpOnly: true,
-          sameSite: "lax",
+          sameSite: "strict",
           maxAge: 3600,
           secure: true,
         });
@@ -139,11 +139,11 @@ export default async function AuthVerify(formData: any) {
           name: "sso_token",
           domain:
             process.env.NODE_ENV === "production"
-              ? ".silka-sso.vercel.app"
+              ? "silka-sso.vercel.app"
               : "localhost",
           value: tokenEnkripsi.toString(),
           httpOnly: true,
-          sameSite: "lax",
+          sameSite: "strict",
           maxAge: 3600,
           secure: true,
         });
