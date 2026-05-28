@@ -137,6 +137,10 @@ export default async function AuthVerify(formData: any) {
          */
         cookieStore.set({
           name: "sso_token",
+          domain:
+            process.env.NODE_ENV === "production"
+              ? ".silka-sso.vercel.app"
+              : "localhost",
           value: tokenEnkripsi.toString(),
           httpOnly: true,
           sameSite: "lax",
