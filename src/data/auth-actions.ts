@@ -107,7 +107,7 @@ export default async function AuthVerify(formData: any) {
           name: "sso_state",
           value: formData.state,
           httpOnly: true,
-          sameSite: "strict",
+          sameSite: "none",
           maxAge: 60,
           secure: true,
         });
@@ -119,7 +119,7 @@ export default async function AuthVerify(formData: any) {
           name: "sso_code",
           value: codeEnkripsi.toString(),
           httpOnly: true,
-          sameSite: "strict",
+          sameSite: "none",
           maxAge: 3600,
           secure: true,
         });
@@ -128,7 +128,7 @@ export default async function AuthVerify(formData: any) {
           name: "sso_code_plain",
           value: data.data.code,
           httpOnly: true,
-          sameSite: "strict",
+          sameSite: "none",
           maxAge: 3600,
           secure: true,
         });
@@ -148,7 +148,7 @@ export default async function AuthVerify(formData: any) {
           name: "sso_token",
           value: tokenEnkripsi.toString(),
           httpOnly: true,
-          sameSite: "strict",
+          sameSite: "none",
           maxAge: 3600,
           secure: true,
         });
@@ -157,7 +157,7 @@ export default async function AuthVerify(formData: any) {
           name: "sso_token_plain",
           value: userinfo.response.access_token,
           httpOnly: true,
-          sameSite: "strict",
+          sameSite: "none",
           maxAge: 3600,
           secure: true,
         });
