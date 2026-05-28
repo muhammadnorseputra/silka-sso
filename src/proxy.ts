@@ -11,7 +11,6 @@ export async function proxy(req: NextRequest) {
     token?.token_plain as string,
   );
 
-  console.log(sessionFromDB);
   if (!sessionFromDB) {
     const res = NextResponse.redirect(new URL("/", req.url));
     res.cookies.delete("sso_token");
