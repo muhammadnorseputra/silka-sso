@@ -37,11 +37,11 @@ export async function GET(req: any) {
       name: "sso_token",
       value: tokenEnkripsi.toString(),
       httpOnly: true,
-      sameSite: "strict",
+      sameSite: "lax",
       maxAge: 3600,
       secure: process.env.NODE_ENV === "production",
     });
-    return Response.redirect(`${fullHost}/redirecting`, 302);
+    return Response.redirect(`${fullHost}/checking`, 302);
   }
 
   return Response.json(userinfo);

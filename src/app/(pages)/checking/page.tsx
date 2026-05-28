@@ -26,7 +26,7 @@ export default function Page() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center px-4 py-10">
       <Card className="w-full max-w-xl shadow-xl border border-slate-200 dark:border-slate-800">
         <CardBody className="text-center space-y-8 p-10">
-          <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-sky-500 to-cyan-500 text-white">
+          <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-linear-to-br from-sky-500 to-cyan-500 text-white">
             <ArrowPathIcon className="size-12 animate-spin" />
           </div>
 

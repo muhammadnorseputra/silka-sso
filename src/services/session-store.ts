@@ -12,7 +12,7 @@ export async function getSessionFromDatabase(token: string) {
       status: sessionDB.response.status,
       message: sessionDB.response.message,
       data: {
-        access_token: token,
+        access_token: null,
       },
     };
   }
