@@ -124,6 +124,15 @@ export default async function AuthVerify(formData: any) {
           secure: true,
         });
 
+        cookieStore.set({
+          name: "sso_code_plain",
+          value: data.data.code,
+          httpOnly: true,
+          sameSite: "strict",
+          maxAge: 3600,
+          secure: true,
+        });
+
         /**
          * Encrypt Access Token
          */
