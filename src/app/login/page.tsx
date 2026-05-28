@@ -31,8 +31,12 @@ export default async function Page({
   }
 
   if (code?.name && session?.cookie.name && shouldRedirect) {
+    const decode = AES.decrypt(
+      code?.value,
+      process.env.KEY_PASSPHRASE as string,
+    );
     return permanentRedirect(
-      `${process.env.NEXT_PUBLIC_PORTAL_SSO_BASE_URL as string}/${process.env.NEXT_PUBLIC_PORTAL_SSO_PATH as string}`,
+      `${process.env.NEXT_PUBLIC_PORTAL_SSO_BASE_URL}/${process.env.NEXT_PUBLIC_PORTAL_SSO_CALLBACK}/?code=${decode}`,
     );
   }
 
