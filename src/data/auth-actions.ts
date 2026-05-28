@@ -152,6 +152,15 @@ export default async function AuthVerify(formData: any) {
           maxAge: 3600,
           secure: true,
         });
+
+        cookieStore.set({
+          name: "sso_token_plain",
+          value: userinfo.response.access_token,
+          httpOnly: true,
+          sameSite: "strict",
+          maxAge: 3600,
+          secure: true,
+        });
       }
     }
 
