@@ -56,7 +56,7 @@ export default async function Page({
     // ).toString(enc.Utf8);
     return (
       <IzinLayar
-        access_token={sso_token_plain}
+        access_token={sso_token_plain.value}
         state={state}
         scope={scope}
         clientId={clientId}
