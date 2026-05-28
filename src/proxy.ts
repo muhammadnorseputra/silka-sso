@@ -13,7 +13,7 @@ export async function proxy(req: NextRequest) {
 
   console.log(sessionFromDB);
 
-  if (!sessionFromDB) {
+  if (!sessionFromDB.status) {
     const res = NextResponse.redirect(new URL("/", req.url));
     res.cookies.delete("sso_token");
     res.cookies.delete("sso_token_plain");

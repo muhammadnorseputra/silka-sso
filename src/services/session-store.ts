@@ -8,8 +8,14 @@ export async function getSessionFromDatabase(token: string) {
   });
 
   if (!sessionDB.response.status) {
-    return sessionDB.response.status;
+    return {
+      status: sessionDB.response.status,
+      message: sessionDB.response.message,
+    };
   }
 
-  return true;
+  return {
+    status: true,
+    message: "access_token valid",
+  };
 }
