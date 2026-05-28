@@ -42,7 +42,7 @@ export default async function Page({
       process.env.KEY_PASSPHRASE as string,
     );
     return permanentRedirect(
-      `${process.env.NEXT_PUBLIC_PORTAL_SSO_BASE_URL}/${process.env.NEXT_PUBLIC_PORTAL_SSO_CALLBACK}/api/oauth/code=${decode}`,
+      `${process.env.NEXT_PUBLIC_PORTAL_SSO_BASE_URL}/${process.env.NEXT_PUBLIC_PORTAL_SSO_CALLBACK}?code=${decode}`,
     );
   }
 
