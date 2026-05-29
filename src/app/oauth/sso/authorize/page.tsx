@@ -44,10 +44,9 @@ export default async function Page({
   }
 
   // Izin Layar
-  const code = (await cookies()).get("sso_code");
   const sso_token = (await cookies()).get("sso_token");
 
-  if (sso_token?.name && code?.name) {
+  if (sso_token) {
     const access_token = AES.decrypt(
       sso_token?.value,
       process.env.KEY_PASSPHRASE as string,

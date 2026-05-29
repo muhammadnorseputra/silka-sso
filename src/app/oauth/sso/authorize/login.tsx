@@ -63,10 +63,10 @@ export default function Login({
         ...FormFileds,
         scope,
         client_id:
-          client?.data.client_id ?? "d0929547-5810-4d60-a653-2d39927a1755",
+          client?.data.client_id ?? "5aa888ec-92be-4fdf-8c69-8c96e99e11ff",
         client_secret:
           client?.data.client_secret ??
-          "IU67[Y$.7F?NR(2%tllq]crmDdepYS]3a+a_]v]F88uP&!Y5`gpc#s47Z*Df'/w",
+          "+51jett5h))zpfhvwhej*r8_0%nej9ljx=*df0_b&2ss3wix*p",
         state,
       };
 
