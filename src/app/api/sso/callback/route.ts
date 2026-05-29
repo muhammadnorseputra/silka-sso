@@ -26,7 +26,6 @@ export async function GET(req: any) {
   }
 
   const userinfo = await AccessToken(code);
-  console.log(userinfo);
   if (userinfo.response.status) {
     const tokenEnkripsi = AES.encrypt(
       userinfo.response.access_token,
