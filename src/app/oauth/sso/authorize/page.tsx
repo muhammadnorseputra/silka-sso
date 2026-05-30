@@ -44,11 +44,11 @@ export default async function Page({
   }
 
   // Izin Layar
-  const sso_token = (await cookies()).get("sso_token");
+  const cookiestore = await cookies();
 
-  if (sso_token) {
+  if (cookiestore.has("sso_token")) {
     const access_token = AES.decrypt(
-      sso_token?.value,
+      cookiestore.get("sso_token")?.value as string,
       process.env.KEY_PASSPHRASE as string,
     ).toString(enc.Utf8);
     return (

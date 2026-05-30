@@ -35,13 +35,13 @@ export default async function Page({
 
   if (cookiestore.has("sso_code") && !sessionFromDB.status) {
     return permanentRedirect(
-      `/oauth/sso/authorize?client_id=5aa888ec-92be-4fdf-8c69-8c96e99e11ff&client_name=SSO Portal&response_type=code&redirect_uri=http://localhost:4000/api/oauth/`,
+      `/oauth/sso/authorize?client_id=5aa888ec-92be-4fdf-8c69-8c96e99e11ff&client_name=SSO Portal&response_type=code&redirect_uri=${redirectTo}`,
     );
   }
 
   if (cookiestore.has("sso_code") && sessionFromDB.status && redirectTo) {
     const decode = AES.decrypt(
-      code?.value,
+      code?.value as string,
       process.env.KEY_PASSPHRASE as string,
     );
     const uri = `${redirectTo}?code=${decode.toString(enc.Utf8)}`;
@@ -50,7 +50,7 @@ export default async function Page({
 
   if (cookiestore.has("sso_code") && sessionFromDB.status && shouldRedirect) {
     const decode = AES.decrypt(
-      code?.value,
+      code?.value as string,
       process.env.KEY_PASSPHRASE as string,
     );
     return permanentRedirect(

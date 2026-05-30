@@ -55,7 +55,7 @@ export default function ForgotPassword() {
             <CardBody>
               <Link
                 href="/login"
-                className="flex items-center text-blue-600 mb-6 gap-1 w-fit hover:underline">
+                className="flex items-center text-blue-400 mb-6 gap-1 w-fit hover:underline">
                 <ChevronLeftIcon className="size-4" />
                 Back to Login
               </Link>
@@ -83,10 +83,10 @@ export default function ForgotPassword() {
                   className="text-gray-800 dark:text-white"
                   isRequired
                   label="Email"
-                  labelPlacement="outside"
+                  labelPlacement="inside"
                   id="email"
                   size="lg"
-                  variant="bordered"
+                  variant="flat"
                   placeholder="Enter your email"
                   type="email"
                   description="Kode OTP akan dikirimkan ke email anda."

@@ -9,6 +9,7 @@ import {
   Tooltip,
   Spinner,
   Alert,
+  CardFooter,
 } from "@heroui/react";
 import Link from "next/link";
 import {
@@ -29,6 +30,7 @@ import { v4 as uuidv4 } from "uuid";
 import ChipComponent from "@/components/chip";
 
 import { useReCaptcha } from "next-recaptcha-v3";
+import { useTheme } from "next-themes";
 
 export default function Login({
   client,
@@ -37,6 +39,7 @@ export default function Login({
   redirectUri = `${process.env.NEXT_PUBLIC_PORTAL_SSO_BASE_URL as string}/${process.env.NEXT_PUBLIC_PORTAL_SSO_CALLBACK as string}`,
   typeAccount,
 }: any) {
+  const { resolvedTheme } = useTheme();
   const router = useRouter();
   const { executeRecaptcha } = useReCaptcha();
   const [isVisible, setIsVisible] = useState(false);
@@ -94,25 +97,25 @@ export default function Login({
 
   return (
     <>
-      {/* Gradient Background */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-0 md:w-125 md:h-125 bg-blue-500/10 blur-3xl rounded-full" />
-        <div className="absolute bottom-0 right-0 md:w-125 md:h-125 bg-fuchsia-500/10 blur-3xl rounded-full" />
-      </div>
-      <div className="relative z-10 max-w-2xl mx-auto text-center space-y-4">
-        <h3 className="text-3xl fw-bold flex items-center justify-center gap-x-3">
-          Single Sign-On{" "}
-          <FingerPrintIcon className="size-12 text-gray-800 dark:text-white" />
-        </h3>
-        <p className="font-bold">Sistem Informasi Layanan Kepegawaian</p>
-      </div>
       <Card
-        fullWidth={false}
-        shadow="sm"
-        radius="lg"
-        className="relative w-full max-w-lg rounded-3xl border border-white dark:border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl p-2 sm:p-6 md:p-8">
+        fullWidth={true}
+        isBlurred
+        shadow="none"
+        radius="sm"
+        className="relative w-full max-w-lg rounded-3xl border border-white/20 dark:border-white/10 bg-white/10 dark:bg-pink-200/10 backdrop-blur-3xl shadow-sm p-2 sm:p-6 md:px-8 md:pt-2 md:pb-0 ring-1 ring-white/60 dark:ring-white/10">
         <CardHeader className="flex flex-col">
-          <div className="flex items-center justify-center w-full">
+          <div className="p-3 border border-white/20 rounded-full bg-transparent">
+            <div className="p-3 border border-white/60 rounded-full bg-transparent">
+              <div className="p-3 border border-white/90 rounded-full bg-white/30 dark:bg-pink-300/70 backdrop-blur-lg shadow-xl shadow-white dark:shadow-pink-300">
+                <FingerPrintIcon className="size-12 text-gray-800 dark:text-white" />
+              </div>
+            </div>
+          </div>
+          <h3 className="text-3xl fw-bold flex items-center justify-center gap-x-3">
+            Single Sign-On{" "}
+          </h3>
+          <p className="font-bold">Sistem Informasi Layanan Kepegawaian</p>
+          <div className="flex items-center justify-center w-full mt-6">
             <Alert
               color="primary"
               description="Silahkan gunakan akun anda untuk mengakses berbagai
@@ -128,7 +131,7 @@ export default function Login({
             method="POST"
             autoComplete="off"
             noValidate
-            className="flex flex-col gap-y-4">
+            className="flex flex-col space-y-3">
             {/* <Select
               isRequired
               isDisabled={isLoading || isSubmitting || loadingBtn}
@@ -194,11 +197,11 @@ export default function Login({
             <Input
               isRequired
               isDisabled={isLoading || isSubmitting || loadingBtn}
-              variant="bordered"
+              variant="flat"
               type="text"
-              radius="lg"
+              radius="sm"
               label="Username"
-              labelPlacement="outside"
+              labelPlacement="inside"
               placeholder="Enter your username"
               size="lg"
               isInvalid={errors?.username ? true : false}
@@ -220,12 +223,12 @@ export default function Login({
               isRequired
               isDisabled={isLoading || isSubmitting || loadingBtn}
               label="Password"
-              variant="bordered"
+              variant="flat"
               size="lg"
               // color={errors?.password ? "danger" : "default"}
               isInvalid={errors?.password ? true : false}
-              radius="lg"
-              labelPlacement="outside"
+              radius="sm"
+              labelPlacement="inside"
               placeholder="Enter your password"
               {...register("password", {
                 required: "Password wajib diisi",
@@ -258,15 +261,21 @@ export default function Login({
               type={isVisible ? "text" : "password"}
             />
             <Button
-              className="disabled:cursor-not-allowed disabled:opacity-60"
+              className="disabled:cursor-not-allowed disabled:opacity-60 mt-2"
               isDisabled={isLoading || isSubmitting || loadingBtn || !isValid}
               isLoading={isLoading || isSubmitting || loadingBtn}
               type="submit"
               fullWidth
               size="lg"
-              color="primary"
+              color="secondary"
               variant="shadow"
-              spinner={<Spinner color="default" variant="dots" size="sm" />}
+              spinner={
+                <Spinner
+                  color={resolvedTheme === "dark" ? "warning" : "default"}
+                  variant="dots"
+                  size="sm"
+                />
+              }
               radius="sm">
               {isLoading || isSubmitting || loadingBtn ? "" : "Login Sekarang"}
             </Button>
@@ -285,16 +294,16 @@ export default function Login({
                 color="primary"
                 prefetch
                 href="/login/lupa-password"
-                className="text-blue-500 hover:text-blue-600 hover:underline">
+                className="text-blue-500 hover:text-blue-600 dark:text-pink-300 dark:hover:text-pink-300/80 hover:underline">
                 Lupa atau ganti password ?
               </Link>
             </div>
-            <div className="flex items-center my-6">
-              <div className="grow border-t border-gray-300 dark:border-gray-600"></div>
-              <span className="px-4 text-gray-500">
-                <LockClosedIcon className="size-6 text-gray-300" />
+            <div className="flex items-center mb-6">
+              <div className="grow border-t border-gray-100 dark:border-gray-400"></div>
+              <span className="px-4 text-gray-100">
+                <LockClosedIcon className="size-6 text-gray-100" />
               </span>
-              <div className="grow border-t border-gray-300 dark:border-gray-600"></div>
+              <div className="grow border-t border-gray-100 dark:border-gray-400"></div>
             </div>
             <Button
               onPress={() => {
@@ -304,15 +313,17 @@ export default function Login({
               size="lg"
               color="secondary"
               startContent={<DevicePhoneMobileIcon />}
-              variant="bordered">
+              variant="flat">
               Registrasi Perangkat
             </Button>
           </form>
         </CardBody>
+        <CardFooter>
+          <span className="text-black/40 text-sm text-ellipsis text-center">
+            &copy; 2024 | Dikembangakan oleh Bidang PPIK - BKPSDM Balangan.
+          </span>
+        </CardFooter>
       </Card>
-      <span className="text-gray-400 dark:text-white text-sm text-ellipsis text-center">
-        &copy; 2024 | Dikembangakan oleh Bidang PPIK - BKPSDM Kab. Balangan.
-      </span>
     </>
   );
 }

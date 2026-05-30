@@ -61,10 +61,9 @@ export default function FormDevice({ device }: any) {
   return (
     <>
       {/* Gradient Background */}
-
-      <div className="flex flex-col items-center justify-center min-h-screen m-0 sm:m-8">
+      <div className="flex flex-col items-center justify-center m-0 sm:m-8">
         <div className="px-0 min-w-full sm:min-w-125">
-          <Card className="w-full sm:max-w-lg rounded-3xl border border-white dark:border-white/10 bg-white/15 backdrop-blur-xl shadow-2xl p-6 sm:p-6 md:p-8">
+          <Card className="min-w-full sm:max-w-lg rounded-3xl border border-white dark:border-white/10 bg-white/15 backdrop-blur-xl shadow-2xl p-6 sm:p-6 md:p-8">
             <CardBody>
               <Link
                 href="/login"

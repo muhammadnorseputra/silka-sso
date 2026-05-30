@@ -15,6 +15,7 @@ import {
   Spinner,
 } from "@heroui/react";
 import { jwtDecode, JwtPayload } from "jwt-decode";
+import { useTheme } from "next-themes";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import toast from "react-hot-toast";
@@ -31,6 +32,9 @@ export default function IzinLayar({
   clientId,
   redirectUri,
 }: any) {
+  const { resolvedTheme } = useTheme();
+
+  // get parameter
   const params = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -73,7 +77,6 @@ export default function IzinLayar({
 
   const handleLogout = async () => {
     // RUN SOME VALIDATION HERE
-
     startTransition(() => {
       return logout(nip, clientId, access_token, parameter);
     });
@@ -133,13 +136,16 @@ export default function IzinLayar({
           onPress={handleIzin}
           fullWidth
           size="lg"
-          isLoading={isPending}
           isDisabled={isPending}
           variant="shadow"
           color="primary"
           className="font-bold">
           {isPending ? (
-            <Spinner color="default" variant="dots" size="sm" />
+            <Spinner
+              color={resolvedTheme === "dark" ? "warning" : "default"}
+              variant="dots"
+              size="sm"
+            />
           ) : (
             <>
               Lanjutkan
@@ -164,14 +170,17 @@ export default function IzinLayar({
         <Button
           onPress={handleLogout}
           fullWidth
-          isLoading={isPending}
           isDisabled={isPending}
           variant="solid"
           color="danger"
           size="lg"
           className="font-bold">
           {isPending ? (
-            <Spinner color="default" variant="dots" size="sm" />
+            <Spinner
+              color={resolvedTheme === "dark" ? "warning" : "default"}
+              variant="dots"
+              size="sm"
+            />
           ) : (
             "Logout Akun"
           )}

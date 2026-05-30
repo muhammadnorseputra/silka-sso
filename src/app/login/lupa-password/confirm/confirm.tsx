@@ -84,11 +84,11 @@ export default function Confirm({ access_token, decoded }: any) {
               variant="faded"
             />
           )}
-          <Card className="relative w-full rounded-3xl border border-white dark:border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl p-2 sm:p-6 md:p-8 mt-4">
+          <Card className="relative w-full rounded-3xl border border-white dark:border-white/10 bg-white/5 backdrop-blur-2xl shadow-xl shadow-white/30 dark:shadow-black/30 p-2 sm:p-6 md:p-8 mt-4 ring-3 ring-white/10 dark:rink-black/10">
             <CardBody>
               <Link
                 href="/login/lupa-password"
-                className="flex items-center text-blue-600 mb-6 gap-1 w-fit hover:underline">
+                className="flex items-center text-blue-400 mb-6 gap-1 w-fit hover:underline">
                 <ChevronLeftIcon className="size-4" />
                 Batal
               </Link>
@@ -101,6 +101,7 @@ export default function Confirm({ access_token, decoded }: any) {
                 <Input
                   isRequired
                   size="lg"
+                  radius="sm"
                   label="New Password"
                   placeholder="Masukan password baru"
                   description="Password must contain uppercase, lowercase, number, and special character"
@@ -145,11 +146,12 @@ export default function Confirm({ access_token, decoded }: any) {
                     </Tooltip>
                   }
                   type={isVisible ? "text" : "password"}
-                  variant="faded"
+                  variant="flat"
                 />
                 <Input
                   isRequired
                   size="lg"
+                  radius="sm"
                   label="Retype Password"
                   placeholder="Masukan password yang sama"
                   isInvalid={!!errors?.confirmPassword}
@@ -188,12 +190,12 @@ export default function Confirm({ access_token, decoded }: any) {
                     </Tooltip>
                   }
                   type={isVisibleConfirmPassword ? "text" : "password"}
-                  variant="faded"
+                  variant="flat"
                 />
                 <InputOtp
                   isRequired
                   length={6}
-                  variant="bordered"
+                  variant="flat"
                   size="lg"
                   description="Silahkan masukan kode OTP yang telah dikirimkan ke email anda"
                   {...register("otp", {
