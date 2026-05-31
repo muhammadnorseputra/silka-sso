@@ -33,6 +33,8 @@ export default function FormDevice({ device }: any) {
     }
   });
 
+  console.log("device_info :", device);
+
   const onSubmit = async (FormFileds: any) => {
     // kirim data ke be
     const FromData = {
