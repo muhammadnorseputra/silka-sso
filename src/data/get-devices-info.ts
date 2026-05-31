@@ -114,7 +114,7 @@ export default async function GetDevicesInfo() {
   return {
     user_id: null,
     user_label: null,
-    device_id: device_id_from_cookie,
+    device_id: null,
     ip,
     userAgent: ua,
     browser: browser.name,
