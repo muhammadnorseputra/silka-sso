@@ -4,6 +4,7 @@ import { userAgent } from "next/server";
 import { cookies, headers } from "next/headers";
 
 async function fetchDeviceApi(
+  device_id: any,
   browser: any,
   os: any,
   model: any,
@@ -13,7 +14,7 @@ async function fetchDeviceApi(
   const url = `${process.env.NEXT_PUBLIC_SILKA_BASE_URL}`;
   try {
     const req = await fetch(
-      `${url}/${process.env.NEXT_PUBLIC_VERSION}/pendaftaran/devices?browser=${browser}&os=${os}&model=${model}&vendor=${vendor}&device=${device}`,
+      `${url}/${process.env.NEXT_PUBLIC_VERSION}/pendaftaran/devices?device_id=${device_id}&browser=${browser}&os=${os}&model=${model}&vendor=${vendor}&device=${device}`,
       {
         method: "GET",
         cache: "no-store",
@@ -86,6 +87,7 @@ export default async function GetDevicesInfo() {
 
   // get info device from api /pendaftaran/devices?browser=Chrome&os=Mac OS&model=Macintosh&vendor=Apple&device=desktop&is_bot=0
   const deviceInfo = await fetchDeviceApi(
+    device_id_from_cookie,
     browser.name,
     os.name,
     device.model,
