@@ -95,6 +95,8 @@ export default async function GetDevicesInfo() {
     device.type || "desktop",
   );
 
+  console.log(deviceInfo);
+
   if (deviceInfo.status) {
     return {
       user_id: deviceInfo.data.user_id,
