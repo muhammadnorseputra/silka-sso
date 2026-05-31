@@ -198,7 +198,7 @@ export default function FormDevice({ device }: any) {
                   type="text"
                   variant="underlined"
                 />
-                {/* <Input
+                <Input
                   isDisabled
                   fullWidth
                   isReadOnly
@@ -224,7 +224,7 @@ export default function FormDevice({ device }: any) {
                   label="VENDOR"
                   type="text"
                   variant="underlined"
-                /> */}
+                />
                 <Button
                   isDisabled={isLoading || isSubmitting}
                   className="disabled:cursor-not-allowed disabled:opacity-60 disabled:bg-gray-600"
