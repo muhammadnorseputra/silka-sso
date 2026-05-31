@@ -101,8 +101,8 @@ export default async function GetDevicesInfo() {
     device_id_from_cookie,
     browser.name,
     os.name,
-    device.model,
-    device.vendor,
+    device.model || "-",
+    device.vendor || "-",
     device.type || "desktop",
   );
 
