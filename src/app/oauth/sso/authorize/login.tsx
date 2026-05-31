@@ -13,6 +13,7 @@ import {
 } from "@heroui/react";
 import Link from "next/link";
 import {
+  ArrowRightCircleIcon,
   DevicePhoneMobileIcon,
   EyeIcon,
   EyeSlashIcon,
@@ -121,7 +122,8 @@ export default function Login({
               description="Silahkan gunakan akun anda untuk mengakses berbagai
             layanan kepegawaian."
               endContent={<ChipComponent name={typeAccount} />}
-              variant="faded"
+              variant="flat"
+              radius="sm"
             />
           </div>
         </CardHeader>
@@ -197,8 +199,9 @@ export default function Login({
             <Input
               isRequired
               isDisabled={isLoading || isSubmitting || loadingBtn}
-              variant="flat"
+              variant="faded"
               type="text"
+              color={errors?.password ? "danger" : "default"}
               radius="sm"
               label="Username"
               labelPlacement="inside"
@@ -218,14 +221,15 @@ export default function Login({
               startContent={
                 <UserIcon className="size-5 text-default-400 pointer-events-none shrink-0 mr-2" />
               }
+              className="transition-all duration-300"
             />
             <Input
               isRequired
               isDisabled={isLoading || isSubmitting || loadingBtn}
               label="Password"
-              variant="flat"
+              variant="faded"
               size="lg"
-              // color={errors?.password ? "danger" : "default"}
+              color={errors?.password ? "danger" : "default"}
               isInvalid={errors?.password ? true : false}
               radius="sm"
               labelPlacement="inside"
@@ -259,9 +263,10 @@ export default function Login({
                 </Tooltip>
               }
               type={isVisible ? "text" : "password"}
+              className="transition-all duration-300"
             />
             <Button
-              className="disabled:cursor-not-allowed disabled:opacity-60 mt-2"
+              className="disabled:cursor-not-allowed disabled:opacity-60 mt-3 group"
               isDisabled={isLoading || isSubmitting || loadingBtn || !isValid}
               isLoading={isLoading || isSubmitting || loadingBtn}
               type="submit"
@@ -269,6 +274,13 @@ export default function Login({
               size="lg"
               color="secondary"
               variant="shadow"
+              endContent={
+                isLoading || isSubmitting || loadingBtn ? (
+                  ""
+                ) : (
+                  <ArrowRightCircleIcon className="group-hover:ml-7 transition-all duration-400" />
+                )
+              }
               spinner={
                 <Spinner
                   color={resolvedTheme === "dark" ? "warning" : "default"}
@@ -277,7 +289,7 @@ export default function Login({
                 />
               }
               radius="sm">
-              {isLoading || isSubmitting || loadingBtn ? "" : "Login Sekarang"}
+              {isLoading || isSubmitting || loadingBtn ? "" : "Masuk Sekarang"}
             </Button>
             <div className="flex justify-between items-center">
               {/* <HeroLink
@@ -294,7 +306,7 @@ export default function Login({
                 color="primary"
                 prefetch
                 href="/login/lupa-password"
-                className="text-blue-500 hover:text-blue-600 dark:text-pink-300 dark:hover:text-pink-300/80 hover:underline">
+                className="text-indigo-700 hover:text-indigo-800 dark:text-pink-300 dark:hover:text-pink-300/80 hover:underline">
                 Lupa atau ganti password ?
               </Link>
             </div>
@@ -313,13 +325,13 @@ export default function Login({
               size="lg"
               color="secondary"
               startContent={<DevicePhoneMobileIcon />}
-              variant="flat">
+              variant="solid">
               Registrasi Perangkat
             </Button>
           </form>
         </CardBody>
         <CardFooter>
-          <span className="text-black/40 text-sm text-ellipsis text-center">
+          <span className="text-black/90 dark:text-white/40 text-sm text-ellipsis text-center">
             &copy; 2024 | Dikembangakan oleh Bidang PPIK - BKPSDM Balangan.
           </span>
         </CardFooter>

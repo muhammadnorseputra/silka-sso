@@ -25,8 +25,8 @@ export default function SSOAccount() {
         className="py-8 hover:shadow-xl hover:scale-110"
         fullWidth
         size="lg"
-        variant="ghost"
-        color="danger"
+        variant="solid"
+        color="primary"
         disableRipple={true}
         startContent={<UserGroupIcon />}
         onPress={() => handleAccount("UMPEG")}>

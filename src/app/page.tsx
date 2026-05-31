@@ -12,7 +12,6 @@ export default async function Page() {
     session?.token_plain as string,
   );
 
-
   if (sessionFromDB.status && shouldRedirect) {
     // Redirect to the dashboard if the user is already logged in
     permanentRedirect(
@@ -21,9 +20,9 @@ export default async function Page() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col sm:flex-row">
+    <div className="group w-full flex flex-col items-center justify-center">
       {/* Left Side - Blue Section */}
-      <div className="flex-1 sm:max-w-150 sm:rounded-r-2xl bg-[url('/bg-home.png')] bg-cover p-12 flex flex-col justify-center text-white">
+      <div className="flex-1 rounded-b-2xl sm:max-w-150 bg-[url('/bg-home.png')] bg-cover p-12 flex flex-col justify-center text-white z-30 relative -top-5 group-hover:top-0 transition-all duration-200">
         <div className="max-w-md">
           {/* Logo */}
           <div className="mb-8">
@@ -49,9 +48,8 @@ export default async function Page() {
           </p>
         </div>
       </div>
-
       {/* Right Side - Login Form */}
-      <div className="flex-1 bg-white dark:bg-slate-900 p-12 flex flex-col justify-center">
+      <div className="flex-1 bg-white dark:bg-slate-800 p-8 flex rounded-b-2xl flex-col justify-center relative -top-5 z-20 group-hover:top-0 transition-all duration-400">
         <div className="max-w-md mx-auto w-full">
           {/* Welcome Header */}
           <div className="text-center mb-8">
@@ -67,15 +65,13 @@ export default async function Page() {
           <div className="space-y-6">
             <SSOAccount />
           </div>
-
-          {/* Footer */}
-          <div className="mt-12 text-center">
-            <p className="text-sm text-gray-400">
-              &copy; 2024 | Dikembangakan oleh Bidang PPIK - BKPSDM Kab.
-              Balangan.
-            </p>
-          </div>
         </div>
+      </div>
+      {/* Footer */}
+      <div className="flex-1 text-center p-4 dark:bg-slate-600 rounded-b-2xl mx-12 relative -top-5 group-hover:top-0 transition-all duration-600">
+        <p className="text-sm text-gray-600 dark:text-gray-300">
+          &copy; 2024 | Dikembangakan oleh Bidang PPIK - BKPSDM Kab. Balangan.
+        </p>
       </div>
     </div>
   );

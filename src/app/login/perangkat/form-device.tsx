@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import React, { Activity } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
+import { v4 as uuidv4 } from "uuid";
+import { getCookie, hasCookie, setCookie } from "cookies-next/client";
 
 export default function FormDevice({ device }: any) {
   const {
@@ -20,11 +22,27 @@ export default function FormDevice({ device }: any) {
   const [token, setToken] = React.useState("");
 
   const router = useRouter();
+  const stateDevice = uuidv4();
+  const stateFromCookie = getCookie("device_id_state");
+
+  React.useLayoutEffect(() => {
+    if (!hasCookie("device_id_state")) {
+      setCookie("device_id_state", stateDevice, {
+        maxAge: 365 * 24 * 60 * 60 * 1000,
+      });
+    }
+  });
 
   const onSubmit = async (FormFileds: any) => {
+    // kirim data ke be
+    const FromData = {
+      state: stateFromCookie,
+      ...FormFileds,
+    };
+
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const result = await toast.promise(RegisterDevicesId(FormFileds), {
+      const result = await toast.promise(RegisterDevicesId(FromData), {
         loading: "Sedang memproses...",
         success: (result) => {
           if (result.message.user_id) {
@@ -40,6 +58,10 @@ export default function FormDevice({ device }: any) {
               message:
                 result.message.user_label || "Gagal mendapatkan user_label",
             });
+          }
+
+          if (result.message.state) {
+            throw new Error(result.message.state);
           }
 
           if (!result.status) {
@@ -61,13 +83,13 @@ export default function FormDevice({ device }: any) {
   return (
     <>
       {/* Gradient Background */}
-      <div className="flex flex-col items-center justify-center m-0 sm:m-8">
-        <div className="px-0 min-w-full sm:min-w-125">
-          <Card className="min-w-full sm:max-w-lg rounded-3xl border border-white dark:border-white/10 bg-white/15 backdrop-blur-xl shadow-2xl p-6 sm:p-6 md:p-8">
+      <div className="flex flex-col items-center justify-center">
+        <div className="w-full sm:min-w-125">
+          <Card className="rounded-3xl border border-white dark:border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl p-6 sm:p-6 md:p-8">
             <CardBody>
               <Link
                 href="/login"
-                className="flex items-center text-blue-600 mb-6 gap-1 w-fit hover:underline">
+                className="flex items-center text-blue-600 dark:text-blue-300 mb-6 gap-1 w-fit hover:underline">
                 <ChevronLeftIcon className="size-4" />
                 Back to Login
               </Link>
@@ -79,9 +101,15 @@ export default function FormDevice({ device }: any) {
                 className="space-y-6">
                 <Activity
                   mode={device?.device_id || token ? "visible" : "hidden"}>
-                  <Snippet symbol="ID :" variant="shadow" color="default">
-                    {device?.device_id || token}
-                  </Snippet>
+                  <Input
+                    isDisabled
+                    fullWidth
+                    isReadOnly
+                    defaultValue={device?.device_id || token}
+                    label="DEVICE ID"
+                    type="text"
+                    variant="underlined"
+                  />
                 </Activity>
                 <Activity
                   mode={!device?.device_id && !token ? "visible" : "hidden"}>
@@ -103,7 +131,8 @@ export default function FormDevice({ device }: any) {
                   type="number"
                   maxLength={18}
                   minLength={8}
-                  variant="underlined"
+                  size="lg"
+                  variant="faded"
                   isInvalid={!!errors?.user_id}
                   errorMessage={errors?.user_id && `${errors?.user_id.message}`}
                   color={errors?.user_id ? "danger" : "default"}
@@ -126,7 +155,8 @@ export default function FormDevice({ device }: any) {
                   placeholder="Masukan Label disini ..."
                   description="Silahkan buat label perangkat. Contoh: Laptop Kantor - Fitriani"
                   type="text"
-                  variant="underlined"
+                  size="lg"
+                  variant="faded"
                   isInvalid={!!errors?.user_label}
                   errorMessage={
                     errors?.user_label && `${errors?.user_label.message}`
