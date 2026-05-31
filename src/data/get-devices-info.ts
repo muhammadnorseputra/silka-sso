@@ -95,7 +95,16 @@ export default async function GetDevicesInfo() {
     device.type || "desktop",
   );
 
-  console.log(deviceInfo);
+  console.log("device_info", deviceInfo);
+  console.log(
+    "req",
+    device_id_from_cookie,
+    browser.name,
+    os.name,
+    device.model,
+    device.vendor,
+    device.type || "desktop",
+  );
 
   if (deviceInfo.status) {
     return {
