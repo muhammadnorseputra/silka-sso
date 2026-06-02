@@ -2,14 +2,13 @@
 
 import RegisterDevicesId from "@/data/register-devices-id";
 import { ChevronLeftIcon } from "@heroicons/react/16/solid";
-import { Button, Card, CardBody, Input, Snippet, Spinner } from "@heroui/react";
-import Link from "next/link";
+import { Button, Card, CardBody, Input, Spinner } from "@heroui/react";
+import { Link } from "@heroui/link";
 import { useRouter } from "next/navigation";
 import React, { Activity } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
-import { v4 as uuidv4 } from "uuid";
-import { getCookie, hasCookie, setCookie } from "cookies-next/client";
+import { useStateDeviceId } from "@/utils/useStateDeviceId";
 
 export default function FormDevice({ device }: any) {
   const {
@@ -20,23 +19,15 @@ export default function FormDevice({ device }: any) {
   } = useForm();
 
   const [token, setToken] = React.useState("");
+  const { deviceId, stateDeviceId } = useStateDeviceId();
 
   const router = useRouter();
-  const stateDevice = uuidv4();
-  const stateFromCookie = getCookie("device_id_state");
-
-  React.useLayoutEffect(() => {
-    if (!hasCookie("device_id_state")) {
-      setCookie("device_id_state", stateDevice, {
-        maxAge: 365 * 24 * 60 * 60 * 1000,
-      });
-    }
-  });
+  const getState = deviceId || stateDeviceId;
 
   const onSubmit = async (FormFileds: any) => {
     // kirim data ke be
     const FromData = {
-      state: stateFromCookie,
+      state: getState,
       ...FormFileds,
     };
 
@@ -71,7 +62,7 @@ export default function FormDevice({ device }: any) {
           if (result.device_id) {
             setToken(result.device_id);
           }
-          router.push("/login");
+          router.back();
           return result.message;
         },
         error: (err) => err.message || "Terjadi kesalahan pada server",
@@ -87,12 +78,15 @@ export default function FormDevice({ device }: any) {
         <div className="w-full sm:min-w-125">
           <Card className="rounded-3xl border border-white dark:border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl p-6 sm:p-6 md:p-8">
             <CardBody>
-              <Link
-                href="/login"
-                className="flex items-center text-blue-600 dark:text-blue-300 mb-6 gap-1 w-fit hover:underline">
+              <Button
+                onPress={() => router.back()}
+                as={Link}
+                variant="flat"
+                color="primary"
+                className="flex items-center text-blue-600 dark:text-blue-300 mb-6 gap-1 w-fit">
                 <ChevronLeftIcon className="size-4" />
                 Back to Login
-              </Link>
+              </Button>
               <form
                 onSubmit={handleSubmit(onSubmit)}
                 method="POST"
