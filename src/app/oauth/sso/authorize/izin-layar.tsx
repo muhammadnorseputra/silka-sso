@@ -4,6 +4,8 @@ import {
   ArrowRightEndOnRectangleIcon,
   CheckCircleIcon,
   FingerPrintIcon,
+  LockClosedIcon,
+  LockOpenIcon,
 } from "@heroicons/react/24/solid";
 import {
   Card,
@@ -86,32 +88,41 @@ export default function IzinLayar({
       isFooterBlurred={false}
       fullWidth={false}
       shadow="lg"
-      className="px-4 mx-auto z-10 md:px-8 py-3 md:py-6 md:max-w-lg lg:max-w-md bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
+      className="relative w-full max-w-lg rounded-3xl border border-white/20 dark:border-white/10 bg-white/10 dark:bg-pink-200/10 backdrop-blur-3xl shadow-sm p-2 sm:p-6 md:px-8 md:pt-2 md:pb-0 ring-1 ring-white/60 dark:ring-white/10">
       <CardHeader>
         <div className="flex flex-col">
-          <h3 className="text-3xl fw-bold flex items-center justify-start gap-x-3">
-            Authorized Access{" "}
-            <FingerPrintIcon className="size-12 text-gray-300" />
-          </h3>
-          <p className="text-lg text-default-400 mt-4 dark:text-white/70">
+          <div className="p-3 border border-white/20 rounded-full bg-transparent">
+            <div className="p-3 border border-white/60 rounded-full bg-transparent">
+              <div className="p-3 border border-white/90 rounded-full bg-white/30 dark:bg-pink-300/70 backdrop-blur-lg shadow-xl shadow-white dark:shadow-pink-300 inline-flex justify-start items-center gap-x-6 w-full">
+                <LockOpenIcon className="size-12 text-gray-800 dark:text-white" />
+                <span className="text-xl font-bold antialiased">
+                  Authorize Access Account
+                </span>
+              </div>
+            </div>
+          </div>
+          <p className="text-md text-default-400 mt-4 dark:text-white/70">
             Izinkan{" "}
-            <span className="text-xl font-bold text-blue-400">
+            <span className="text-xl font-bold text-blue-600">
               {params.get("client_name")}
             </span>{" "}
             untuk menggunakan akun silka anda.
           </p>
-          <div className="flex justify-start items-center gap-4 mb-2 mt-4 py-2 px-4 border rounded-full w-full">
+          <div className="flex justify-start items-center gap-x-6 mb-2 mt-4 py-2 px-4 border border-white/80 dark:bg-black/70 dark:border-black/70 rounded-lg w-full bg-white/30 backdrop-blur-xl shadow">
             <Avatar
               isBordered
               as="button"
               name={nama_lengkap}
               size="md"
               src={picture}
-              className="w-12"
+              className="w-16 h-16"
             />
-            {nama_lengkap} {nip}
+            <div className="inline-flex flex-col items-center justify-start">
+              <span>{nama_lengkap}</span>
+              <span>{nip}</span>
+            </div>
           </div>
-          <ul className="space-y-2 mt-4">
+          <ul className="mt-4 *:border-b *:border-white/50 dark:*:border-black/30 *:py-2 [&>*:last-child]:border-b-0">
             <li className="flex items-center space-x-2">
               <CheckCircleIcon className="text-green-600 size-5" />
               <span>Nomor Induk Pegawai (NIP)</span>
@@ -139,7 +150,8 @@ export default function IzinLayar({
           isDisabled={isPending}
           variant="shadow"
           color="primary"
-          className="font-bold">
+          radius="sm"
+          className="font-bold group transition-all">
           {isPending ? (
             <Spinner
               color={resolvedTheme === "dark" ? "warning" : "default"}
@@ -149,11 +161,11 @@ export default function IzinLayar({
           ) : (
             <>
               Lanjutkan
-              <ArrowRightEndOnRectangleIcon className="size-6" />
+              <ArrowRightEndOnRectangleIcon className="size-8" />
             </>
           )}
         </Button>
-        <Button
+        {/* <Button
           onPress={() => router.back()}
           fullWidth
           variant="solid"
@@ -161,11 +173,11 @@ export default function IzinLayar({
           size="lg"
           className="font-bold mt-6">
           Batal
-        </Button>
+        </Button> */}
         <div className="flex items-center my-6">
-          <div className="grow border-t border-gray-300"></div>
+          <div className="grow border-t border-gray-300 dark:border-gray-600"></div>
           <span className="px-4 text-gray-500">OR</span>
-          <div className="grow border-t border-gray-300"></div>
+          <div className="grow border-t border-gray-300 dark:border-gray-600"></div>
         </div>
         <Button
           onPress={handleLogout}
@@ -174,6 +186,7 @@ export default function IzinLayar({
           variant="solid"
           color="danger"
           size="lg"
+          radius="sm"
           className="font-bold">
           {isPending ? (
             <Spinner
@@ -186,8 +199,8 @@ export default function IzinLayar({
           )}
         </Button>
       </CardBody>
-      <CardFooter className="flex flex-col md:flex-row items-center md:items-end justify-between dark:bg-transparent">
-        <span className="text-gray-300 text-sm text-ellipsis">
+      <CardFooter className="flex flex-col md:flex-row items-center md:items-end justify-center dark:bg-transparent">
+        <span className="text-gray-600 text-sm text-ellipsis">
           &copy; Dikembangakan oleh Bidang PPIK BKPSDM Balangan.
         </span>
       </CardFooter>

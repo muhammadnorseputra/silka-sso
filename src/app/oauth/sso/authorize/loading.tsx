@@ -26,7 +26,7 @@ export default function Loading() {
       </div>
 
       {/* Main Card */}
-      <Card className="w-full max-w-lg shadow-xl bg-transparent">
+      <Card className="w-full max-w-lg shadow-none bg-transparent">
         <CardBody className="p-8 bg-transparent">
           {/* Info Text with Badge */}
           <div className="mb-6 text-center">
