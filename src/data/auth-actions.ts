@@ -51,15 +51,15 @@ export default async function AuthVerify(formData: any) {
     };
   }
 
-  if (!device_id) {
-    return {
-      response: {
-        status: false,
-        message:
-          "Device ID tidak ditemukan, pastikan anda telah melakukan pendaftaran perangkat.",
-      },
-    };
-  }
+  // if (!device_id) {
+  //   return {
+  //     response: {
+  //       status: false,
+  //       message:
+  //         "Device ID tidak ditemukan, pastikan anda telah melakukan pendaftaran perangkat.",
+  //     },
+  //   };
+  // }
 
   try {
     const base_url = `${process.env.NEXT_PUBLIC_SILKA_BASE_URL}/${process.env.NEXT_PUBLIC_VERSION}/oauth/sso/login`;
@@ -70,7 +70,7 @@ export default async function AuthVerify(formData: any) {
       password: formData.password,
       client_id: formData.client_id,
       client_secret: formData.client_secret,
-      device_id,
+      // device_id,
     };
 
     /**
