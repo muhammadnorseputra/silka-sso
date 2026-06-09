@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { AES } from "crypto-js";
 import AccessToken from "./access_token";
-import GetDevicesInfo from "./get-devices-info";
+// import GetDevicesInfo from "./get-devices-info";
 
 async function CaptchaVerify(token: string) {
   const url = `https://www.google.com/recaptcha/api/siteverify`;
@@ -38,7 +38,7 @@ async function CaptchaVerify(token: string) {
 
 export default async function AuthVerify(formData: any) {
   const cookieStore = await cookies();
-  const { device_id } = await GetDevicesInfo();
+  // const { device_id } = await GetDevicesInfo();
   const captchaResult = await CaptchaVerify(formData.token);
 
   if (!captchaResult.success && captchaResult.score < 0.5) {
