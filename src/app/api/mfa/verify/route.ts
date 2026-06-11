@@ -1,7 +1,11 @@
 import { getSessionFromDatabase } from "@/services/session-store";
 import speakeasy from "speakeasy";
 
-export async function POST(req, res) {
+export async function POST(req: {
+  json: () =>
+    | PromiseLike<{ secret: any; token: any; access_token: any }>
+    | { secret: any; token: any; access_token: any };
+}) {
   const { secret, token, access_token } = await req.json();
 
   const session = await getSessionFromDatabase(access_token);
