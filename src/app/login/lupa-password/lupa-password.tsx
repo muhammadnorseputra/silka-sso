@@ -49,14 +49,14 @@ export default function ForgotPassword() {
         <div className="absolute top-0 left-0 md:w-125 md:h-125 bg-blue-500/10 blur-3xl rounded-full" />
         <div className="absolute bottom-0 right-0 md:w-125 md:h-125 bg-fuchsia-500/10 blur-3xl rounded-full" />
       </div> */}
-      <Card className="w-full max-w-xl border-x rounded-none min-h-screen border-white/20 dark:border-white/10 bg-white/10 dark:bg-pink-200/10 backdrop-blur-sm shadow-sm p-2 sm:p-6 md:px-18 md:pt-2 md:pb-0 ring-1 ring-white/60 dark:ring-white/10">
+      <Card className="w-full max-w-xl border-x rounded-none min-h-screen border-white/20 dark:border-white/10 bg-white/10 dark:bg-white/10 backdrop-blur-sm shadow-sm p-2 sm:p-6 md:px-18 md:pt-2 md:pb-0 ring-1 ring-white/60 dark:ring-white/10">
         <CardBody className="inline-flex justify-center items-start">
           <Button
             onPress={() => router.back()}
             as={Link}
             variant="flat"
             color="danger"
-            className="flex items-center text-red-600 dark:text-red-300 mb-6 gap-1 w-fit">
+            className="flex items-center text-red-600 dark:text-red-100 mb-6 gap-1 w-fit">
             <ChevronLeftIcon className="size-4" />
             Back to Login
           </Button>
@@ -81,8 +81,14 @@ export default function ForgotPassword() {
             noValidate
             className="space-y-6 w-full">
             <Input
-              className="text-gray-800 dark:text-white"
+              classNames={{
+                inputWrapper:
+                  "dark:bg-gradient-to-t dark:from-slate-900/80 dark:to-white/20",
+                description: "dark:text-gray-300",
+                label: "pb-1",
+              }}
               isRequired
+              radius="sm"
               label="Email"
               labelPlacement="inside"
               id="email"
@@ -102,7 +108,7 @@ export default function ForgotPassword() {
                 },
               })}
               startContent={
-                <EnvelopeIcon className="size-5 text-default-400 pointer-events-none shrink-0 mr-2" />
+                <EnvelopeIcon className="size-5 text-default-800 pointer-events-none shrink-0 mr-2" />
               }
             />
 

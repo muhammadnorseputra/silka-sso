@@ -10,6 +10,7 @@ import {
   Spinner,
   Alert,
   CardFooter,
+  Divider,
 } from "@heroui/react";
 import Link from "next/link";
 import {
@@ -105,7 +106,7 @@ export default function Login({
         isBlurred
         shadow="none"
         radius="sm"
-        className="relative w-full max-w-xl border-x rounded-none min-h-screen border-white/20 dark:border-white/10 bg-white/10 dark:bg-pink-200/10 backdrop-blur-sm shadow-sm p-2 sm:p-6 md:px-18 md:pt-2 md:pb-0 ring-1 ring-white/60 dark:ring-white/10">
+        className="relative w-full max-w-xl border-x rounded-none min-h-screen border-white/20 dark:border-white/10 bg-white/10 dark:bg-white/10 backdrop-blur-sm shadow-sm p-2 sm:p-6 md:px-18 md:pt-2 md:pb-0 ring-1 ring-white/60 dark:ring-white/10">
         <CardHeader className="flex flex-col">
           <div className="p-3 border border-white/20 rounded-full bg-transparent">
             <div className="p-3 border border-white/60 rounded-full bg-transparent">
@@ -114,16 +115,20 @@ export default function Login({
               </div>
             </div>
           </div>
-          <h3 className="text-3xl fw-bold flex items-center justify-center gap-x-3 mt-6">
+          <Divider
+            orientation="vertical"
+            className="h-8 mx-auto bg-white dark:bg-white/20"
+          />
+          <ChipComponent name={typeAccount} />
+          <h3 className="text-3xl fw-bold flex items-center justify-center gap-x-3 mt-4">
             Single Sign-On{" "}
           </h3>
           <p className="font-bold">Sistem Informasi Layanan Kepegawaian</p>
           <div className="flex items-center justify-center w-full mt-6">
             <Alert
               color="warning"
-              description="Silahkan gunakan akun anda untuk mengakses berbagai
+              description="Silahkan gunakan akun anda untuk mengakses
             layanan kepegawaian."
-              endContent={<ChipComponent name={typeAccount} />}
               variant="flat"
               radius="sm"
             />
@@ -224,6 +229,11 @@ export default function Login({
                 <UserIcon className="size-5 text-default-400 pointer-events-none shrink-0 mr-2" />
               }
               className="transition-all duration-300"
+              classNames={{
+                label: "pb-1",
+                inputWrapper:
+                  "dark:bg-gradient-to-t dark:from-slate-900/80 dark:to-white/20",
+              }}
             />
             <Input
               isRequired
@@ -266,6 +276,11 @@ export default function Login({
               }
               type={isVisible ? "text" : "password"}
               className="transition-all duration-300"
+              classNames={{
+                label: "pb-1",
+                inputWrapper:
+                  "dark:bg-gradient-to-t dark:from-slate-900/80 dark:to-white/20",
+              }}
             />
             <Button
               className="disabled:cursor-not-allowed disabled:opacity-60 mt-3 group"
@@ -308,7 +323,7 @@ export default function Login({
                 color="primary"
                 prefetch
                 href="/login/lupa-password"
-                className="text-indigo-700 hover:text-indigo-800 dark:text-blue-300 dark:hover:text-blue-300/80 hover:underline">
+                className="text-indigo-700 hover:text-indigo-800 dark:text-blue-100 dark:hover:text-blue-100/80 hover:underline">
                 Lupa atau ganti password ?
               </Link>
             </div>
