@@ -35,7 +35,7 @@ export default async function Page({
 
   if (cookiestore.has("sso_code") && !sessionFromDB.status) {
     return permanentRedirect(
-      `/oauth/sso/authorize?client_id=5aa888ec-92be-4fdf-8c69-8c96e99e11ff&client_name=SSO Portal&response_type=code&redirect_uri=${redirectTo}`,
+      `https://silka-sso.vercel.app/oauth/sso/authorize?client_id=5aa888ec-92be-4fdf-8c69-8c96e99e11ff&client_name=SSO Portal&response_type=code&redirect_uri=${redirectTo}`,
     );
   }
 

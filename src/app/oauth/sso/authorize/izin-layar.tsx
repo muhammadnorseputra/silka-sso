@@ -1,5 +1,6 @@
 "use client";
 
+import ChipComponent from "@/components/chip";
 import {
   ArrowRightEndOnRectangleIcon,
   CheckCircleIcon,
@@ -15,6 +16,7 @@ import {
   Button,
   Avatar,
   Spinner,
+  Divider,
 } from "@heroui/react";
 import { jwtDecode, JwtPayload } from "jwt-decode";
 import { useTheme } from "next-themes";
@@ -88,12 +90,12 @@ export default function IzinLayar({
       isFooterBlurred={false}
       fullWidth={false}
       shadow="lg"
-      className="relative w-full max-w-lg rounded-3xl border border-white/20 dark:border-white/10 bg-white/10 dark:bg-pink-200/10 backdrop-blur-3xl shadow-sm p-2 sm:p-6 md:px-8 md:pt-2 md:pb-0 ring-1 ring-white/60 dark:ring-white/10">
-      <CardHeader>
+      className="w-full max-w-xl border-x rounded-none min-h-screen border-white/20 dark:border-white/10 bg-white/10 dark:bg-blue-200/10 backdrop-blur-sm shadow-sm p-2 sm:p-6 md:px-18 md:pt-2 md:pb-0 ring-1 ring-white/60 dark:ring-white/10">
+      <CardHeader className="*:w-full">
         <div className="flex flex-col">
           <div className="p-3 border border-white/20 rounded-full bg-transparent">
             <div className="p-3 border border-white/60 rounded-full bg-transparent">
-              <div className="p-3 border border-white/90 rounded-full bg-white/30 dark:bg-pink-300/70 backdrop-blur-lg shadow-xl shadow-white dark:shadow-pink-300 inline-flex justify-start items-center gap-x-6 w-full">
+              <div className="p-3 border border-white/90 rounded-full bg-white/30 dark:bg-blue-300/70 backdrop-blur-lg shadow-xl shadow-white dark:shadow-blue-300 inline-flex justify-start items-center gap-x-6 w-full">
                 <LockOpenIcon className="size-12 text-gray-800 dark:text-white" />
                 <span className="text-xl font-bold antialiased">
                   Authorize Access Account
@@ -101,14 +103,15 @@ export default function IzinLayar({
               </div>
             </div>
           </div>
-          <p className="text-md text-default-400 mt-4 dark:text-white/70">
-            Izinkan{" "}
-            <span className="text-xl font-bold text-blue-600">
-              {params.get("client_name")}
-            </span>{" "}
-            untuk menggunakan akun silka anda.
+          <Divider orientation="vertical" className="h-8 mx-auto bg-white" />
+          <ChipComponent
+            className="p-4 mx-auto"
+            name={params.get("client_name")}
+          />
+          <p className="text-sm text-default-400 mt-4 dark:text-white/60">
+            Izinkan untuk menggunakan akun silka anda.
           </p>
-          <div className="flex justify-start items-center gap-x-6 mb-2 mt-4 py-2 px-4 border border-white/80 dark:bg-black/70 dark:border-black/70 rounded-lg w-full bg-white/30 backdrop-blur-xl shadow">
+          <div className="flex justify-start items-center gap-x-6 mb-2 mt-2 py-2 px-4 border border-white/80 dark:bg-white/10 dark:border-black/10 rounded-2xl w-full bg-white/30 backdrop-blur-xl shadow">
             <Avatar
               isBordered
               as="button"
@@ -117,26 +120,26 @@ export default function IzinLayar({
               src={picture}
               className="w-16 h-16"
             />
-            <div className="inline-flex flex-col items-center justify-start">
+            <div className="inline-flex flex-col items-start justify-start w-max">
               <span>{nama_lengkap}</span>
               <span>{nip}</span>
             </div>
           </div>
-          <ul className="mt-4 *:border-b *:border-white/50 dark:*:border-black/30 *:py-2 [&>*:last-child]:border-b-0">
+          <ul className="mt-2 bg-white/20 py-3 rounded-2xl *:border-b *:border-white/50 dark:*:border-white/30 *:py-2 *:px-4 [&>*:last-child]:border-b-0">
             <li className="flex items-center space-x-2">
-              <CheckCircleIcon className="text-green-600 size-5" />
+              <CheckCircleIcon className="text-green-600 dark:text-green-200 size-5" />
               <span>Nomor Induk Pegawai (NIP)</span>
             </li>
             <li className="flex items-center space-x-2">
-              <CheckCircleIcon className="text-green-600 size-5" />
+              <CheckCircleIcon className="text-green-600 dark:text-green-200 size-5" />
               <span>Nama Lengkap</span>
             </li>
             <li className="flex items-center space-x-2">
-              <CheckCircleIcon className="text-green-600 size-5" />
+              <CheckCircleIcon className="text-green-600 dark:text-green-200 size-5" />
               <span>Photo Profile</span>
             </li>
             <li className="flex items-center space-x-2">
-              <CheckCircleIcon className="text-green-600 size-5" />
+              <CheckCircleIcon className="text-green-600 dark:text-green-200 size-5" />
               <span>Info kepegawaian.</span>
             </li>
           </ul>
@@ -175,9 +178,9 @@ export default function IzinLayar({
           Batal
         </Button> */}
         <div className="flex items-center my-6">
-          <div className="grow border-t border-gray-300 dark:border-gray-600"></div>
-          <span className="px-4 text-gray-500">OR</span>
-          <div className="grow border-t border-gray-300 dark:border-gray-600"></div>
+          <div className="grow border-t border-gray-300 dark:border-gray-300"></div>
+          <span className="px-4 text-gray-200">OR</span>
+          <div className="grow border-t border-gray-300 dark:border-gray-300"></div>
         </div>
         <Button
           onPress={handleLogout}
@@ -201,7 +204,7 @@ export default function IzinLayar({
       </CardBody>
       <CardFooter className="flex flex-col md:flex-row items-center md:items-end justify-center dark:bg-transparent">
         <span className="text-gray-600 text-sm text-ellipsis">
-          &copy; Dikembangakan oleh Bidang PPIK BKPSDM Balangan.
+          &copy; 2024 | Dikembangakan oleh Bidang PPIK - BKPSDM Balangan.
         </span>
       </CardFooter>
     </Card>

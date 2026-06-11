@@ -32,6 +32,7 @@ import ChipComponent from "@/components/chip";
 
 import { useReCaptcha } from "next-recaptcha-v3";
 import { useTheme } from "next-themes";
+import TwoFactorModal from "@/components/mfa-modal";
 
 export default function Login({
   client,
@@ -98,27 +99,28 @@ export default function Login({
 
   return (
     <>
+      {/* <TwoFactorModal /> */}
       <Card
         fullWidth={true}
         isBlurred
         shadow="none"
         radius="sm"
-        className="relative w-full max-w-lg rounded-3xl border border-white/20 dark:border-white/10 bg-white/10 dark:bg-pink-200/10 backdrop-blur-3xl shadow-sm p-2 sm:p-6 md:px-8 md:pt-2 md:pb-0 ring-1 ring-white/60 dark:ring-white/10">
+        className="relative w-full max-w-xl border-x rounded-none min-h-screen border-white/20 dark:border-white/10 bg-white/10 dark:bg-pink-200/10 backdrop-blur-sm shadow-sm p-2 sm:p-6 md:px-18 md:pt-2 md:pb-0 ring-1 ring-white/60 dark:ring-white/10">
         <CardHeader className="flex flex-col">
           <div className="p-3 border border-white/20 rounded-full bg-transparent">
             <div className="p-3 border border-white/60 rounded-full bg-transparent">
-              <div className="p-3 border border-white/90 rounded-full bg-white/30 dark:bg-pink-300/70 backdrop-blur-lg shadow-xl shadow-white dark:shadow-pink-300">
+              <div className="p-3 border border-white/90 rounded-full bg-white/30 dark:bg-blue-300/70 backdrop-blur-lg shadow-xl shadow-white dark:shadow-blue-300">
                 <FingerPrintIcon className="size-12 text-gray-800 dark:text-white" />
               </div>
             </div>
           </div>
-          <h3 className="text-3xl fw-bold flex items-center justify-center gap-x-3">
+          <h3 className="text-3xl fw-bold flex items-center justify-center gap-x-3 mt-6">
             Single Sign-On{" "}
           </h3>
           <p className="font-bold">Sistem Informasi Layanan Kepegawaian</p>
           <div className="flex items-center justify-center w-full mt-6">
             <Alert
-              color="primary"
+              color="warning"
               description="Silahkan gunakan akun anda untuk mengakses berbagai
             layanan kepegawaian."
               endContent={<ChipComponent name={typeAccount} />}
@@ -272,7 +274,7 @@ export default function Login({
               type="submit"
               fullWidth
               size="lg"
-              color="secondary"
+              color="primary"
               variant="shadow"
               endContent={
                 isLoading || isSubmitting || loadingBtn ? (
@@ -306,18 +308,18 @@ export default function Login({
                 color="primary"
                 prefetch
                 href="/login/lupa-password"
-                className="text-indigo-700 hover:text-indigo-800 dark:text-pink-300 dark:hover:text-pink-300/80 hover:underline">
+                className="text-indigo-700 hover:text-indigo-800 dark:text-blue-300 dark:hover:text-blue-300/80 hover:underline">
                 Lupa atau ganti password ?
               </Link>
             </div>
-            <div className="flex items-center mb-6">
+            {/* <div className="flex items-center mb-6">
               <div className="grow border-t border-gray-100 dark:border-gray-400"></div>
               <span className="px-4 text-gray-100">
                 <LockClosedIcon className="size-6 text-gray-100" />
               </span>
               <div className="grow border-t border-gray-100 dark:border-gray-400"></div>
-            </div>
-            <Button
+            </div> */}
+            {/* <Button
               onPress={() => {
                 router.push("/login/perangkat");
               }}
@@ -327,11 +329,11 @@ export default function Login({
               startContent={<DevicePhoneMobileIcon />}
               variant="solid">
               Registrasi Perangkat
-            </Button>
+            </Button> */}
           </form>
         </CardBody>
         <CardFooter>
-          <span className="text-black/90 dark:text-white/40 text-sm text-ellipsis text-center">
+          <span className="text-black/40 dark:text-white/40 text-sm text-ellipsis text-center">
             &copy; 2024 | Dikembangakan oleh Bidang PPIK - BKPSDM Balangan.
           </span>
         </CardFooter>
