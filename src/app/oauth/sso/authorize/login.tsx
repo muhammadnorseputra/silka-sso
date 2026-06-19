@@ -105,7 +105,7 @@ export default function Login({
         fullWidth={true}
         shadow="none"
         radius="none"
-        className="relative w-full max-w-xl px-2 sm:px-8 pt-8 bg-transparent">
+        className="relative w-full max-w-xl px-2 sm:px-8 sm:pt-8 bg-transparent">
         <CardHeader className="flex flex-col">
           <div className={cn('transition-all duration-200  p-3 border border-white/40 rounded-full bg-transparent')}>
             <div className="p-3 border border-white/60 rounded-full bg-transparent">
