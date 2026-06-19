@@ -22,7 +22,7 @@ import {
   UserIcon,
 } from "@heroicons/react/24/solid";
 import { useForm } from "react-hook-form";
-import toast, { useToasterStore } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useState } from "react";
 import { permanentRedirect } from "next/navigation";
 import AuthVerify from "@/data/auth-actions";
@@ -44,11 +44,6 @@ export default function Login({
   const { executeRecaptcha } = useReCaptcha();
   const [isVisible, setIsVisible] = useState(false);
   const [loadingBtn, setLoadingBtn] = useState(false);
-
-
-  const { toasts: allToasts } = useToasterStore();
-
-  const shouldFade = allToasts.filter((t) => t.visible).length;
 
   const {
     register,
@@ -110,9 +105,9 @@ export default function Login({
         fullWidth={true}
         shadow="none"
         radius="none"
-        className="relative w-full max-w-xl px-2 sm:px-8 bg-transparent">
+        className="relative w-full max-w-xl px-2 sm:px-8 pt-8 bg-transparent">
         <CardHeader className="flex flex-col">
-          <div className={cn('transition-all duration-200  p-3 border border-white/40 rounded-full bg-transparent', shouldFade ? 'blur-lg' : '')}>
+          <div className={cn('transition-all duration-200  p-3 border border-white/40 rounded-full bg-transparent')}>
             <div className="p-3 border border-white/60 rounded-full bg-transparent">
               <div className="p-3 border border-white/80 rounded-full bg-white backdrop-blur-lg shadow-xl shadow-white">
                 <FingerPrintIcon className="size-12 text-gray-800 dark:text-slate-900" />
@@ -121,7 +116,7 @@ export default function Login({
           </div>
           <Divider
             orientation="vertical"
-            className={cn("h-6 mx-auto bg-white/40 dark:bg-white/20, shouldFade", shouldFade ? 'opacity-0.5' : '1')}/>
+            className={cn("h-6 mx-auto bg-white/40 dark:bg-white/20, shouldFade")}/>
           <ChipComponent name={typeAccount} />
           <h3 className="relative text-3xl fw-bold flex items-center justify-center gap-x-3 mt-4">
             Single Sign-On{" "}
@@ -144,7 +139,7 @@ export default function Login({
             method="POST"
             autoComplete="off"
             noValidate
-            className="flex flex-col space-y-6 bg-white dark:bg-linear-to-b dark:from-slate-900 dark:to-slate-700 p-8 rounded-2xl ring-4 ring-blue-100/60 dark:ring-slate-700">
+            className="flex flex-col space-y-6 bg-white dark:bg-linear-to-b dark:from-slate-800 dark:to-black p-8 rounded-2xl ring-4 ring-blue-100/60 dark:ring-slate-700">
             {/* <Select
               isRequired
               isDisabled={isLoading || isSubmitting || loadingBtn}

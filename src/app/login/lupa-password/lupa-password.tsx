@@ -86,7 +86,7 @@ export default function ForgotPassword() {
             method="POST"
             autoComplete="off"
             noValidate
-            className="inline-flex flex-col space-y-6 w-full bg-white dark:bg-linear-to-b dark:from-slate-900 dark:to-slate-700 p-6 rounded-2xl ring-4 ring-blue-100/60 dark:ring-slate-700"
+            className="inline-flex flex-col space-y-6 w-full bg-white dark:bg-linear-to-b dark:from-slate-800 dark:to-black p-6 rounded-2xl ring-4 ring-blue-100/60 dark:ring-slate-800"
           >
             <div>
               <Alert

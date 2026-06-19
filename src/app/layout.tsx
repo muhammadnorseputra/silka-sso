@@ -24,7 +24,7 @@ export default async function RootLayout({
       <body className={`${roboto.className} antialiased`}>
         <Providers>
           <ReactQueryProvider>
-            <Toaster position="top-center"/>
+            <Toaster />
             {children}
           </ReactQueryProvider>
         </Providers>
