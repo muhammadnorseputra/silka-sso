@@ -43,17 +43,12 @@ export default function ForgotPassword() {
     }
   };
   return (
-    <>
-      {/* Gradient Background */}
-      {/* <div className="absolute inset-0">
-        <div className="absolute top-0 left-0 md:w-125 md:h-125 bg-blue-500/10 blur-3xl rounded-full" />
-        <div className="absolute bottom-0 right-0 md:w-125 md:h-125 bg-fuchsia-500/10 blur-3xl rounded-full" />
-      </div> */}
+
       <Card
         fullWidth={true}
         shadow="none"
         radius="none"
-        className="relative w-full max-w-xl min-h-screen px-2 sm:px-8 bg-transparent"
+        className="relative w-full max-w-xl px-2 sm:px-8 pt-8 bg-transparent"
       >
         <CardBody className="inline-flex justify-center items-start">
           <Button
@@ -150,6 +145,5 @@ export default function ForgotPassword() {
           </form>
         </CardBody>
       </Card>
-    </>
   );
 }

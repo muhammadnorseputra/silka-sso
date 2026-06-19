@@ -89,7 +89,7 @@ export default function IzinLayar({
       fullWidth={true}
       shadow="none"
       radius="none"
-      className="relative w-full max-w-xl min-h-screen px-2 sm:px-8 bg-transparent"
+      className="relative w-full max-w-xl px-2 sm:px-8 bg-transparent"
     >
       <CardHeader>
         <div className="inline-flex flex-col justify-center items-center w-full">
@@ -206,11 +206,6 @@ export default function IzinLayar({
           <div className="grow border-t border-gray-300 dark:border-gray-300"></div>
         </div> */}
       </CardBody>
-      <CardFooter className="flex flex-col md:flex-row items-center md:items-end justify-center dark:bg-transparent">
-        <span className="text-black/40 dark:text-white/40 text-sm text-center w-full">
-          &copy; 2024 | Dikembangakan oleh Bidang PPIK - BKPSDM Balangan.
-        </span>
-      </CardFooter>
     </Card>
   );
 }

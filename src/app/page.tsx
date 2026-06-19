@@ -65,7 +65,7 @@ export default async function Page() {
         </div>
       </div>
       {/* Right Side - Login Form */}
-      <div className="flex-1 bg-white dark:bg-slate-800 px-18 py-8 sm:px-12 sm:py-8 flex rounded-b-2xl flex-col justify-center relative">
+      <div className="flex-1 bg-white dark:bg-transparent px-18 py-8 sm:px-12 sm:py-8 flex rounded-b-2xl flex-col justify-center relative">
         <div className="max-w-md mx-auto w-full">
           {/* Welcome Header */}
           <div className="text-center mb-8">
@@ -84,7 +84,7 @@ export default async function Page() {
         </div>
       </div>
       {/* Footer */}
-      <div className="flex-1 text-center p-4 dark:bg-slate-700 rounded-b-2xl mx-4">
+      <div className="flex-1 text-center p-4 dark:bg-transparent rounded-b-2xl mx-4">
         <p className="text-xs text-gray-600 dark:text-gray-400">
           &copy; 2024 | Dikembangakan oleh Bidang PPIK - BKPSDM Kab. Balangan.
         </p>
