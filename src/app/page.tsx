@@ -22,7 +22,7 @@ export default async function Page() {
   return (
     <div className="group w-full flex flex-col items-center justify-center">
       {/* Left Side - Blue Section */}
-      <div className="flex-1 rounded-b-2xl sm:max-w-150 bg-[url('/bg-home.png')] bg-cover p-12 flex flex-col justify-center text-white z-30 relative -top-5 group-hover:top-0 transition-all duration-200">
+      <div className="flex-1 rounded-b-2xl sm:max-w-150 bg-[url('/bg-home.png')] bg-cover p-12 flex flex-col justify-center text-white z-30">
         <div className="max-w-md">
           {/* Logo */}
           <div className="mb-8">
@@ -37,7 +37,23 @@ export default async function Page() {
 
           {/* Main Heading */}
           <h1 className="text-2xl sm:text-4xl font-bold mb-6 leading-tight">
-            Akses Semua Layanan Kepegawaian Dengan Satu Portal SSO!
+            Akses Semua Layanan Kepegawaian Dengan Satu Portal{" "}
+            <span className="relative">
+              SSO!
+              <svg
+                className="absolute -bottom-1.5 left-0 w-full h-2 text-primary/30"
+                viewBox="0 0 100 10"
+                preserveAspectRatio="none"
+              >
+                <path
+                  d="M0,5 Q50,10 100,5"
+                  stroke="currentColor"
+                  strokeWidth="6"
+                  fill="none"
+                  strokeLinecap="round"
+                ></path>
+              </svg>
+            </span>
           </h1>
 
           {/* Description */}
@@ -49,7 +65,7 @@ export default async function Page() {
         </div>
       </div>
       {/* Right Side - Login Form */}
-      <div className="flex-1 bg-white dark:bg-slate-800 p-8 flex rounded-b-2xl flex-col justify-center relative -top-5 z-20 group-hover:top-0 transition-all duration-400">
+      <div className="flex-1 bg-white dark:bg-slate-800 px-18 py-8 sm:px-12 sm:py-8 flex rounded-b-2xl flex-col justify-center relative">
         <div className="max-w-md mx-auto w-full">
           {/* Welcome Header */}
           <div className="text-center mb-8">
@@ -68,8 +84,8 @@ export default async function Page() {
         </div>
       </div>
       {/* Footer */}
-      <div className="flex-1 text-center p-4 dark:bg-slate-600 rounded-b-2xl mx-12 relative -top-5 group-hover:top-0 transition-all duration-600">
-        <p className="text-sm text-gray-600 dark:text-gray-300">
+      <div className="flex-1 text-center p-4 dark:bg-slate-700 rounded-b-2xl mx-4">
+        <p className="text-xs text-gray-600 dark:text-gray-400">
           &copy; 2024 | Dikembangakan oleh Bidang PPIK - BKPSDM Kab. Balangan.
         </p>
       </div>

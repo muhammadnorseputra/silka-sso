@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import "@/app/globals.css";
 import { ReactQueryProvider } from "@/services/FetchQueryProvider";
-import { Toaster } from "react-hot-toast";
 import { Roboto } from "next/font/google";
 import Providers from "@/services/providers";
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "Single Sign On | SILKa Online",
@@ -24,8 +24,8 @@ export default async function RootLayout({
       <body className={`${roboto.className} antialiased`}>
         <Providers>
           <ReactQueryProvider>
+            <Toaster position="top-center"/>
             {children}
-            <Toaster />
           </ReactQueryProvider>
         </Providers>
       </body>

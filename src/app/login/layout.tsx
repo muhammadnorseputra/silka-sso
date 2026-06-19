@@ -4,8 +4,8 @@ interface Props {
 
 export default async function Layout({ children }: Props) {
   return (
-    <section className="bg-[url('/assets/images/bg-ai-kantor-bkpsdm.png')] bg-cover lg:bg-center lg:bg-cover lg:bg-fixed">
-      <div className="min-h-screen bg-white/10 dark:bg-black/50 mx-auto flex items-center flex-col gap-8 justify-center">
+    <section className="bg-linear-to-b from-sky-100 to-white dark:from-slate-900 dark:to-slate-600">
+      <div className="mx-auto flex items-center flex-col justify-center">
         {children}
       </div>
     </section>

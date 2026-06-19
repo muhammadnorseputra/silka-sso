@@ -8,32 +8,30 @@ import {
   Input,
   Tooltip,
   Spinner,
-  Alert,
   CardFooter,
   Divider,
+  cn,
 } from "@heroui/react";
 import Link from "next/link";
 import {
   ArrowRightCircleIcon,
-  DevicePhoneMobileIcon,
   EyeIcon,
   EyeSlashIcon,
   FingerPrintIcon,
   KeyIcon,
-  LockClosedIcon,
   UserIcon,
 } from "@heroicons/react/24/solid";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
+import toast, { useToasterStore } from "react-hot-toast";
 import { useState } from "react";
-import { permanentRedirect, useRouter } from "next/navigation";
+import { permanentRedirect } from "next/navigation";
 import AuthVerify from "@/data/auth-actions";
 import { v4 as uuidv4 } from "uuid";
 import ChipComponent from "@/components/chip";
 
 import { useReCaptcha } from "next-recaptcha-v3";
 import { useTheme } from "next-themes";
-import TwoFactorModal from "@/components/mfa-modal";
+import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 
 export default function Login({
   client,
@@ -43,14 +41,19 @@ export default function Login({
   typeAccount,
 }: any) {
   const { resolvedTheme } = useTheme();
-  const router = useRouter();
   const { executeRecaptcha } = useReCaptcha();
   const [isVisible, setIsVisible] = useState(false);
   const [loadingBtn, setLoadingBtn] = useState(false);
 
+
+  const { toasts: allToasts } = useToasterStore();
+
+  const shouldFade = allToasts.filter((t) => t.visible).length;
+
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors, isLoading, isSubmitting, isValid },
   } = useForm();
 
@@ -80,6 +83,8 @@ export default function Login({
         loading: "Memverifikasi akun...",
         success: (result) => {
           if (!result.response.status) {
+            setError('username', {})
+            setError('password', {})
             throw new Error(result.response.message);
           }
 
@@ -103,36 +108,35 @@ export default function Login({
       {/* <TwoFactorModal /> */}
       <Card
         fullWidth={true}
-        isBlurred
         shadow="none"
-        radius="sm"
-        className="relative w-full max-w-xl border-x rounded-none min-h-screen border-white/20 dark:border-white/10 bg-white/10 dark:bg-white/10 backdrop-blur-sm shadow-sm p-2 sm:p-6 md:px-18 md:pt-2 md:pb-0 ring-1 ring-white/60 dark:ring-white/10">
+        radius="none"
+        className="relative w-full max-w-xl min-h-screen px-2 sm:px-8 bg-transparent">
         <CardHeader className="flex flex-col">
-          <div className="p-3 border border-white/20 rounded-full bg-transparent">
+          <div className={cn('transition-all duration-200  p-3 border border-white/40 rounded-full bg-transparent', shouldFade ? 'blur-lg' : '')}>
             <div className="p-3 border border-white/60 rounded-full bg-transparent">
-              <div className="p-3 border border-white/90 rounded-full bg-white/30 dark:bg-blue-300/70 backdrop-blur-lg shadow-xl shadow-white dark:shadow-blue-300">
-                <FingerPrintIcon className="size-12 text-gray-800 dark:text-white" />
+              <div className="p-3 border border-white/80 rounded-full bg-white backdrop-blur-lg shadow-xl shadow-white">
+                <FingerPrintIcon className="size-12 text-gray-800 dark:text-slate-900" />
               </div>
             </div>
           </div>
           <Divider
             orientation="vertical"
-            className="h-8 mx-auto bg-white dark:bg-white/20"
-          />
+            className={cn("h-6 mx-auto bg-white/40 dark:bg-white/20, shouldFade", shouldFade ? 'opacity-0.5' : '1')}/>
           <ChipComponent name={typeAccount} />
-          <h3 className="text-3xl fw-bold flex items-center justify-center gap-x-3 mt-4">
+          <h3 className="relative text-3xl fw-bold flex items-center justify-center gap-x-3 mt-4">
             Single Sign-On{" "}
+            <svg className="absolute -bottom-1.5 left-0 w-full h-2 text-primary/30" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0,5 Q50,10 100,5" stroke="currentColor" strokeWidth="6" fill="none" strokeLinecap="round"></path></svg>
           </h3>
-          <p className="font-bold">Sistem Informasi Layanan Kepegawaian</p>
-          <div className="flex items-center justify-center w-full mt-6">
+          <p className="font-bold text-center">Sistem Informasi Layanan Kepegawaian</p>
+          {/* <div className="flex items-center justify-center w-full mt-6">
             <Alert
               color="warning"
-              description="Silahkan gunakan akun anda untuk mengakses
+              description="Silahkan gunakan akun Silka anda untuk mengakses
             layanan kepegawaian."
               variant="flat"
               radius="sm"
             />
-          </div>
+          </div> */}
         </CardHeader>
         <CardBody>
           <form
@@ -140,7 +144,7 @@ export default function Login({
             method="POST"
             autoComplete="off"
             noValidate
-            className="flex flex-col space-y-3">
+            className="flex flex-col space-y-6 bg-white dark:bg-linear-to-b dark:from-slate-900 dark:to-slate-700 p-8 rounded-2xl ring-4 ring-blue-100/60 dark:ring-slate-700">
             {/* <Select
               isRequired
               isDisabled={isLoading || isSubmitting || loadingBtn}
@@ -206,13 +210,13 @@ export default function Login({
             <Input
               isRequired
               isDisabled={isLoading || isSubmitting || loadingBtn}
-              variant="faded"
+              variant="underlined"
               type="text"
               color={errors?.password ? "danger" : "default"}
               radius="sm"
               label="Username"
-              labelPlacement="inside"
-              placeholder="Enter your username"
+              labelPlacement="outside"
+              placeholder="Masukan username anda"
               size="lg"
               isInvalid={errors?.username ? true : false}
               errorMessage={
@@ -226,26 +230,30 @@ export default function Login({
                 },
               })}
               startContent={
-                <UserIcon className="size-5 text-default-400 pointer-events-none shrink-0 mr-2" />
+                <UserIcon className="transition-all size-5 text-default-300 dark:text-slate-400 group-hover:text-default-600 group-focus:text-default-600 group-focus-within:text-default-600 group-focus-visible:text-default-600 mr-2" />
               }
-              className="transition-all duration-300"
+              endContent={
+                errors?.username && <ExclamationCircleIcon className="text-red-500 size-6 pointer-events-none shrink-0"/>
+              }
+              className="group"
               classNames={{
-                label: "pb-1",
+                errorMessage: '-ml-1 tracking-wide',
+                input: 'placeholder:text-gray-300 dark:placeholder:text-slate-400',
                 inputWrapper:
-                  "dark:bg-gradient-to-t dark:from-slate-900/80 dark:to-white/20",
+                  "bg-white dark:bg-transparent",
               }}
             />
             <Input
               isRequired
               isDisabled={isLoading || isSubmitting || loadingBtn}
               label="Password"
-              variant="faded"
+              variant="underlined"
               size="lg"
               color={errors?.password ? "danger" : "default"}
               isInvalid={errors?.password ? true : false}
               radius="sm"
-              labelPlacement="inside"
-              placeholder="Enter your password"
+              labelPlacement="outside"
+              placeholder="Masukan password anda"
               {...register("password", {
                 required: "Password wajib diisi",
               })}
@@ -253,15 +261,17 @@ export default function Login({
                 errors?.password?.message && `${errors.password.message}`
               }
               startContent={
-                <KeyIcon className="size-5 text-default-400 pointer-events-none shrink-0 mr-2" />
+                <KeyIcon className="transition-all size-5 text-default-300 dark:text-slate-400 group-hover:text-default-600 group-focus:text-default-600 group-focus-within:text-default-600 group-focus-visible:text-default-600 mr-2" />
               }
               endContent={
+                <>
+                {errors?.password && <ExclamationCircleIcon className="text-red-500 size-6 pointer-events-none shrink-0 mr-2"/>}
                 <Tooltip
                   content={
                     !isVisible ? "Lihat Password" : "Sembuyikan Password"
                   }>
                   <button
-                    className="focus:outline-hidden"
+                    className="focus:outline-hidden cursor-pointer"
                     type="button"
                     tabIndex={-1}
                     onClick={toggleVisibility}
@@ -273,17 +283,19 @@ export default function Login({
                     )}
                   </button>
                 </Tooltip>
+                </>
               }
               type={isVisible ? "text" : "password"}
-              className="transition-all duration-300"
               classNames={{
-                label: "pb-1",
+                errorMessage: '-ml-1 tracking-wide',
+                input: 'placeholder:text-gray-300 dark:placeholder:text-slate-400',
                 inputWrapper:
-                  "dark:bg-gradient-to-t dark:from-slate-900/80 dark:to-white/20",
+                  "bg-white dark:bg-transparent",
               }}
+              className="group"
             />
             <Button
-              className="disabled:cursor-not-allowed disabled:opacity-60 mt-3 group"
+              className="disabled:cursor-not-allowed disabled:opacity-40 group"
               isDisabled={isLoading || isSubmitting || loadingBtn || !isValid}
               isLoading={isLoading || isSubmitting || loadingBtn}
               type="submit"
@@ -300,8 +312,8 @@ export default function Login({
               }
               spinner={
                 <Spinner
-                  color={resolvedTheme === "dark" ? "warning" : "default"}
-                  variant="dots"
+                  color={resolvedTheme === "dark" ? "default" : "default"}
+                  variant="spinner"
                   size="sm"
                 />
               }
@@ -319,13 +331,18 @@ export default function Login({
                 <ChevronLeftIcon className="size-4" />
                 Back
               </HeroLink> */}
+              <div className="inline-flex justify-start items-center space-x-1">
+              <span>
+                Lupa Password?
+              </span>
               <Link
                 color="primary"
                 prefetch
                 href="/login/lupa-password"
-                className="text-indigo-700 hover:text-indigo-800 dark:text-blue-100 dark:hover:text-blue-100/80 hover:underline">
-                Lupa atau ganti password ?
+                className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-100/80">
+                Reset di sini
               </Link>
+              </div>
             </div>
             {/* <div className="flex items-center mb-6">
               <div className="grow border-t border-gray-100 dark:border-gray-400"></div>
@@ -348,7 +365,7 @@ export default function Login({
           </form>
         </CardBody>
         <CardFooter>
-          <span className="text-black/40 dark:text-white/40 text-sm text-ellipsis text-center">
+          <span className="text-black/40 dark:text-white/40 text-sm text-center w-full">
             &copy; 2024 | Dikembangakan oleh Bidang PPIK - BKPSDM Balangan.
           </span>
         </CardFooter>
@@ -356,3 +373,5 @@ export default function Login({
     </>
   );
 }
+
+

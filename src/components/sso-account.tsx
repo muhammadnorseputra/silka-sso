@@ -25,7 +25,7 @@ export default function SSOAccount() {
         className="py-8 hover:shadow-xl hover:scale-110"
         fullWidth
         size="lg"
-        variant="solid"
+        variant="shadow"
         color="primary"
         disableRipple={true}
         startContent={<UserGroupIcon />}

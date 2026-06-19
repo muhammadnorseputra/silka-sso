@@ -73,14 +73,20 @@ export default function Confirm({ access_token, decoded }: any) {
         <div className="absolute top-0 left-0 md:w-125 md:h-125 bg-blue-500/10 blur-3xl rounded-full" />
         <div className="absolute bottom-0 right-0 md:w-125 md:h-125 bg-fuchsia-500/10 blur-3xl rounded-full" />
       </div> */}
-      <Card className="w-full max-w-xl border-x rounded-none min-h-screen border-white/20 dark:border-white/10 bg-white/10 dark:bg-pink-200/10 backdrop-blur-sm shadow-sm p-2 sm:p-6 md:px-18 md:pt-2 md:pb-0 ring-1 ring-white/60 dark:ring-white/10">
+      <Card
+        fullWidth={true}
+        shadow="none"
+        radius="none"
+        className="relative w-full max-w-xl min-h-screen px-2 sm:px-8 bg-transparent"
+      >
         <CardBody className="inline-flex justify-center items-start">
           <Button
             onPress={() => router.back()}
             as={Link}
             variant="flat"
             color="danger"
-            className="flex items-center text-red-600 dark:text-red-300 gap-1 mb-4 w-fit">
+            className="flex items-center text-red-600 dark:text-red-300 gap-1 mb-4 w-fit"
+          >
             <ChevronLeftIcon className="size-4" />
             Batal
           </Button>
@@ -89,14 +95,15 @@ export default function Confirm({ access_token, decoded }: any) {
             method="POST"
             autoComplete="off"
             noValidate
-            className="space-y-3 overflow-hidden">
+            className="inline-flex flex-col space-y-6 w-full bg-white dark:bg-linear-to-b dark:from-slate-900 dark:to-slate-700 p-6 rounded-2xl ring-4 ring-blue-100/60 dark:ring-slate-700"
+          >
             <Input
               isRequired
               size="lg"
               radius="sm"
               label="New Password"
               type={isVisible ? "text" : "password"}
-              variant="faded"
+              variant="bordered"
               placeholder="Masukan password baru"
               description="Password must contain uppercase, lowercase, number, and special character"
               isInvalid={!!errors?.new_password}
@@ -123,14 +130,16 @@ export default function Confirm({ access_token, decoded }: any) {
                   color="primary"
                   content={
                     !isVisible ? "Lihat Password" : "Sembuyikan Password"
-                  }>
+                  }
+                >
                   <Button
                     className="focus:outline-hidden"
                     tabIndex={-1}
                     size="sm"
                     radius="full"
                     onPress={toggleVisibility}
-                    aria-label="toggle password visibility">
+                    aria-label="toggle password visibility"
+                  >
                     {!isVisible ? (
                       <EyeSlashIcon className="size-6 text-gray-400 dark:text-gray-200" />
                     ) : (
@@ -146,7 +155,7 @@ export default function Confirm({ access_token, decoded }: any) {
               radius="sm"
               label="Retype Password"
               type={isVisibleConfirmPassword ? "text" : "password"}
-              variant="faded"
+              variant="bordered"
               placeholder="Masukan password yang sama"
               isInvalid={!!errors?.confirmPassword}
               errorMessage={
@@ -166,14 +175,16 @@ export default function Confirm({ access_token, decoded }: any) {
                     !isVisibleConfirmPassword
                       ? "Lihat Password"
                       : "Sembuyikan Password"
-                  }>
+                  }
+                >
                   <Button
                     className="focus:outline-hidden"
                     tabIndex={-1}
                     size="sm"
                     radius="full"
                     onPress={toggleVisibilityConfirmPassword}
-                    aria-label="toggle password visibility">
+                    aria-label="toggle password visibility"
+                  >
                     {!isVisibleConfirmPassword ? (
                       <EyeSlashIcon className="size-6 text-gray-400 dark:text-gray-200" />
                     ) : (
@@ -183,7 +194,7 @@ export default function Confirm({ access_token, decoded }: any) {
                 </Tooltip>
               }
             />
-            <div className="my-2">
+            <div className="mb-2">
               {access_token && (
                 <Alert
                   icon={
@@ -202,7 +213,7 @@ export default function Confirm({ access_token, decoded }: any) {
               }}
               isRequired
               length={6}
-              variant="faded"
+              variant="bordered"
               size="lg"
               description="Silahkan masukan kode OTP yang telah dikirimkan ke email anda"
               {...register("otp", {
@@ -215,7 +226,8 @@ export default function Confirm({ access_token, decoded }: any) {
               className="w-full h-12 text-base font-medium disabled:hover:opacity-40 disabled:opacity-20 disabled:cursor-not-allowed"
               isLoading={isLoading || isSubmitting}
               isDisabled={isLoading || isSubmitting}
-              spinner={<Spinner color="default" variant="spinner" size="sm" />}>
+              spinner={<Spinner color="default" variant="spinner" size="sm" />}
+            >
               {isLoading || isSubmitting ? "" : "Submit"}
             </Button>
           </form>

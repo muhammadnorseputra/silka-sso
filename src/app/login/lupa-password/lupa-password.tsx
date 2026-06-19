@@ -49,51 +49,75 @@ export default function ForgotPassword() {
         <div className="absolute top-0 left-0 md:w-125 md:h-125 bg-blue-500/10 blur-3xl rounded-full" />
         <div className="absolute bottom-0 right-0 md:w-125 md:h-125 bg-fuchsia-500/10 blur-3xl rounded-full" />
       </div> */}
-      <Card className="w-full max-w-xl border-x rounded-none min-h-screen border-white/20 dark:border-white/10 bg-white/10 dark:bg-white/10 backdrop-blur-sm shadow-sm p-2 sm:p-6 md:px-18 md:pt-2 md:pb-0 ring-1 ring-white/60 dark:ring-white/10">
+      <Card
+        fullWidth={true}
+        shadow="none"
+        radius="none"
+        className="relative w-full max-w-xl min-h-screen px-2 sm:px-8 bg-transparent"
+      >
         <CardBody className="inline-flex justify-center items-start">
           <Button
             onPress={() => router.back()}
             as={Link}
             variant="flat"
             color="danger"
-            className="flex items-center text-red-600 dark:text-red-100 mb-6 gap-1 w-fit">
+            className="flex items-center text-red-600 dark:text-red-100 mb-6 gap-1 w-fit"
+          >
             <ChevronLeftIcon className="size-4" />
             Back to Login
           </Button>
 
-          <h1 className="text-xl md:text-2xl font-extrabold mb-4 text-gray-800 dark:text-white">
-            Lupa atau Ganti Password ?
+          <h1 className="text-xl md:text-2xl font-extrabold mb-6 text-gray-800 dark:text-white">
+            Lupa atau{" "}
+            <span className="relative">
+              Ganti Password ?
+              <svg
+                className="absolute -bottom-1.5 left-0 w-full h-2 text-primary/30"
+                viewBox="0 0 100 10"
+                preserveAspectRatio="none"
+              >
+                <path
+                  d="M0,5 Q50,10 100,5"
+                  stroke="currentColor"
+                  strokeWidth="6"
+                  fill="none"
+                  strokeLinecap="round"
+                ></path>
+              </svg>
+            </span>
           </h1>
-          <div>
-            <Alert
-              hideIconWrapper
-              color="warning"
-              description="Silahkan isi email anda yang terdaftar pada portal SILKa untuk
-                mendapatkan Kode OTP dan melakukan reset password."
-              variant="faded"
-              className="mb-6"
-            />
-          </div>
           <form
             onSubmit={handleSubmit(onSubmit)}
             method="POST"
             autoComplete="off"
             noValidate
-            className="space-y-6 w-full">
+            className="inline-flex flex-col space-y-6 w-full bg-white dark:bg-linear-to-b dark:from-slate-900 dark:to-slate-700 p-6 rounded-2xl ring-4 ring-blue-100/60 dark:ring-slate-700"
+          >
+            <div>
+              <Alert
+                hideIconWrapper
+                color="warning"
+                description="Silahkan isi email anda yang terdaftar pada portal SILKa untuk
+                mendapatkan Kode OTP dan melakukan reset password."
+                variant="faded"
+              />
+            </div>
             <Input
+              className="group"
               classNames={{
-                inputWrapper:
-                  "dark:bg-gradient-to-t dark:from-slate-900/80 dark:to-white/20",
-                description: "dark:text-gray-300",
-                label: "pb-1",
+                errorMessage: "-ml-1 tracking-wide",
+                input:
+                  "placeholder:text-gray-300 dark:placeholder:text-slate-400",
+                inputWrapper: "bg-transparent",
+                description: "-ml-1 pt-2",
               }}
               isRequired
               radius="sm"
               label="Email"
-              labelPlacement="inside"
+              labelPlacement="outside"
               id="email"
               size="lg"
-              variant="faded"
+              variant="underlined"
               placeholder="Enter your email"
               type="email"
               description="Kode OTP akan dikirimkan ke email anda."
@@ -108,7 +132,7 @@ export default function ForgotPassword() {
                 },
               })}
               startContent={
-                <EnvelopeIcon className="size-5 text-default-800 pointer-events-none shrink-0 mr-2" />
+                <EnvelopeIcon className="transition-all size-5 text-default-300 dark:text-slate-400 group-hover:text-default-600 group-focus:text-default-600 group-focus-within:text-default-600 group-focus-visible:text-default-600 mr-2" />
               }
             />
 
@@ -119,7 +143,8 @@ export default function ForgotPassword() {
               variant="shadow"
               className="w-full h-12 text-base font-medium disabled:hover:opacity-40 disabled:opacity-40 disabled:cursor-not-allowed"
               isDisabled={isLoading || isSubmitting || !isValid}
-              spinner={<Spinner color="default" variant="dots" size="sm" />}>
+              spinner={<Spinner color="default" variant="spinner" size="sm" />}
+            >
               {isLoading || isSubmitting ? "" : "Kirim"}
             </Button>
           </form>
