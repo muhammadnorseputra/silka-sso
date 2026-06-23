@@ -102,7 +102,6 @@ export default function Login({
       }
     } finally {
       setLoadingBtn(false);
-      toast.dismiss();
     }
   };
 
