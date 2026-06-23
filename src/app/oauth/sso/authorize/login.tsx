@@ -87,8 +87,7 @@ export default function Login({
 
             return result.response.message;
           },
-          error: (err) =>
-            `Galat! ${err.message}` || "Terjadi kesalahan saat verifikasi",
+          error: (err) => err.message || "Terjadi kesalahan saat verifikasi",
         },
         {
           id: "auth-verify",

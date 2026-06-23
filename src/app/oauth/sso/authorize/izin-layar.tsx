@@ -1,21 +1,18 @@
 "use client";
 
 import ChipComponent from "@/components/chip";
+import { UserCircleIcon } from "@heroicons/react/20/solid";
 import { KeyIcon, LockClosedIcon } from "@heroicons/react/24/outline";
-import {
-  ArrowRightEndOnRectangleIcon,
-  CheckCircleIcon,
-  LockOpenIcon,
-} from "@heroicons/react/24/solid";
+import { ArrowRightEndOnRectangleIcon } from "@heroicons/react/24/solid";
 import {
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
   Button,
   Avatar,
   Spinner,
   Divider,
+  cn,
 } from "@heroui/react";
 import { jwtDecode, JwtPayload } from "jwt-decode";
 import { useTheme } from "next-themes";
@@ -63,27 +60,54 @@ export default function IzinLayar({
     // THIS CODE WILL RUN AFTER THE SERVER ACTION
   }, [isPending]);
 
-  const handleIzin = async () => {
+  const handleIzin = () => {
     // RUN SOME VALIDATION HERE
-    startTransition(async () => {
-      const createIzin = await create(
-        clientId,
-        state,
-        params.get("scope") as string,
-        redirectUri,
+    startTransition(async() => {
+      await toast.promise(
+        create(
+          clientId,
+          state,
+          params.get("scope") as string,
+          redirectUri,
+        ),
+        {
+          loading: "Membuat izin...",
+          success: (result) => {
+            if(!result.status)
+            {
+              throw new Error(result.message);
+            }
+            router.replace(result.data?.redirect || '/')
+            return result.message
+          },
+          error: (err) => err.message || "Terjadi kesalahan",
+        },
+        {
+          id: 'toast-approve-screen'
+        }
       );
-      if (createIzin.status === false) {
-        toast.error(createIzin.message);
-      }
     });
   };
 
-  const handleLogout = async () => {
-    // RUN SOME VALIDATION HERE
-    startTransition(() => {
-      return logout(nip, clientId, access_token, parameter);
+  const handleLogout = () => {
+    startTransition(async () => {
+      await toast.promise(logout(nip, clientId, access_token, parameter), {
+        loading: "Processing logout...",
+        success: (result) => {
+          if(!result.status)
+          {
+            throw new Error(result.message);
+          }
+          router.replace(parameter)
+          return result.message;
+        },
+        error: (err) => err.message || "Logout gagal",
+      }, {
+        id: 'toast-logout'
+      });
     });
   };
+
   return (
     <Card
       fullWidth={true}
@@ -93,7 +117,12 @@ export default function IzinLayar({
     >
       <CardHeader>
         <div className="inline-flex flex-col justify-center items-center w-full">
-          <div className="p-3 border border-white/20 rounded-full bg-transparent">
+          <div
+            className={cn(
+              "p-3 border border-white/20 rounded-full bg-transparent",
+              isPending && "blur-lg dark:blur-2xl",
+            )}
+          >
             <div className="p-3 border border-white/60 rounded-full bg-transparent">
               <div className="p-3 border border-white/90 rounded-full bg-white/30 dark:bg-blue-300/70 backdrop-blur-lg shadow-xl shadow-white dark:shadow-blue-300 inline-flex justify-start items-center gap-x-6 w-full">
                 <KeyIcon className="size-12 text-gray-800 dark:text-white" />
@@ -111,14 +140,22 @@ export default function IzinLayar({
         <p className="text-sm text-default-400 dark:text-white/60">
           Izinkan untuk menggunakan akun silka anda.
         </p>
-        <div className="flex justify-start items-center gap-x-6 mb-2 mt-2 py-2 px-4 border border-white/90 dark:bg-white/20 dark:border-black/10 rounded-2xl w-full bg-white/60 backdrop-blur-xl shadow">
+        <div className="flex justify-start items-center gap-x-6 mb-2 mt-2 py-4 px-4 border border-white/90 dark:bg-white/20 dark:border-black/10 rounded-2xl w-full bg-white/60 backdrop-blur-xl shadow">
           <Avatar
+          showFallback
+          fallback={
+          <UserCircleIcon
+            className="animate-pulse w-6 h-6 text-default-500"
+            fill="currentColor"
+          />
+        }
             isBordered
+            radius="full"
             as="button"
             name={nama_lengkap}
-            size="md"
+            size="lg"
             src={picture}
-            className="w-16 h-16"
+            color="primary"
           />
           <div className="inline-flex flex-col items-start justify-start w-max">
             <span>{nama_lengkap}</span>
@@ -144,52 +181,52 @@ export default function IzinLayar({
             </li>
           </ul> */}
         <div className="inline-flex w-full justify-between items-center space-x-4">
-           <Button
-          onPress={handleLogout}
-          fullWidth
-          isDisabled={isPending}
-          variant="flat"
-          color="danger"
-          size="lg"
-          radius="sm"
-          className="font-bold"
-        >
-          {isPending ? (
-            <Spinner
-              color={resolvedTheme === "dark" ? "default" : "default"}
-              variant="spinner"
-              size="sm"
-            />
-          ) : (
-            <>
-              Keluar
-              <LockClosedIcon className="size-8" />
-            </>
-          )}
-        </Button>
-        <Button
-          onPress={handleIzin}
-          fullWidth
-          size="lg"
-          isDisabled={isPending}
-          variant="shadow"
-          color="primary"
-          radius="sm"
-          className="font-bold group transition-all"
-        >
-          {isPending ? (
-            <Spinner
-              color={resolvedTheme === "dark" ? "default" : "default"}
-              variant="spinner"
-              size="sm"
-            />
-          ) : (
-            <>
-              Lanjutkan
-              <ArrowRightEndOnRectangleIcon className="size-8" />
-            </>
-          )}
-        </Button>
+          <Button
+            onPress={handleLogout}
+            fullWidth
+            isDisabled={isPending}
+            variant="flat"
+            color="danger"
+            size="lg"
+            radius="sm"
+            className="font-bold"
+          >
+            {isPending ? (
+              <Spinner
+                color={resolvedTheme === "dark" ? "default" : "default"}
+                variant="spinner"
+                size="sm"
+              />
+            ) : (
+              <>
+                Keluar
+                <LockClosedIcon className="size-8" />
+              </>
+            )}
+          </Button>
+          <Button
+            onPress={handleIzin}
+            fullWidth
+            size="lg"
+            isDisabled={isPending}
+            variant="shadow"
+            color="primary"
+            radius="sm"
+            className="font-bold group transition-all"
+          >
+            {isPending ? (
+              <Spinner
+                color={resolvedTheme === "dark" ? "default" : "default"}
+                variant="spinner"
+                size="sm"
+              />
+            ) : (
+              <>
+                Lanjutkan
+                <ArrowRightEndOnRectangleIcon className="size-8" />
+              </>
+            )}
+          </Button>
         </div>
         {/* <Button
           onPress={() => router.back()}
