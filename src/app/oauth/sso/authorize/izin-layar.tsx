@@ -180,7 +180,7 @@ export default function IzinLayar({
           {isPending ? (
             <Spinner
               color={resolvedTheme === "dark" ? "default" : "default"}
-              variant="dots"
+              variant="spinner"
               size="sm"
             />
           ) : (

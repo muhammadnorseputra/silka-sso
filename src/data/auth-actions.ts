@@ -70,21 +70,64 @@ export default async function AuthVerify(formData: any) {
       password: formData.password,
       client_id: formData.client_id,
       client_secret: formData.client_secret,
-      // device_id,
     };
 
-    /**
-     * Request Login Endpoint
-     */
-    const response = await fetch(base_url, {
-      method: "POST",
-      cache: "no-store",
-      headers: {
-        apiKey: process.env.NEXT_PUBLIC_APIKEY as string,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(account),
-    });
+    // ✅ AbortController untuk timeout (koneksi lambat / server tidak merespons)
+    const TIMEOUT_MS = 8000; // 8 detik
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+    let response: Response;
+    try {
+      response = await fetch(base_url, {
+        method: "POST",
+        cache: "no-store",
+        headers: {
+          apiKey: process.env.NEXT_PUBLIC_APIKEY as string,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(account),
+        signal: controller.signal,
+      });
+    } catch (fetchError) {
+      if (fetchError instanceof Error) {
+        // ✅ Timeout / koneksi lambat
+        if (fetchError.name === "AbortError") {
+          return {
+            response: {
+              status: false,
+              message:
+                "Server tidak merespons dalam batas waktu yang ditentukan. Coba lagi.",
+            },
+          };
+        }
+
+        // ✅ Server tidak bisa dijangkau (network error dari sisi server)
+        if (
+          fetchError.message.includes("ECONNREFUSED") || // port ditolak
+          fetchError.message.includes("ENOTFOUND") || // DNS gagal / domain tidak ditemukan
+          fetchError.message.includes("ECONNRESET") || // koneksi direset paksa
+          fetchError.message.includes("ETIMEDOUT") // timeout di level TCP
+        ) {
+          return {
+            response: {
+              status: false,
+              message: `Server ${process.env.NEXT_PUBLIC_SILKA_BASE_URL} tidak dapat dijangkau. Periksa koneksi jaringan server.`,
+            },
+          };
+        }
+      }
+
+      // ✅ Fallback error tidak terduga
+      return {
+        response: {
+          status: false,
+          message: `Terjadi kesalahan jaringan: ${fetchError instanceof Error ? fetchError.message : fetchError}`,
+        },
+      };
+    } finally {
+      clearTimeout(timeoutId); // ✅ Selalu bersihkan timer
+    }
 
     const data = await response.json();
 
@@ -92,63 +135,45 @@ export default async function AuthVerify(formData: any) {
       const userinfo = await AccessToken(data.data.code);
 
       if (userinfo.response.status) {
-        /**
-         * Encrypt Authorization Code
-         */
+        const cookieOptions = {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "lax" as const,
+        };
+
         const codeEnkripsi = AES.encrypt(
           data.data.code,
           process.env.KEY_PASSPHRASE as string,
         );
 
-        /**
-         * AUTH STATE
-         */
         cookieStore.set({
           name: "sso_state",
           value: formData.state,
-          httpOnly: true,
           maxAge: 60,
-          secure: process.env.NODE_ENV === "production" ? true : false,
-          sameSite: "lax",
+          ...cookieOptions,
         });
-
-        /**
-         * AUTH CODE
-         */
         cookieStore.set({
           name: "sso_code",
           value: codeEnkripsi.toString(),
-          httpOnly: true,
-          maxAge: 3600,
-          secure: process.env.NODE_ENV === "production" ? true : false,
-          sameSite: "lax",
+          maxAge: 3600 * 12,
+          ...cookieOptions,
         });
 
-        /**
-         * Encrypt Access Token
-         */
         const tokenEnkripsi = AES.encrypt(
           userinfo.response.access_token,
           process.env.KEY_PASSPHRASE as string,
         );
 
-        /**
-         * ACCESS TOKEN
-         */
         cookieStore.set({
           name: "sso_token",
           value: tokenEnkripsi.toString(),
-          httpOnly: true,
-          maxAge: 3600,
-          secure: process.env.NODE_ENV === "production" ? true : false,
-          sameSite: "lax",
+          maxAge: 3600 * 12,
+          ...cookieOptions,
         });
       }
     }
 
-    return {
-      response: data,
-    };
+    return { response: data };
   } catch (error) {
     return {
       response: {
