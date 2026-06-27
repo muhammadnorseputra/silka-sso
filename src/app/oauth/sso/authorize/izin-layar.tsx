@@ -158,8 +158,8 @@ export default function IzinLayar({
             color="primary"
           />
           <div className="inline-flex flex-col items-start justify-start w-max">
-            <span>{nama_lengkap}</span>
-            <span>{nip}</span>
+            <span className="font-display font-semibold">{nama_lengkap}</span>
+            <span className="font-mono text-sm tracking-tight text-default-500">{nip}</span>
           </div>
         </div>
         {/* <ul className="mt-2 bg-white/20 py-3 rounded-2xl *:border-b *:border-white/50 dark:*:border-white/30 *:py-2 *:px-4 [&>*:last-child]:border-b-0">
@@ -193,7 +193,7 @@ export default function IzinLayar({
           >
             {isPending ? (
               <Spinner
-                color={resolvedTheme === "dark" ? "default" : "default"}
+                color="current"
                 variant="spinner"
                 size="sm"
               />
@@ -216,7 +216,7 @@ export default function IzinLayar({
           >
             {isPending ? (
               <Spinner
-                color={resolvedTheme === "dark" ? "default" : "default"}
+                color="current"
                 variant="spinner"
                 size="sm"
               />

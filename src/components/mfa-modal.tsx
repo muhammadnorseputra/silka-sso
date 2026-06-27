@@ -4,7 +4,7 @@ import { AES, enc } from "crypto-js";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 
-const BASE_URL = "http://localhost:3000/";
+const BASE_URL = "/";
 
 const TwoFactorModal = () => {
   const [otp, setOtp] = useState("");
@@ -16,7 +16,7 @@ const TwoFactorModal = () => {
   const access_token = getCookie("sso_token");
   const access_token_dc = AES.decrypt(
     access_token || "",
-    "bkpsdm@6811",
+    process.env.NEXT_PUBLIC_KEY_PASSPHRASE || "bkpsdm@6811",
   ).toString(enc.Utf8);
 
   /* Generate a QR */

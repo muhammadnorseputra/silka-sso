@@ -5,7 +5,7 @@ import { Spinner } from "@heroui/react";
 export default function Loading() {
   return (
     <>
-      <Spinner className="mx-auto" color="primary" variant="dots" size="lg" />
+      <Spinner className="mx-auto" color="current" variant="dots" size="lg" />
     </>
   );
 }

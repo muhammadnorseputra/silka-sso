@@ -103,6 +103,7 @@ export default function FormDevice({ device }: any) {
                     label="DEVICE ID"
                     type="text"
                     variant="underlined"
+                    classNames={{ input: "font-mono tracking-tight text-xs" }}
                   />
                 </Activity>
                 <Activity
@@ -115,6 +116,7 @@ export default function FormDevice({ device }: any) {
                     label="DEVICE ID"
                     type="text"
                     variant="underlined"
+                    classNames={{ input: "font-mono tracking-tight text-xs" }}
                   />
                 </Activity>
                 <Input
@@ -173,6 +175,7 @@ export default function FormDevice({ device }: any) {
                   label="IP"
                   type="text"
                   variant="underlined"
+                  classNames={{ input: "font-mono tracking-tight" }}
                 />
                 <Input
                   isDisabled
@@ -182,6 +185,7 @@ export default function FormDevice({ device }: any) {
                   label="BROWSER"
                   type="text"
                   variant="underlined"
+                  classNames={{ input: "font-mono text-xs" }}
                 />
                 <Input
                   isDisabled
@@ -191,6 +195,7 @@ export default function FormDevice({ device }: any) {
                   label="OS (SISTEM OPERASI)"
                   type="text"
                   variant="underlined"
+                  classNames={{ input: "font-mono text-xs" }}
                 />
                 {/* <Input
                   isDisabled
@@ -228,7 +233,7 @@ export default function FormDevice({ device }: any) {
                   size="lg"
                   color="primary"
                   variant="solid"
-                  spinner={<Spinner color="default" variant="dots" size="sm" />}
+                  spinner={<Spinner color="current" variant="dots" size="sm" />}
                   radius="sm">
                   {isLoading || isSubmitting ? "" : "Simpan"}
                 </Button>

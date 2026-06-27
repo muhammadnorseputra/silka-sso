@@ -1,37 +1,94 @@
 "use client";
 
+// Organized imports
+import { useState } from "react";
+import { permanentRedirect } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { v4 as uuidv4 } from "uuid";
+import toast from "react-hot-toast";
+import { useReCaptcha } from "next-recaptcha-v3";
+
+// UI Components
 import {
   Card,
   CardHeader,
   CardBody,
+  CardFooter,
   Button,
   Input,
   Tooltip,
   Spinner,
-  CardFooter,
   Divider,
   cn,
 } from "@heroui/react";
 import Link from "next/link";
+import Image from "next/image";
+
+// Icons
 import {
   ArrowRightCircleIcon,
+  ArrowRightIcon,
   EyeIcon,
   EyeSlashIcon,
-  FingerPrintIcon,
   KeyIcon,
   UserIcon,
 } from "@heroicons/react/24/solid";
-import { useForm } from "react-hook-form";
-import toast, { useToasterStore } from "react-hot-toast";
-import { useState } from "react";
-import { permanentRedirect } from "next/navigation";
-import AuthVerify from "@/data/auth-actions";
-import { v4 as uuidv4 } from "uuid";
+import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
+
+// Custom Components
 import ChipComponent from "@/components/chip";
 
-import { useReCaptcha } from "next-recaptcha-v3";
-import { useTheme } from "next-themes";
-import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
+// Data Services
+import AuthVerify from "@/data/auth-actions";
+import { BorderBeam } from "@/components/ui/border-beam";
+
+// Interfaces
+interface LoginProps {
+  client: any;
+  state?: string;
+  scope: string;
+  redirectUri?: string;
+  typeAccount: string;
+}
+
+interface FormData {
+  username: string;
+  password: string;
+}
+
+// Reusable Components
+const Logo = () => (
+  <div className="p-3 border border-white/60 rounded-full bg-transparent">
+    <div className="w-20 h-20 border border-white/80 rounded-full bg-white dark:bg-slate-900 backdrop-blur-lg shadow-xl shadow-white relative">
+      <Image
+        width={32}
+        height={32}
+        src={"/logo.png"}
+        alt="Logo Balangan"
+        className="absolute left-6 top-5 w-auto h-auto"
+      />
+    </div>
+  </div>
+);
+
+const Title = () => (
+  <h3 className="relative text-3xl font-display font-bold flex items-center justify-center gap-x-3 mt-4">
+    Single Sign-On{" "}
+    <svg
+      className="absolute -bottom-1.5 left-0 w-full h-2 text-primary/30"
+      viewBox="0 0 100 10"
+      preserveAspectRatio="none"
+    >
+      <path
+        d="M0,5 Q50,10 100,5"
+        stroke="currentColor"
+        strokeWidth="6"
+        fill="none"
+        strokeLinecap="round"
+      />
+    </svg>
+  </h3>
+);
 
 export default function Login({
   client,
@@ -39,8 +96,7 @@ export default function Login({
   scope,
   redirectUri = `${process.env.NEXT_PUBLIC_PORTAL_SSO_BASE_URL as string}/${process.env.NEXT_PUBLIC_PORTAL_SSO_CALLBACK as string}`,
   typeAccount,
-}: any) {
-  const { resolvedTheme } = useTheme();
+}: LoginProps) {
   const { executeRecaptcha } = useReCaptcha();
   const [isVisible, setIsVisible] = useState(false);
   const [loadingBtn, setLoadingBtn] = useState(false);
@@ -49,28 +105,24 @@ export default function Login({
     register,
     handleSubmit,
     setError,
-    formState: { errors, isLoading, isSubmitting, isValid },
-  } = useForm();
+    formState: { errors, isSubmitting },
+  } = useForm<FormData>();
 
-  function toggleVisibility() {
-    return setIsVisible(!isVisible);
-  }
+  const toggleVisibility = () => setIsVisible(!isVisible);
 
-  const isSubmit = async (FormFileds: any) => {
+  const handleLogin = async (formData: FormData) => {
     try {
       setLoadingBtn(true);
+
       // Generate ReCaptcha token
       const token = await executeRecaptcha("form_submit");
 
       const payload = {
         token,
-        ...FormFileds,
+        ...formData,
         scope,
-        client_id:
-          client?.data.client_id ?? "5aa888ec-92be-4fdf-8c69-8c96e99e11ff",
-        client_secret:
-          client?.data.client_secret ??
-          "+51jett5h))zpfhvwhej*r8_0%nej9ljx=*df0_b&2ss3wix*p",
+        client_id: client?.data.client_id,
+        client_secret: client?.data.client_secret,
         state,
       };
 
@@ -80,18 +132,15 @@ export default function Login({
           loading: "Memverifikasi akun...",
           success: (result) => {
             if (!result.response.status) {
-              setError("username", {});
-              setError("password", {});
+              setError("username", { type: "manual" });
+              setError("password", { type: "manual" });
               throw new Error(result.response.message);
             }
-
             return result.response.message;
           },
           error: (err) => err.message || "Terjadi kesalahan saat verifikasi",
         },
-        {
-          id: "auth-verify",
-        },
+        { id: "auth-verify" },
       );
 
       if (result?.response.status) {
@@ -104,9 +153,10 @@ export default function Login({
     }
   };
 
+  const isDisabled = isSubmitting || loadingBtn;
+
   return (
     <>
-      {/* <TwoFactorModal /> */}
       <Card
         fullWidth={true}
         shadow="none"
@@ -116,60 +166,30 @@ export default function Login({
         <CardHeader className="flex flex-col">
           <div
             className={cn(
-              "transition-all duration-200  p-3 border border-white/40 rounded-full bg-transparent",
-              loadingBtn && "blur-lg dark:blur-2xl",
+              "p-3 border border-white/40 rounded-full bg-transparent",
+              isDisabled && "blur-2xl",
             )}
           >
-            <div className="p-3 border border-white/60 rounded-full bg-transparent">
-              <div className="p-3 border border-white/80 rounded-full bg-white backdrop-blur-lg shadow-xl shadow-white">
-                <FingerPrintIcon className="size-12 text-gray-800 dark:text-slate-900" />
-              </div>
-            </div>
+            <Logo />
           </div>
           <Divider
             orientation="vertical"
-            className={cn(
-              "h-6 mx-auto bg-white/40 dark:bg-white/20",
-              loadingBtn && "opacity-10",
-            )}
+            className="h-6 mx-auto bg-white/40 dark:bg-white/20"
           />
           <ChipComponent name={typeAccount} />
-          <h3 className="relative text-3xl fw-bold flex items-center justify-center gap-x-3 mt-4">
-            Single Sign-On{" "}
-            <svg
-              className="absolute -bottom-1.5 left-0 w-full h-2 text-primary/30"
-              viewBox="0 0 100 10"
-              preserveAspectRatio="none"
-            >
-              <path
-                d="M0,5 Q50,10 100,5"
-                stroke="currentColor"
-                strokeWidth="6"
-                fill="none"
-                strokeLinecap="round"
-              ></path>
-            </svg>
-          </h3>
-          <p className="font-bold text-center">
+          <Title />
+          <p className="font-display font-semibold text-center tracking-wide">
             Sistem Informasi Layanan Kepegawaian
           </p>
-          {/* <div className="flex items-center justify-center w-full mt-6">
-            <Alert
-              color="warning"
-              description="Silahkan gunakan akun Silka anda untuk mengakses
-            layanan kepegawaian."
-              variant="flat"
-              radius="sm"
-            />
-          </div> */}
         </CardHeader>
+
         <CardBody>
           <form
-            onSubmit={handleSubmit(isSubmit)}
+            onSubmit={handleSubmit(handleLogin)}
             method="POST"
             autoComplete="off"
             noValidate
-            className="flex flex-col space-y-6 bg-white dark:bg-linear-to-b dark:from-slate-800 dark:to-black p-8 rounded-2xl ring-4 ring-blue-100/60 dark:ring-slate-700"
+            className="relative ring-2 ring-blue-50  overflow-hidden rounded-2xl flex flex-col space-y-6 bg-white dark:bg-linear-to-b dark:from-slate-800 dark:to-black p-8"
           >
             {/* <Select
               isRequired
@@ -236,19 +256,17 @@ export default function Login({
             <Input
               autoFocus
               isRequired
-              isDisabled={isLoading || isSubmitting || loadingBtn}
+              isDisabled={isSubmitting || loadingBtn}
               variant="underlined"
               type="text"
-              color={errors?.password ? "danger" : "default"}
+              color={errors?.username ? "danger" : "default"}
               radius="sm"
               label="Username"
               labelPlacement="outside"
               placeholder="Masukan username anda"
               size="lg"
-              isInvalid={errors?.username ? true : false}
-              errorMessage={
-                errors?.username?.message && `${errors.username.message}`
-              }
+              isInvalid={!!errors?.username}
+              errorMessage={errors?.username?.message}
               {...register("username", {
                 required: "Username wajib diisi",
                 minLength: {
@@ -259,7 +277,7 @@ export default function Login({
               startContent={
                 <UserIcon
                   className={cn(
-                    `transition-all size-5 text-default-300 dark:text-slate-400 group-hover:text-default-600 group-focus:text-default-600 group-focus-within:text-default-600 group-focus-visible:text-default-600 mr-2`,
+                    `size-5 text-default-300 dark:text-slate-400 mr-2`,
                     errors?.username && "text-red-500 dark:text-red-500",
                   )}
                 />
@@ -279,25 +297,23 @@ export default function Login({
             />
             <Input
               isRequired
-              isDisabled={isLoading || isSubmitting || loadingBtn}
+              isDisabled={isDisabled}
               label="Password"
               variant="underlined"
               size="lg"
               color={errors?.password ? "danger" : "default"}
-              isInvalid={errors?.password ? true : false}
+              isInvalid={!!errors?.password}
               radius="sm"
               labelPlacement="outside"
               placeholder="Masukan password anda"
               {...register("password", {
                 required: "Password wajib diisi",
               })}
-              errorMessage={
-                errors?.password?.message && `${errors.password.message}`
-              }
+              errorMessage={errors?.password?.message}
               startContent={
                 <KeyIcon
                   className={cn(
-                    `transition-all size-5 text-default-300 dark:text-slate-400 group-hover:text-default-600 group-focus:text-default-600 group-focus-within:text-default-600 group-focus-visible:text-default-600 mr-2`,
+                    `size-5 text-default-300 dark:text-slate-400 mr-2`,
                     errors?.password && "text-red-500 dark:text-red-500",
                   )}
                 />
@@ -339,30 +355,24 @@ export default function Login({
             />
             <Button
               className="disabled:cursor-not-allowed disabled:opacity-40 group"
-              isDisabled={isLoading || isSubmitting || loadingBtn}
-              isLoading={isLoading || isSubmitting || loadingBtn}
+              isDisabled={isDisabled}
+              isLoading={isDisabled}
               type="submit"
               fullWidth
               size="lg"
               color="primary"
-              variant="shadow"
+              variant="solid"
               endContent={
-                isLoading || isSubmitting || loadingBtn ? (
+                isDisabled ? (
                   ""
                 ) : (
-                  <ArrowRightCircleIcon className="group-hover:ml-7 transition-all duration-400" />
+                  <ArrowRightIcon className="group-hover:ml-7 transition-all duration-400 size-6" />
                 )
               }
-              spinner={
-                <Spinner
-                  color={resolvedTheme === "dark" ? "default" : "default"}
-                  variant="spinner"
-                  size="sm"
-                />
-              }
+              spinner={<Spinner color="current" variant="spinner" size="sm" />}
               radius="sm"
             >
-              {isLoading || isSubmitting || loadingBtn ? "" : "Masuk Sekarang"}
+              {isDisabled ? "" : "Masuk Sekarang"}
             </Button>
             <div className="flex justify-between items-center">
               {/* <HeroLink
@@ -405,11 +415,17 @@ export default function Login({
               variant="solid">
               Registrasi Perangkat
             </Button> */}
+          <BorderBeam
+            duration={4}
+            size={400}
+            reverse
+            className="from-transparent via-blue-300 to-transparent"
+          />
           </form>
         </CardBody>
         <CardFooter>
           <span className="text-black/40 dark:text-white/40 text-sm text-center w-full">
-            &copy; 2024 | Dikembangakan oleh Bidang PPIK - BKPSDM Balangan.
+            2024 &copy; Dikembangakan oleh Bidang PPIK - BKPSDM Balangan.
           </span>
         </CardFooter>
       </Card>

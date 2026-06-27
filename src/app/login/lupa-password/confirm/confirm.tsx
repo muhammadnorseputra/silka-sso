@@ -226,7 +226,7 @@ export default function Confirm({ access_token, decoded }: any) {
               className="w-full h-12 text-base font-medium disabled:hover:opacity-40 disabled:opacity-20 disabled:cursor-not-allowed"
               isLoading={isLoading || isSubmitting}
               isDisabled={isLoading || isSubmitting}
-              spinner={<Spinner color="default" variant="spinner" size="sm" />}
+              spinner={<Spinner color="current" variant="spinner" size="sm" />}
             >
               {isLoading || isSubmitting ? "" : "Submit"}
             </Button>

@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "next": {
+      "source": "hairyf/skills",
+      "sourceType": "github",
+      "skillPath": "skills/next/SKILL.md",
+      "computedHash": "d85d97185cc605c44ba06483a532f5ee185ec800049be93ec95ab736cebb3262"
+    },
+    "tailwindcss": {
+      "source": "hairyf/skills",
+      "sourceType": "github",
+      "skillPath": "skills/tailwindcss/SKILL.md",
+      "computedHash": "676d95536c3c4a64215535ff09128d6e8d5163eb3fc204ed2cfde61e87b5d892"
+    }
+  }
+}

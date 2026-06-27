@@ -41,7 +41,7 @@ export default async function AuthVerify(formData: any) {
   // const { device_id } = await GetDevicesInfo();
   const captchaResult = await CaptchaVerify(formData.token);
 
-  if (!captchaResult.success && captchaResult.score < 0.5) {
+  if (!captchaResult.success || captchaResult.score < 0.5) {
     return {
       response: {
         status: false,
@@ -68,8 +68,8 @@ export default async function AuthVerify(formData: any) {
       type: cookieStore.get("type_account")?.value,
       username: formData.username,
       password: formData.password,
-      client_id: formData.client_id,
-      client_secret: formData.client_secret,
+      client_id: formData.client_id || "5aa888ec-92be-4fdf-8c69-8c96e99e11ff",
+      client_secret: formData.client_secret || "+51jett5h))zpfhvwhej*r8_0%nej9ljx=*df0_b&2ss3wix*p",
     };
 
     // ✅ AbortController untuk timeout (koneksi lambat / server tidak merespons)
@@ -155,7 +155,7 @@ export default async function AuthVerify(formData: any) {
         cookieStore.set({
           name: "sso_code",
           value: codeEnkripsi.toString(),
-          maxAge: 3600 * 12,
+          maxAge: 3600,
           ...cookieOptions,
         });
 
@@ -167,7 +167,7 @@ export default async function AuthVerify(formData: any) {
         cookieStore.set({
           name: "sso_token",
           value: tokenEnkripsi.toString(),
-          maxAge: 3600 * 12,
+          maxAge: 3600,
           ...cookieOptions,
         });
       }

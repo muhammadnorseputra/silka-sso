@@ -58,5 +58,5 @@ export default async function Page({
     );
   }
 
-  return <Login typeAccount={type_account.value} />;
+  return <Login typeAccount={type_account.value} client={undefined} scope={""} />;
 }

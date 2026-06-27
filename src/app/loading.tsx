@@ -8,7 +8,7 @@ export default function Loading() {
         classNames={{ label: "text-foreground mt-4" }}
         label="Please Wait ..."
         variant="spinner"
-        color="primary"
+        color="current"
         size="lg"
       />
     </section>

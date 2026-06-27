@@ -20,7 +20,7 @@ interface Payload extends JwtPayload {
 
 const LOGOUT_SECRET_KEY = process.env.NEXT_PUBLIC_LOGOUT_SECRET_KEY as string;
 
-function getAccessToken(encryptedToken: string): Payload | undefined {
+function getAccessTokenFromCookie(encryptedToken: string): Payload | undefined {
   try {
     const decrypted = AES.decrypt(
       encryptedToken,
@@ -32,13 +32,34 @@ function getAccessToken(encryptedToken: string): Payload | undefined {
     return undefined;
   }
 }
+
+function verifyLogoutToken(token: string): Payload | undefined {
+  try {
+    return jwt.verify(token, LOGOUT_SECRET_KEY, {
+      algorithms: ["HS256"],
+    }) as Payload;
+  } catch (error) {
+    console.error("Error verifying logout_token:", error);
+    return undefined;
+  }
+}
+
 export async function POST(request: Request) {
   const cookieStore = await cookies();
 
   const accessTokenCookie = cookieStore.get("sso_token");
   const { logout_token } = await request.json();
 
-  const token = getAccessToken(accessTokenCookie?.value || logout_token);
+  // logout_token adalah JWT yang ditandatangani, beda dengan cookie sso_token (AES encrypted)
+  let token: Payload | undefined;
+
+  if (accessTokenCookie?.value) {
+    // Dari cookie sesi lokal — AES decrypt dulu baru JWT decode
+    token = getAccessTokenFromCookie(accessTokenCookie.value);
+  } else if (logout_token) {
+    // Dari backchannel logout token — JWT yang sudah ditandatangani, langsung verify
+    token = verifyLogoutToken(logout_token);
+  }
 
   if (!token) {
     return NextResponse.json(
@@ -52,11 +73,11 @@ export async function POST(request: Request) {
   const { nip } = token.data;
 
   // lanjutkan validasi / proses token di sini
-  const payloadLogout = JSON.stringify({
+  const payloadLogout = {
     sub: nip,
     aud: CLIENT_APP.map((app) => app.client_id),
     iat: Math.floor(Date.now() / 1000),
-  });
+  };
   const jwtLogout = jwt.sign(payloadLogout, LOGOUT_SECRET_KEY, {
     algorithm: "HS256",
   });
