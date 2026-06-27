@@ -16,12 +16,15 @@ export default async function Page({
 }) {
   const query = await searchParams;
 
-  const clientId = query?.client_id;
-  const clientName = query?.client_name;
-  const responseType = query?.response_type;
-  const redirectUri = query?.redirect_uri;
-  const state = query?.state;
-  const scope = query?.scope;
+  const parseParam = (value: string | string[] | undefined) =>
+    Array.isArray(value) ? value[0] : value;
+
+  const clientId = parseParam(query?.client_id);
+  const clientName = parseParam(query?.client_name);
+  const responseType = parseParam(query?.response_type);
+  const redirectUri = parseParam(query?.redirect_uri);
+  const state = parseParam(query?.state);
+  const scope = parseParam(query?.scope);
 
   const response = await verifyClient(
     clientId as string,

@@ -46,7 +46,7 @@ import { BorderBeam } from "@/components/ui/border-beam";
 interface LoginProps {
   client: any;
   state?: string;
-  scope: string;
+  scope?: string;
   redirectUri?: string;
   typeAccount: string;
 }
