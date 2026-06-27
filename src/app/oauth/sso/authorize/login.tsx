@@ -189,7 +189,7 @@ export default function Login({
             method="POST"
             autoComplete="off"
             noValidate
-            className="relative ring-2 ring-blue-50  overflow-hidden rounded-2xl flex flex-col space-y-6 bg-white dark:bg-linear-to-b dark:from-slate-800 dark:to-black p-8"
+            className="relative ring-2 ring-blue-50 dark:ring-slate-800  overflow-hidden rounded-2xl flex flex-col space-y-6 bg-white dark:bg-linear-to-b dark:from-slate-800 dark:to-black p-8"
           >
             {/* <Select
               isRequired
@@ -419,7 +419,7 @@ export default function Login({
             duration={4}
             size={400}
             reverse
-            className="from-transparent via-blue-300 to-transparent"
+            className="from-transparent via-blue-300 to-transparent dark:via-blue-800"
           />
           </form>
         </CardBody>
