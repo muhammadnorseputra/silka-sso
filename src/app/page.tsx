@@ -1,4 +1,8 @@
 import SSOAccount from "@/components/sso-account";
+import { GridPattern } from "@/components/ui/grid-pattern";
+import { Meteors } from "@/components/ui/meteors";
+import { TextAnimate } from "@/components/ui/text-animate";
+import { TypingAnimation } from "@/components/ui/typing-animation";
 import getSession from "@/hooks/session_server";
 import { getSessionFromDatabase } from "@/services/session-store";
 import Image from "next/image";
@@ -49,29 +53,42 @@ export default async function Page() {
 
           {/* Heading block */}
           <div className="space-y-6 max-w-lg">
-            <h1 className="text-4xl/tight xl:text-5xl/tight font-bold text-white">
+            <TextAnimate as="h1" className="text-5xl/tight xl:text-5xl/tight font-bold text-white" animation="blurInUp" by="word" once>
               Akses Semua Layanan Kepegawaian
-              <span className="block mt-2 text-transparent bg-clip-text bg-linear-to-r from-blue-300 to-indigo-200">
-                Dengan Satu Portal
-              </span>
-            </h1>
-            <p className="text-base leading-relaxed text-blue-200/80">
-              Nikmati kemudahan akses ke portal layanan kepegawaian melalui
-              Single Sign On dalam satu akun.
-            </p>
+            </TextAnimate>
+            <TextAnimate
+              as="h2"
+              className="text-5xl block mt-2 text-transparent bg-clip-text bg-linear-to-r from-blue-300 to-indigo-200"
+              animation="slideUp"
+              by="word"
+            >
+              Dengan Satu Portal
+            </TextAnimate>
+              <TypingAnimation as="p" cursorStyle="line" deleteSpeed={20} loop className="text-base leading-relaxed text-blue-200/80">
+                Nikmati kemudahan akses ke portal layanan kepegawaian melalui
+                Single Sign On dalam satu akun.
+              </TypingAnimation>
           </div>
 
           {/* Bottom stat */}
           <div className="flex items-center gap-2 text-xs text-blue-300/50">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400/70" />
+            <span className="relative inline-flex items-center justify-center" style={{ width: 6, height: 6 }}>
+              {/* Pulsing ring */}
+              <span className="absolute inline-block w-6 h-6 rounded-full bg-emerald-400/20 animate-ping" />
+              {/* Solid dot */}
+              <span
+                className="relative inline-block w-1.5 h-1.5 rounded-full bg-emerald-400/70"
+                style={{ animationDelay: "1s" }}
+              />
+            </span>
             Sistem terintegrasi — SILKa Online
           </div>
         </div>
       </aside>
 
       {/* Right — Login Panel */}
-      <section className="flex-1 flex flex-col items-center justify-center px-6 py-12 lg:px-16 bg-white dark:bg-deep-navy">
-
+      <section className="relative flex-1 flex flex-col items-center justify-center px-6 py-12 lg:px-16 bg-white dark:bg-deep-navy">
+        <GridPattern width={20} height={20} strokeDasharray="2"/>
         <div className="w-full max-w-sm mx-auto">
           {/* Header */}
           <div className="text-center mb-10">
@@ -90,7 +107,7 @@ export default async function Page() {
                 />
               </svg>
             </div>
-            <h2 className="text-2xl font-bold text-gray-300 dark:text-white">
+            <h2 className="text-2xl font-bold text-gray-600 dark:text-white">
               Selamat Datang
             </h2>
             <p className="text-gray-400 dark:text-gray-500 mt-1.5 text-sm">
