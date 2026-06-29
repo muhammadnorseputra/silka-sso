@@ -110,7 +110,7 @@ export default async function Page() {
             <h2 className="text-2xl font-bold text-gray-600 dark:text-white">
               Selamat Datang
             </h2>
-            <p className="text-gray-400 dark:text-gray-500 mt-1.5 text-sm">
+            <p className="text-gray-400 dark:text-gray-200 mt-1.5 text-sm">
               Silakan pilih akun untuk melanjutkan
             </p>
           </div>
@@ -121,7 +121,7 @@ export default async function Page() {
           </div>
 
           {/* Footer */}
-          <p className="mt-12 text-center text-xs text-gray-400 dark:text-gray-600">
+          <p className="mt-12 text-center text-xs text-gray-400 dark:text-gray-500">
             2024 &copy; Dikembangkan oleh Bidang PPIK, BKPSDM Kab. Balangan.
           </p>
         </div>

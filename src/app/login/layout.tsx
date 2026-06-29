@@ -7,7 +7,7 @@ interface Props {
 
 export default async function Layout({ children }: Props) {
   return (
-    <section className="bg-linear-to-b from-sky-100 to-transparent dark:from-slate-900 dark:to-transparent">
+    <section className="bg-linear-to-b from-sky-100 to-transparent dark:from-slate-900 dark:to-black">
       <GridPattern
         width={30}
         height={30}

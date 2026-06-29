@@ -191,68 +191,6 @@ export default function Login({
             noValidate
             className="relative ring-2 ring-blue-50 dark:ring-slate-800  overflow-hidden rounded-2xl flex flex-col space-y-6 bg-white dark:bg-linear-to-b dark:from-slate-800 dark:to-black p-8"
           >
-            {/* <Select
-              isRequired
-              isDisabled={isLoading || isSubmitting || loadingBtn}
-              label="Masuk sebagai"
-              placeholder="Pilih type account"
-              size="lg"
-              radius="sm"
-              variant="faded"
-              labelPlacement="outside"
-              isInvalid={!!errors?.type ? true : false}
-              errorMessage={errors?.type?.message && `${errors.type.message}`}
-              {...register("type", {
-                required: "Pilih type account",
-              })}
-              renderValue={(items: any) => {
-                switch (items[0].key) {
-                  case "NONASN":
-                    return (
-                      <div className="flex flex-row items-center justify-start">
-                        <UsersIcon className="size-6 mr-3 text-blue-500" />
-                        <span className="font-bold">Personal - NON ASN</span>
-                      </div>
-                    );
-                  case "PERSONAL":
-                    return (
-                      <div className="flex flex-row items-center justify-start">
-                        <UserCircleIcon className="size-6 mr-3 text-green-500" />
-                        <span className="font-bold">Personal - PNS</span>
-                      </div>
-                    );
-                  case "UMPEG":
-                    return (
-                      <div className="flex flex-row items-center justify-start">
-                        <UserGroupIcon className="size-6 mr-3 text-pink-500" />
-                        <span className="font-bold">
-                          Pengelola Kepegawaian (UMPEG)
-                        </span>
-                      </div>
-                    );
-                }
-              }}>
-              <SelectItem key="NONASN" textValue="NONASN">
-                <div className="flex flex-row items-center justify-start gap-x-2 p-4">
-                  <UsersIcon className="size-6" />
-                  <span className="font-bold">Personal - NON ASN</span>
-                </div>
-              </SelectItem>
-              <SelectItem key="PERSONAL" textValue="PERSONAL">
-                <div className="flex flex-row items-center justify-start gap-x-2 p-4">
-                  <UserCircleIcon className="size-6" />
-                  <span className="font-bold">Personal - PNS</span>
-                </div>
-              </SelectItem>
-              <SelectItem key="UMPEG" textValue="UMPEG">
-                <div className="flex flex-row items-center justify-start gap-x-2 p-4">
-                  <UserGroupIcon className="size-6" />
-                  <span className="font-bold">
-                    Pengelola Kepegawaian (UMPEG)
-                  </span>
-                </div>
-              </SelectItem>
-            </Select> */}
             <Input
               autoFocus
               isRequired
@@ -417,9 +355,9 @@ export default function Login({
             </Button> */}
           <BorderBeam
             duration={4}
-            size={400}
+            size={500}
             reverse
-            className="from-transparent via-blue-300 to-transparent dark:via-blue-800"
+            className="from-transparent via-blue-300 to-transparent dark:via-blue-700"
           />
           </form>
         </CardBody>
