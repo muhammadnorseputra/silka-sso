@@ -29,9 +29,9 @@ const SsoAccountButton: React.FC<SsoAccountButtonProps> = ({
     <button
       disabled={isPending}
       onClick={() => onClick(type)} // Pass the type to the handler
-      className="group relative w-full flex items-center gap-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-linear-to-b dark:from-gray-600 dark:to-gray-900 px-5 py-4 text-left shadow-sm transition-all duration-200 hover:border-blue-200 hover:shadow-lg hover:shadow-blue-500/40 disabled:opacity-50 disabled:cursor-not-allowed hover:cursor-pointer"
+      className="group relative w-full flex items-center gap-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-linear-to-b dark:from-gray-600 dark:to-gray-900 px-5 py-4 text-left shadow-sm transition-all duration-200 hover:border-teal-200 hover:shadow-sm hover:shadow-teal-500/40 disabled:opacity-90 disabled:cursor-not-allowed hover:cursor-pointer"
     >
-      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-linear-to-br from-blue-50 to-indigo-50 dark:from-blue-500/10 dark:to-indigo-500/10 text-blue-600 dark:text-blue-400 transition-colors group-hover:from-blue-100 group-hover:to-indigo-100 dark:group-hover:from-blue-500/20 dark:group-hover:to-indigo-500/20">
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-linear-to-br from-teal-50 to-indigo-50 dark:from-teal-500/10 dark:to-indigo-500/10 text-teal-600 dark:text-teal-400 transition-colors group-hover:from-teal-100 group-hover:to-indigo-100 dark:group-hover:from-teal-500/20 dark:group-hover:to-indigo-500/20">
         {icon}
       </span>
       <span className="flex flex-col gap-0.5 min-w-0">

@@ -31,7 +31,7 @@ export default async function Page() {
         <div className="absolute inset-0 bg-dot-grid" />
 
         {/* Decorative glowing orbs */}
-        <div className="absolute -top-48 -left-48 w-96 h-96 rounded-full bg-blue-500/10 blur-3xl" />
+        <div className="absolute -top-48 -left-48 w-96 h-96 rounded-full bg-teal-500/10 blur-3xl" />
         <div className="absolute -bottom-32 -right-32 w-80 h-80 rounded-full bg-indigo-500/10 blur-3xl" />
 
         <div className="relative z-10 flex flex-col justify-between p-14 w-full">
@@ -58,20 +58,20 @@ export default async function Page() {
             </TextAnimate>
             <TextAnimate
               as="h2"
-              className="text-5xl block mt-2 text-transparent bg-clip-text bg-linear-to-r from-blue-300 to-indigo-200"
+              className="text-5xl block mt-2 text-transparent bg-clip-text bg-linear-to-r from-teal-300 to-indigo-200"
               animation="slideUp"
               by="word"
             >
               Dengan Satu Portal
             </TextAnimate>
-              <TypingAnimation as="p" cursorStyle="line" deleteSpeed={20} loop className="text-base leading-relaxed text-blue-200/80">
+              <TypingAnimation as="p" cursorStyle="line" deleteSpeed={20} loop className="text-base leading-relaxed text-teal-200/80">
                 Nikmati kemudahan akses ke portal layanan kepegawaian melalui
                 Single Sign On dalam satu akun.
               </TypingAnimation>
           </div>
 
           {/* Bottom stat */}
-          <div className="flex items-center gap-2 text-xs text-blue-300/50">
+          <div className="flex items-center gap-2 text-xs text-teal-300/50">
             <span className="relative inline-flex items-center justify-center" style={{ width: 6, height: 6 }}>
               {/* Pulsing ring */}
               <span className="absolute inline-block w-6 h-6 rounded-full bg-emerald-400/20 animate-ping" />
@@ -88,11 +88,11 @@ export default async function Page() {
 
       {/* Right — Login Panel */}
       <section className="relative flex-1 flex flex-col items-center justify-center px-6 py-12 lg:px-16 bg-white dark:bg-deep-navy">
-        <GridPattern width={20} height={20} strokeDasharray="2"/>
+        <GridPattern width={60} height={60} strokeDasharray="2"/>
         <div className="w-full max-w-sm mx-auto">
           {/* Header */}
           <div className="text-center mb-10">
-            <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-linear-to-br from-blue-600 to-indigo-600 shadow-lg shadow-blue-600/20 mb-6">
+            <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-linear-to-br from-teal-600 to-indigo-600 shadow-lg shadow-teal-600/20 mb-6">
               <svg
                 className="w-7 h-7 text-white"
                 fill="none"

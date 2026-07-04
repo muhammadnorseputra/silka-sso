@@ -41,6 +41,7 @@ import ChipComponent from "@/components/chip";
 // Data Services
 import AuthVerify from "@/data/auth-actions";
 import { BorderBeam } from "@/components/ui/border-beam";
+import { MagicCard } from "@/components/ui/magic-card";
 
 // Interfaces
 interface LoginProps {
@@ -58,16 +59,14 @@ interface FormData {
 
 // Reusable Components
 const Logo = () => (
-  <div className="p-3 border border-white/60 rounded-full bg-transparent">
-    <div className="w-20 h-20 border border-white/80 rounded-full bg-white dark:bg-slate-900 backdrop-blur-lg shadow-xl shadow-white relative">
-      <Image
-        width={32}
-        height={32}
-        src={"/logo.png"}
-        alt="Logo Balangan"
-        className="absolute left-6 top-5 w-auto h-auto"
-      />
-    </div>
+  <div className="w-25 h-25 border border-white dark:border-slate-600 rounded-full  relative">
+    <Image
+      width={35}
+      height={35}
+      src={"/logo.png"}
+      alt="Logo Balangan"
+      className="absolute left-6 top-5 w-auto h-auto"
+    />
   </div>
 );
 
@@ -161,12 +160,12 @@ export default function Login({
         fullWidth={true}
         shadow="none"
         radius="none"
-        className="relative w-full max-w-xl px-2 sm:px-8 sm:pt-8 bg-transparent"
+        className="relative w-full max-w-xl px-2 sm:px-8 sm:pt-2 bg-transparent"
       >
         <CardHeader className="flex flex-col">
           <div
             className={cn(
-              "p-3 border border-white/40 rounded-full bg-transparent",
+              "p-3 border border-white dark:border-slate-600 rounded-full bg-transparent",
               isDisabled && "blur-2xl",
             )}
           >
@@ -174,7 +173,7 @@ export default function Login({
           </div>
           <Divider
             orientation="vertical"
-            className="h-6 mx-auto bg-white/40 dark:bg-white/20"
+            className="h-6 mx-auto border-white dark:bg-slate-600 "
           />
           <ChipComponent name={typeAccount} />
           <Title />
@@ -184,136 +183,139 @@ export default function Login({
         </CardHeader>
 
         <CardBody>
-          <form
-            onSubmit={handleSubmit(handleLogin)}
-            method="POST"
-            autoComplete="off"
-            noValidate
-            className="relative ring-2 ring-blue-50 dark:ring-slate-800  overflow-hidden rounded-2xl flex flex-col space-y-6 bg-white dark:bg-linear-to-b dark:from-slate-800 dark:to-black p-8"
-          >
-            <Input
-              autoFocus
-              isRequired
-              isDisabled={isSubmitting || loadingBtn}
-              variant="underlined"
-              type="text"
-              color={errors?.username ? "danger" : "default"}
-              radius="sm"
-              label="Username"
-              labelPlacement="outside"
-              placeholder="Masukan username anda"
-              size="lg"
-              isInvalid={!!errors?.username}
-              errorMessage={errors?.username?.message}
-              {...register("username", {
-                required: "Username wajib diisi",
-                minLength: {
-                  value: 3,
-                  message: "Masukan minimal 3 karakter",
-                },
-              })}
-              startContent={
-                <UserIcon
-                  className={cn(
-                    `size-5 text-default-300 dark:text-slate-400 mr-2`,
-                    errors?.username && "text-red-500 dark:text-red-500",
-                  )}
-                />
-              }
-              endContent={
-                errors?.username && (
-                  <ExclamationCircleIcon className="text-red-500 size-6 pointer-events-none shrink-0" />
-                )
-              }
-              className="group"
-              classNames={{
-                errorMessage: "-ml-1 tracking-wide",
-                input:
-                  "placeholder:text-gray-300 dark:placeholder:text-slate-400 disabled:cursor-not-allowed",
-                inputWrapper: "bg-white dark:bg-transparent",
-              }}
-            />
-            <Input
-              isRequired
-              isDisabled={isDisabled}
-              label="Password"
-              variant="underlined"
-              size="lg"
-              color={errors?.password ? "danger" : "default"}
-              isInvalid={!!errors?.password}
-              radius="sm"
-              labelPlacement="outside"
-              placeholder="Masukan password anda"
-              {...register("password", {
-                required: "Password wajib diisi",
-              })}
-              errorMessage={errors?.password?.message}
-              startContent={
-                <KeyIcon
-                  className={cn(
-                    `size-5 text-default-300 dark:text-slate-400 mr-2`,
-                    errors?.password && "text-red-500 dark:text-red-500",
-                  )}
-                />
-              }
-              endContent={
-                <>
-                  {errors?.password && (
-                    <ExclamationCircleIcon className="text-red-500 size-6 pointer-events-none shrink-0 mr-2" />
-                  )}
-                  <Tooltip
-                    content={
-                      !isVisible ? "Lihat Password" : "Sembuyikan Password"
-                    }
-                  >
-                    <button
-                      className="focus:outline-hidden cursor-pointer"
-                      type="button"
-                      tabIndex={-1}
-                      onClick={toggleVisibility}
-                      aria-label="toggle password visibility"
-                    >
-                      {!isVisible ? (
-                        <EyeSlashIcon className="size-6 text-gray-400 dark:text-gray-200" />
-                      ) : (
-                        <EyeIcon className="size-6 text-gray-800 dark:text-gray-400" />
-                      )}
-                    </button>
-                  </Tooltip>
-                </>
-              }
-              type={isVisible ? "text" : "password"}
-              classNames={{
-                errorMessage: "-ml-1 tracking-wide",
-                input:
-                  "placeholder:text-gray-300 dark:placeholder:text-slate-400 disabled:cursor-not-allowed",
-                inputWrapper: "bg-white dark:bg-transparent",
-              }}
-              className="group"
-            />
-            <Button
-              className="disabled:cursor-not-allowed disabled:opacity-40 group"
-              isDisabled={isDisabled}
-              isLoading={isDisabled}
-              type="submit"
-              fullWidth
-              size="lg"
-              color="primary"
-              variant="solid"
-              endContent={
-                isDisabled ? (
-                  ""
-                ) : (
-                  <ArrowRightIcon className="group-hover:ml-7 transition-all duration-400 size-6" />
-                )
-              }
-              spinner={<Spinner color="current" variant="spinner" size="sm" />}
-              radius="sm"
+          <MagicCard mode="gradient" gradientColor="" gradientFrom="oklch(85.5% 0.138 181.071)" gradientTo="oklch(70.4% 0.14 182.503)" className="relative overflow-hidden rounded-2xl bg-white dark:bg-linear-to-b dark:from-slate-800 dark:to-black p-8">
+            <form
+              onSubmit={handleSubmit(handleLogin)}
+              method="POST"
+              autoComplete="off"
+              noValidate
+              className=" flex flex-col space-y-6"
             >
-              {isDisabled ? "" : "Masuk Sekarang"}
-            </Button>
-            <div className="flex justify-between items-center">
-              {/* <HeroLink
+              <Input
+                autoFocus
+                isRequired
+                isDisabled={isSubmitting || loadingBtn}
+                variant="underlined"
+                type="text"
+                color={errors?.username ? "danger" : "default"}
+                radius="sm"
+                label="Username"
+                labelPlacement="outside"
+                placeholder="Masukan username anda"
+                size="lg"
+                isInvalid={!!errors?.username}
+                errorMessage={errors?.username?.message}
+                {...register("username", {
+                  required: "Username wajib diisi",
+                  minLength: {
+                    value: 3,
+                    message: "Masukan minimal 3 karakter",
+                  },
+                })}
+                startContent={
+                  <UserIcon
+                    className={cn(
+                      `size-5 text-default-300 dark:text-slate-400 mr-2`,
+                      errors?.username && "text-red-500 dark:text-red-500",
+                    )}
+                  />
+                }
+                endContent={
+                  errors?.username && (
+                    <ExclamationCircleIcon className="text-red-500 size-6 pointer-events-none shrink-0" />
+                  )
+                }
+                className="group"
+                classNames={{
+                  errorMessage: "-ml-1 tracking-wide",
+                  input:
+                    "placeholder:text-gray-300 dark:placeholder:text-slate-400 disabled:cursor-not-allowed",
+                  inputWrapper: "bg-transparent",
+                }}
+              />
+              <Input
+                isRequired
+                isDisabled={isDisabled}
+                label="Password"
+                variant="underlined"
+                size="lg"
+                color={errors?.password ? "danger" : "default"}
+                isInvalid={!!errors?.password}
+                radius="sm"
+                labelPlacement="outside"
+                placeholder="Masukan password anda"
+                {...register("password", {
+                  required: "Password wajib diisi",
+                })}
+                errorMessage={errors?.password?.message}
+                startContent={
+                  <KeyIcon
+                    className={cn(
+                      `size-5 text-default-300 dark:text-slate-400 mr-2`,
+                      errors?.password && "text-red-500 dark:text-red-500",
+                    )}
+                  />
+                }
+                endContent={
+                  <>
+                    {errors?.password && (
+                      <ExclamationCircleIcon className="text-red-500 size-6 pointer-events-none shrink-0 mr-2" />
+                    )}
+                    <Tooltip
+                      content={
+                        !isVisible ? "Lihat Password" : "Sembuyikan Password"
+                      }
+                    >
+                      <button
+                        className="focus:outline-hidden cursor-pointer"
+                        type="button"
+                        tabIndex={-1}
+                        onClick={toggleVisibility}
+                        aria-label="toggle password visibility"
+                      >
+                        {!isVisible ? (
+                          <EyeSlashIcon className="size-6 text-gray-400 dark:text-gray-200" />
+                        ) : (
+                          <EyeIcon className="size-6 text-gray-800 dark:text-gray-400" />
+                        )}
+                      </button>
+                    </Tooltip>
+                  </>
+                }
+                type={isVisible ? "text" : "password"}
+                classNames={{
+                  errorMessage: "-ml-1 tracking-wide",
+                  input:
+                    "placeholder:text-gray-300 dark:placeholder:text-slate-400 disabled:cursor-not-allowed",
+                  inputWrapper: "bg-transparent",
+                }}
+                className="group"
+              />
+              <Button
+                className="disabled:cursor-not-allowed disabled:opacity-30 group"
+                isDisabled={isDisabled}
+                isLoading={isDisabled}
+                type="submit"
+                fullWidth
+                size="lg"
+                color="primary"
+                variant="solid"
+                endContent={
+                  isDisabled ? (
+                    ""
+                  ) : (
+                    <ArrowRightIcon className="group-hover:ml-7 transition-all duration-400 size-6" />
+                  )
+                }
+                spinner={
+                  <Spinner color="current" variant="spinner" size="sm" />
+                }
+                radius="sm"
+              >
+                {isDisabled ? "" : "Masuk Sekarang"}
+              </Button>
+              <div className="flex justify-between items-center">
+                {/* <HeroLink
                 color="primary"
                 onPress={() => {
                   destroy();
@@ -323,26 +325,26 @@ export default function Login({
                 <ChevronLeftIcon className="size-4" />
                 Back
               </HeroLink> */}
-              <div className="inline-flex justify-start items-center space-x-1">
-                <span>Lupa Password?</span>
-                <Link
-                  color="primary"
-                  prefetch
-                  href="/login/lupa-password"
-                  className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-100/80"
-                >
-                  Reset di sini
-                </Link>
+                <div className="inline-flex justify-start items-center space-x-1">
+                  <span>Lupa Password?</span>
+                  <Link
+                    color="primary"
+                    prefetch
+                    href="/login/lupa-password"
+                    className="text-teal-500 hover:text-teal-600 dark:text-teal-400 dark:hover:text-teal-100/80"
+                  >
+                    Reset di sini
+                  </Link>
+                </div>
               </div>
-            </div>
-            {/* <div className="flex items-center mb-6">
+              {/* <div className="flex items-center mb-6">
               <div className="grow border-t border-gray-100 dark:border-gray-400"></div>
               <span className="px-4 text-gray-100">
                 <LockClosedIcon className="size-6 text-gray-100" />
               </span>
               <div className="grow border-t border-gray-100 dark:border-gray-400"></div>
             </div> */}
-            {/* <Button
+              {/* <Button
               onPress={() => {
                 router.push("/login/perangkat");
               }}
@@ -353,16 +355,11 @@ export default function Login({
               variant="solid">
               Registrasi Perangkat
             </Button> */}
-          <BorderBeam
-            duration={4}
-            size={500}
-            reverse
-            className="from-transparent via-blue-300 to-transparent dark:via-blue-700"
-          />
-          </form>
+            </form>
+          </MagicCard>
         </CardBody>
         <CardFooter>
-          <span className="text-black/40 dark:text-white/40 text-sm text-center w-full">
+          <span className="text-black/40 dark:text-white/30 text-sm text-center w-full">
             2024 &copy; Dikembangakan oleh Bidang PPIK - BKPSDM Balangan.
           </span>
         </CardFooter>
