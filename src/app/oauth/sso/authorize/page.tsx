@@ -28,10 +28,10 @@ export default async function Page({
 
   const response = await verifyClient(
     clientId as string,
-    clientName as string,
     responseType as string,
     redirectUri as string,
     state as string,
+    clientName,
   );
 
   /**
@@ -42,7 +42,8 @@ export default async function Page({
 
   // Ensure the response is a plain object
 
-  if (!response.status) {
+  // clientName optional — don't unauthorized when missing
+  if (!response.status && clientName) {
     unauthorized();
   }
 
@@ -68,8 +69,9 @@ export default async function Page({
   // Type Account Check
   const typeAccount = (await cookies()).get("type_account");
   if (!typeAccount || typeAccount.value === "undefined") {
+    const clientNameParam = clientName ? `client_name=${clientName}&` : "";
     permanentRedirect(
-      `/#oauth/sso/authorize?client_name=${clientName}&client_id=${clientId}&redirect_uri=${encodeURIComponent(
+      `/#oauth/sso/authorize?${clientNameParam}client_id=${clientId}&redirect_uri=${encodeURIComponent(
         redirectUri as string,
       )}&response_type=code&scope=${scope}&state=${state}`,
     );
