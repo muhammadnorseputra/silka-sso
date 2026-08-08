@@ -59,7 +59,7 @@ interface FormData {
 
 // Reusable Components
 const Logo = () => (
-  <div className="w-25 h-25 border border-white dark:border-slate-600 rounded-full  relative">
+  <div className="w-25 h-25 rounded-full  relative">
     <Image
       width={35}
       height={35}
@@ -72,20 +72,7 @@ const Logo = () => (
 
 const Title = () => (
   <h3 className="relative text-3xl font-display font-bold flex items-center justify-center gap-x-3 mt-4">
-    Single Sign-On{" "}
-    <svg
-      className="absolute -bottom-1.5 left-0 w-full h-2 text-primary/30"
-      viewBox="0 0 100 10"
-      preserveAspectRatio="none"
-    >
-      <path
-        d="M0,5 Q50,10 100,5"
-        stroke="currentColor"
-        strokeWidth="6"
-        fill="none"
-        strokeLinecap="round"
-      />
-    </svg>
+    Single Sign-On
   </h3>
 );
 
@@ -164,17 +151,12 @@ export default function Login({
       >
         <CardHeader className="flex flex-col">
           <div
-            className={cn(
-              "p-3 border border-white dark:border-slate-600 rounded-full bg-transparent",
+            className={cn("rounded-full bg-transparent",
               isDisabled && "blur-2xl",
             )}
           >
             <Logo />
           </div>
-          <Divider
-            orientation="vertical"
-            className="h-6 mx-auto border-white dark:bg-slate-600 "
-          />
           <ChipComponent name={typeAccount} />
           <Title />
           <p className="font-display font-semibold text-center tracking-wide">
