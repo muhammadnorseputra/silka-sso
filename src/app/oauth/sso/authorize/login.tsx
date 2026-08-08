@@ -1,7 +1,7 @@
 "use client";
 
 // Organized imports
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { permanentRedirect } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
@@ -18,7 +18,7 @@ import {
   Input,
   Tooltip,
   Spinner,
-  Divider,
+  CircularProgress,
   cn,
 } from "@heroui/react";
 import Link from "next/link";
@@ -26,7 +26,6 @@ import Image from "next/image";
 
 // Icons
 import {
-  ArrowRightCircleIcon,
   ArrowRightIcon,
   EyeIcon,
   EyeSlashIcon,
@@ -40,7 +39,6 @@ import ChipComponent from "@/components/chip";
 
 // Data Services
 import AuthVerify from "@/data/auth-actions";
-import { BorderBeam } from "@/components/ui/border-beam";
 import { MagicCard } from "@/components/ui/magic-card";
 
 // Interfaces
@@ -56,6 +54,10 @@ interface FormData {
   username: string;
   password: string;
 }
+
+// Persisted cooldown keys so the timer survives a page refresh
+const COOLDOWN_STORAGE_KEY = "sso-login-cooldown-end";
+const COOLDOWN_TOTAL_STORAGE_KEY = "sso-login-cooldown-total";
 
 // Reusable Components
 const Logo = () => (
@@ -86,18 +88,73 @@ export default function Login({
   const { executeRecaptcha } = useReCaptcha();
   const [isVisible, setIsVisible] = useState(false);
   const [loadingBtn, setLoadingBtn] = useState(false);
+  const [cooldownSeconds, setCooldownSeconds] = useState(0);
+  const [cooldownTotalSeconds, setCooldownTotalSeconds] = useState(0);
 
   const {
     register,
     handleSubmit,
     setError,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useForm<FormData>();
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
+  // Restore an active cooldown from localStorage so it survives a refresh
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+
+    const storedEnd = Number(
+      window.localStorage.getItem(COOLDOWN_STORAGE_KEY) ?? 0,
+    );
+    const storedTotal = Number(
+      window.localStorage.getItem(COOLDOWN_TOTAL_STORAGE_KEY) ?? 0,
+    );
+
+    if (storedEnd > Date.now()) {
+      const remaining = Math.ceil((storedEnd - Date.now()) / 1000);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setCooldownSeconds(remaining);
+      setCooldownTotalSeconds(
+        storedTotal >= remaining ? storedTotal : remaining,
+      );
+    } else if (storedEnd > 0) {
+      // Cooldown already finished — clean up stale entries
+      window.localStorage.removeItem(COOLDOWN_STORAGE_KEY);
+      window.localStorage.removeItem(COOLDOWN_TOTAL_STORAGE_KEY);
+    }
+
+    return undefined;
+  }, []);
+
+  useEffect(() => {
+    if (cooldownSeconds <= 0) {
+      // Clear persisted cooldown once the timer fully finishes
+      if (typeof window !== "undefined") {
+        const storedEnd = Number(
+          window.localStorage.getItem(COOLDOWN_STORAGE_KEY) ?? 0,
+        );
+        if (storedEnd > 0 && storedEnd <= Date.now()) {
+          window.localStorage.removeItem(COOLDOWN_STORAGE_KEY);
+          window.localStorage.removeItem(COOLDOWN_TOTAL_STORAGE_KEY);
+        }
+      }
+      return undefined;
+    }
+
+    const intervalId = window.setInterval(() => {
+      setCooldownSeconds((current) => Math.max(current - 1, 0));
+    }, 1000);
+
+    return () => window.clearInterval(intervalId);
+  }, [cooldownSeconds]);
+
   const handleLogin = async (formData: FormData) => {
     try {
+      clearErrors();
       setLoadingBtn(true);
 
       // Generate ReCaptcha token
@@ -112,34 +169,70 @@ export default function Login({
         state,
       };
 
-      const result = await toast.promise(
-        AuthVerify(payload),
-        {
-          loading: "Memverifikasi akun...",
-          success: (result) => {
-            if (!result.response.status) {
-              setError("username", { type: "manual" });
-              setError("password", { type: "manual" });
-              throw new Error(result.response.message);
-            }
-            return result.response.message;
-          },
-          error: (err) => err.message || "Terjadi kesalahan saat verifikasi",
-        },
-        { id: "auth-verify" },
-      );
+      const result = await AuthVerify(payload);
+      const apiResponse = result?.response?.response ?? result?.response ?? result;
+      const loginStatus = apiResponse?.status ?? false;
+      const loginMessage = apiResponse?.message ?? "Terjadi kesalahan saat verifikasi";
+      const retrySeconds = Number(apiResponse?.timer ?? 0);
 
-      if (result?.response.status) {
+      if (!loginStatus) {
+        setError("username", {
+          type: "manual",
+          message: loginMessage,
+        });
+        setError("password", {
+          type: "manual",
+          message: loginMessage,
+        });
+
+        if (retrySeconds > 0) {
+          setCooldownSeconds(retrySeconds);
+          setCooldownTotalSeconds(retrySeconds);
+          // eslint-disable-next-line react-hooks/purity
+          const cooldownEnd = Date.now() + retrySeconds * 1000;
+          window.localStorage.setItem(
+            COOLDOWN_STORAGE_KEY,
+            String(cooldownEnd),
+          );
+          window.localStorage.setItem(
+            COOLDOWN_TOTAL_STORAGE_KEY,
+            String(retrySeconds),
+          );
+        }
+
+        toast.error(loginMessage, { id: "auth-verify" });
+        return;
+      }
+
+      toast.success(loginMessage || "Login berhasil", { id: "auth-verify" });
+
+      // Login success — cooldown no longer applies
+      window.localStorage.removeItem(COOLDOWN_STORAGE_KEY);
+      window.localStorage.removeItem(COOLDOWN_TOTAL_STORAGE_KEY);
+
+      if (result?.response?.data?.code || apiResponse?.data?.code) {
         permanentRedirect(
-          `${redirectUri}?state=${state}&code=${result?.response.data.code}`,
+          `${redirectUri}?state=${state}&code=${result?.response?.data?.code ?? apiResponse?.data?.code}`,
         );
       }
+    } catch (error) {
+      const fallbackMessage =
+        error instanceof Error
+          ? error.message || "Terjadi kesalahan saat verifikasi"
+          : "Terjadi kesalahan saat verifikasi";
+
+      setError("username", { type: "manual", message: fallbackMessage });
+      setError("password", { type: "manual", message: fallbackMessage });
+      toast.error(fallbackMessage, { id: "auth-verify" });
     } finally {
       setLoadingBtn(false);
     }
   };
 
-  const isDisabled = isSubmitting || loadingBtn;
+  const isDisabled = isSubmitting || loadingBtn || cooldownSeconds > 0;
+  const submitButtonLabel = cooldownSeconds > 0
+    ? `Tunggu ${cooldownSeconds}s`
+    : "Masuk Sekarang";
 
   return (
     <>
@@ -152,7 +245,7 @@ export default function Login({
         <CardHeader className="flex flex-col">
           <div
             className={cn("rounded-full bg-transparent",
-              isDisabled && "blur-2xl",
+              isSubmitting && "blur-2xl",
             )}
           >
             <Logo />
@@ -173,10 +266,47 @@ export default function Login({
               noValidate
               className=" flex flex-col space-y-6"
             >
+              {cooldownSeconds > 0 && (
+                <div className="flex items-center gap-4 rounded-2xl border border-amber-300/70 bg-amber-50 px-4 py-3.5 dark:border-amber-700/40 dark:bg-amber-900/20">
+                  <CircularProgress
+                    aria-label="Waktu tunggu percobaan login"
+                    size="lg"
+                    color="warning"
+                    value={cooldownSeconds}
+                    maxValue={cooldownTotalSeconds || cooldownSeconds}
+                    showValueLabel
+                    valueLabel={
+                      <div className="flex flex-col items-center leading-none">
+                        <span className="text-xl font-bold tabular-nums text-amber-700 dark:text-amber-300">
+                          {cooldownSeconds}
+                        </span>
+                      </div>
+                    }
+                    classNames={{
+                      svg: "size-16 shrink-0",
+                      track: "stroke-amber-200 dark:stroke-amber-800/60",
+                      indicator: "stroke-amber-500 dark:stroke-amber-400",
+                    }}
+                  />
+                  <div className="min-w-0 space-y-0.5">
+                    <p className="text-sm font-bold text-amber-800 dark:text-amber-200">
+                      Terlalu banyak percobaan gagal
+                    </p>
+                    <p className="text-sm font-medium text-amber-700 dark:text-amber-300">
+                      Silakan coba lagi dalam{" "}
+                      <b className="tabular-nums text-amber-900 dark:text-amber-100">
+                        {cooldownSeconds}
+                      </b>{" "}
+                      detik.
+                    </p>
+                  </div>
+                </div>
+              )}
+
               <Input
                 autoFocus
                 isRequired
-                isDisabled={isSubmitting || loadingBtn}
+                isDisabled={isDisabled}
                 variant="underlined"
                 type="text"
                 color={errors?.username ? "danger" : "default"}
@@ -276,14 +406,14 @@ export default function Login({
               <Button
                 className="disabled:cursor-not-allowed disabled:opacity-30 group"
                 isDisabled={isDisabled}
-                isLoading={isDisabled}
+                isLoading={isSubmitting || loadingBtn}
                 type="submit"
                 fullWidth
                 size="lg"
                 color="primary"
                 variant="solid"
                 endContent={
-                  isDisabled ? (
+                  isDisabled || cooldownSeconds > 0 ? (
                     ""
                   ) : (
                     <ArrowRightIcon className="group-hover:ml-7 transition-all duration-400 size-6" />
@@ -294,7 +424,7 @@ export default function Login({
                 }
                 radius="sm"
               >
-                {isDisabled ? "" : "Masuk Sekarang"}
+                {cooldownSeconds > 0 ? `Tunggu ${cooldownSeconds}s` : isDisabled ? "" : submitButtonLabel}
               </Button>
               <div className="flex justify-between items-center">
                 {/* <HeroLink
