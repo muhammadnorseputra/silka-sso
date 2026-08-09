@@ -2,7 +2,7 @@
 
 // Organized imports
 import { useEffect, useState } from "react";
-import { permanentRedirect } from "next/navigation";
+import { permanentRedirect, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import toast from "react-hot-toast";
@@ -85,6 +85,7 @@ export default function Login({
   redirectUri = `${process.env.NEXT_PUBLIC_PORTAL_SSO_BASE_URL as string}/${process.env.NEXT_PUBLIC_PORTAL_SSO_CALLBACK as string}`,
   typeAccount,
 }: LoginProps) {
+  const router = useRouter();
   const { executeRecaptcha } = useReCaptcha();
   const [isVisible, setIsVisible] = useState(false);
   const [loadingBtn, setLoadingBtn] = useState(false);
@@ -212,14 +213,14 @@ export default function Login({
       // Redirect to the izin-access page if consent is required
       if(apiResponse?.data?.is_consent)
         {
-        permanentRedirect(
+        return router.replace(
           `/oauth/sso/izin-access`,
         );
       }
 
       // Redirect to the client application with the authorization code if consent is not required
       if ((result?.response?.data?.code || apiResponse?.data?.code) && apiResponse?.data?.is_consent === false) {
-        permanentRedirect(
+        return router.replace(
           `${redirectUri}?state=${state}&code=${result?.response?.data?.code ?? apiResponse?.data?.code}`,
         );
       }

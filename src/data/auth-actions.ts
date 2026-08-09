@@ -3,7 +3,6 @@
 import { cookies } from "next/headers";
 import { AES } from "crypto-js";
 import AccessToken from "./access_token";
-import { redirect } from "next/dist/server/api-utils";
 // import GetDevicesInfo from "./get-devices-info";
 
 async function CaptchaVerify(token: string) {
