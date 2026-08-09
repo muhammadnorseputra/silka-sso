@@ -20,10 +20,6 @@ export default async function Page() {
     return permanentRedirect("/oauth/sso/izin-access");
   }
 
-  if (!consentCookie?.value) {
-    return permanentRedirect("/login");
-  }
-
   const session = await getSession();
   const shouldRedirect = true;
 
