@@ -1,4 +1,3 @@
-"use server";
 import verifyClient from "@/data/verify-client";
 import Login from "./login";
 import { cookies } from "next/headers";

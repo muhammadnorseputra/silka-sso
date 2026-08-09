@@ -37,7 +37,7 @@ export default async function Page({
   const query = await searchParams;
   const redirectTo =
     query?.redirect_uri ||
-    `${process.env.NEXT_PUBLIC_PORTAL_SSO_BASE_URL}${process.env.NEXT_PUBLIC_PORTAL_SSO_CALLBACK}`;
+    `${process.env.NEXT_PUBLIC_PORTAL_SSO_BASE_URL}/${process.env.NEXT_PUBLIC_PORTAL_SSO_CALLBACK}`;
 
   // if (cookiestore.has("sso_code") && !sessionFromDB.status) {
   //   return permanentRedirect(

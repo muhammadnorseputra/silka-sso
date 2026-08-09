@@ -134,7 +134,42 @@ export async function approveConsent(
       };
     }
 
-    const target = new URL(consent.redirect_uri || "");
+    const redirectUri = typeof consent.redirect_uri === "string"
+      ? consent.redirect_uri.trim()
+      : "";
+
+    if (!redirectUri) {
+      const errorMessage = "Redirect URI izin akses tidak tersedia.";
+
+      cookieStore.set("sso_consent_error", errorMessage, {
+        path: "/",
+        sameSite: "lax",
+      });
+
+      return {
+        success: false,
+        error: errorMessage,
+      };
+    }
+
+    let target: URL;
+
+    try {
+      target = new URL(redirectUri);
+    } catch {
+      const errorMessage = "Redirect URI izin akses tidak valid.";
+
+      cookieStore.set("sso_consent_error", errorMessage, {
+        path: "/",
+        sameSite: "lax",
+      });
+
+      return {
+        success: false,
+        error: errorMessage,
+      };
+    }
+
     target.searchParams.set("state", consent.state || "");
     target.searchParams.set("code", code);
 
