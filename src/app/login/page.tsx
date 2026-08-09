@@ -41,6 +41,7 @@ export default async function Page({
     query?.redirect_uri ||
     `${process.env.NEXT_PUBLIC_PORTAL_SSO_BASE_URL}/${process.env.NEXT_PUBLIC_PORTAL_SSO_CALLBACK}`;
 
+    // jika cookie sso_code ada dan status session database tidak ada maka redirect ke authorize portal sso dashboard
     if (cookiestore.has("sso_code") && !sessionFromDB.status) {
       return permanentRedirect(
         `https://silka-sso.vercel.app/oauth/sso/authorize?client_id=5aa888ec-92be-4fdf-8c69-8c96e99e11ff&client_name=PortalSSO&response_type=code&redirect_uri=${redirectTo}`,
