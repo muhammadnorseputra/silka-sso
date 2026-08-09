@@ -3,6 +3,7 @@
 import { cookies } from "next/headers";
 import { AES } from "crypto-js";
 import AccessToken from "./access_token";
+import { redirect } from "next/dist/server/api-utils";
 // import GetDevicesInfo from "./get-devices-info";
 
 async function CaptchaVerify(token: string) {
@@ -69,7 +70,13 @@ export default async function AuthVerify(formData: any) {
       username: formData.username,
       password: formData.password,
       client_id: formData.client_id || "5aa888ec-92be-4fdf-8c69-8c96e99e11ff",
-      client_secret: formData.client_secret || "+51jett5h))zpfhvwhej*r8_0%nej9ljx=*df0_b&2ss3wix*p",
+      client_secret:
+        formData.client_secret ||
+        "+51jett5h))zpfhvwhej*r8_0%nej9ljx=*df0_b&2ss3wix*p",
+      redirect_uri: formData.redirect_uri,
+      state: formData.state,
+      scope: formData.scope,
+      // device_id: device_id,
     };
 
     // ✅ AbortController untuk timeout (koneksi lambat / server tidak merespons)
@@ -131,7 +138,8 @@ export default async function AuthVerify(formData: any) {
 
     const data = await response.json();
 
-    if (data.status) {
+    // jika logib berhasil dan tidak perlu izin akses, maka langsung buat access token
+    if (data.status && data.data.is_consent === false && data.data.code) {
       const userinfo = await AccessToken(data.data.code);
 
       if (userinfo.response.status) {
@@ -171,6 +179,22 @@ export default async function AuthVerify(formData: any) {
           ...cookieOptions,
         });
       }
+    }
+
+    // jika login berhasil dan perlu izin akses, maka simpan data response ke cookie untuk digunakan di halaman izin akses
+    if (data.status && data.data.is_consent) {
+      const cookieOptions = {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax" as const,
+      };
+
+      cookieStore.set({
+        name: "sso_consent",
+        value: JSON.stringify(data.data),
+        maxAge: 3600,
+        ...cookieOptions,
+      });
     }
 
     return { response: data };

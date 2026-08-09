@@ -2,7 +2,7 @@
 
 // Organized imports
 import { useEffect, useState } from "react";
-import { permanentRedirect } from "next/navigation";
+import { permanentRedirect, redirect, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import toast from "react-hot-toast";
@@ -85,6 +85,7 @@ export default function Login({
   redirectUri = `${process.env.NEXT_PUBLIC_PORTAL_SSO_BASE_URL as string}/${process.env.NEXT_PUBLIC_PORTAL_SSO_CALLBACK as string}`,
   typeAccount,
 }: LoginProps) {
+  const router = useRouter();
   const { executeRecaptcha } = useReCaptcha();
   const [isVisible, setIsVisible] = useState(false);
   const [loadingBtn, setLoadingBtn] = useState(false);
@@ -167,6 +168,7 @@ export default function Login({
         client_id: client?.data.client_id,
         client_secret: client?.data.client_secret,
         state,
+        redirect_uri: redirectUri,
       };
 
       const result = await AuthVerify(payload);
@@ -178,11 +180,9 @@ export default function Login({
       if (!loginStatus) {
         setError("username", {
           type: "manual",
-          message: loginMessage,
         });
         setError("password", {
           type: "manual",
-          message: loginMessage,
         });
 
         if (retrySeconds > 0) {
@@ -210,8 +210,17 @@ export default function Login({
       window.localStorage.removeItem(COOLDOWN_STORAGE_KEY);
       window.localStorage.removeItem(COOLDOWN_TOTAL_STORAGE_KEY);
 
-      if (result?.response?.data?.code || apiResponse?.data?.code) {
-        permanentRedirect(
+      // Redirect to the izin-access page if consent is required
+      if(apiResponse?.data?.is_consent)
+        {
+        return router.replace(
+          `/oauth/sso/izin-access`,
+        );
+      }
+
+      // Redirect to the client application with the authorization code if consent is not required
+      if ((result?.response?.data?.code || apiResponse?.data?.code) && !apiResponse?.data?.is_consent) {
+        return router.replace(
           `${redirectUri}?state=${state}&code=${result?.response?.data?.code ?? apiResponse?.data?.code}`,
         );
       }
@@ -220,9 +229,8 @@ export default function Login({
         error instanceof Error
           ? error.message || "Terjadi kesalahan saat verifikasi"
           : "Terjadi kesalahan saat verifikasi";
-
-      setError("username", { type: "manual", message: fallbackMessage });
-      setError("password", { type: "manual", message: fallbackMessage });
+      setError("username", { type: "manual" });
+      setError("password", { type: "manual" });
       toast.error(fallbackMessage, { id: "auth-verify" });
     } finally {
       setLoadingBtn(false);

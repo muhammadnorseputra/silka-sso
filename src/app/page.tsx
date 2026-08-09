@@ -8,10 +8,22 @@ import { TextAnimate } from "@/components/ui/text-animate";
 import { TypingAnimation } from "@/components/ui/typing-animation";
 import getSession from "@/hooks/session_server";
 import { getSessionFromDatabase } from "@/services/session-store";
+import { cookies } from "next/headers";
 import Image from "next/image";
 import { permanentRedirect } from "next/navigation";
 
 export default async function Page() {
+  const cookieStore = await cookies();
+  const consentCookie = cookieStore.get("sso_consent");
+
+  if (consentCookie?.value) {
+    return permanentRedirect("/oauth/sso/izin-access");
+  }
+
+  if (!consentCookie?.value) {
+    return permanentRedirect("/login");
+  }
+
   const session = await getSession();
   const shouldRedirect = true;
 

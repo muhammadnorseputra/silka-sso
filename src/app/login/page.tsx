@@ -12,8 +12,14 @@ export default async function Page({
     readonly [key: string]: string | string[] | undefined;
   }>;
 }) {
-  const session = await getSession();
   const cookiestore = await cookies();
+  const consentCookie = cookiestore.get("sso_consent");
+
+  if (consentCookie?.value) {
+    return permanentRedirect("/oauth/sso/izin-access");
+  }
+
+  const session = await getSession();
 
   const sessionFromDB = await getSessionFromDatabase(
     session?.token_plain as string,
@@ -33,11 +39,11 @@ export default async function Page({
     query?.redirect_uri ||
     `${process.env.NEXT_PUBLIC_PORTAL_SSO_BASE_URL}${process.env.NEXT_PUBLIC_PORTAL_SSO_CALLBACK}`;
 
-  if (cookiestore.has("sso_code") && !sessionFromDB.status) {
-    return permanentRedirect(
-      `https://silka-sso.vercel.app/oauth/sso/authorize?client_id=5aa888ec-92be-4fdf-8c69-8c96e99e11ff&client_name=PortalSSO&response_type=code&redirect_uri=${redirectTo}`,
-    );
-  }
+  // if (cookiestore.has("sso_code") && !sessionFromDB.status) {
+  //   return permanentRedirect(
+  //     `https://silka-sso.vercel.app/oauth/sso/authorize?client_id=5aa888ec-92be-4fdf-8c69-8c96e99e11ff&client_name=PortalSSO&response_type=code&redirect_uri=${redirectTo}`,
+  //   );
+  // }
 
   if (cookiestore.has("sso_code") && sessionFromDB.status && redirectTo) {
     const decode = AES.decrypt(
