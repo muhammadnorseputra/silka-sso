@@ -23,10 +23,24 @@ interface ConsentPayload {
   level?: string;
 }
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  readonly searchParams: Promise<{
+    readonly [key: string]: string | string[] | undefined;
+  }>;
+}) {
+
+  const query = await searchParams;
+
+  const parseParam = (value: string | string[] | undefined) =>
+    Array.isArray(value) ? value[0] : value;
+  const state = parseParam(query?.state);
+  
   const cookieStore = await cookies();
   const consentCookie = cookieStore.get("sso_consent");
   const consentErrorCookie = cookieStore.get("sso_consent_error");
+  const consentStateCookie = cookieStore.get("sso_consent_state");
 
   if (!consentCookie?.value) {
     redirect("/login");
@@ -53,6 +67,7 @@ export default async function Page() {
     .map((item) => item.trim())
     .filter(Boolean);
   const consentErrorMessage = consentErrorCookie?.value || "";
+  const consentState = consentStateCookie?.value || "";
   const nip = consent.nip || "-";
   const username = consent.username || "-";
 
@@ -181,7 +196,7 @@ export default async function Page() {
               </div>
               <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                 <span className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-emerald-50/65">Scope</span>
-                <div className="flex flex-wrap items-center justify-end gap-2">
+                <div className="flex flex-wrap items-center justify-start gap-2">
                   {scopeLabels.length > 0 ? (
                     scopeLabels.map((item) => (
                       <span
@@ -198,7 +213,7 @@ export default async function Page() {
               </div>
             </div>
 
-            <ConsentActions cancelAction={cancelConsent} approveAction={approveConsent} />
+            <ConsentActions state={state || consentState} cancelAction={cancelConsent} approveAction={approveConsent} />
           </div>
         </div>
       </section>

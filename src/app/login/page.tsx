@@ -12,6 +12,9 @@ export default async function Page({
     readonly [key: string]: string | string[] | undefined;
   }>;
 }) {
+
+  const query = await searchParams;
+  
   const cookiestore = await cookies();
   const consentCookie = cookiestore.get("sso_consent");
 
@@ -34,7 +37,6 @@ export default async function Page({
     return permanentRedirect("/");
   }
 
-  const query = await searchParams;
   const redirectTo =
     query?.redirect_uri ||
     `${process.env.NEXT_PUBLIC_PORTAL_SSO_BASE_URL}/${process.env.NEXT_PUBLIC_PORTAL_SSO_CALLBACK}`;

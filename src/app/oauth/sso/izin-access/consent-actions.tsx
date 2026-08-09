@@ -37,9 +37,11 @@ function ConsentSubmitButton({
 }
 
 export function ConsentActions({
+  state,
   cancelAction,
   approveAction,
 }: {
+  state: string;
   cancelAction: () => Promise<void>;
   approveAction: (formData: FormData) => Promise<ConsentApprovalResult>;
 }) {
@@ -60,7 +62,11 @@ export function ConsentActions({
     setIsPending(true);
 
     try {
-      const result = await approveAction(new FormData());
+      const formData = new FormData();
+      formData.set("state", state);
+
+      const result = await approveAction(formData);
+      console.log("Consent approval result:", result);
 
       if (!result.success) {
         setErrorMessage(result.error || "Gagal mengirim izin akses.");

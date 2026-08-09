@@ -18,13 +18,7 @@ interface ConsentApiResponse {
   error?: string;
   data?: {
     code?: string;
-    message?: string;
-  };
-  response?: {
-    data?: {
-      code?: string;
-      message?: string;
-    };
+    redirect_uri?: string;
   };
 }
 
@@ -37,7 +31,7 @@ export type ConsentApprovalResult = {
 export async function approveConsent(
   formData: FormData,
 ): Promise<ConsentApprovalResult> {
-  void formData;
+  const latestState = formData.get("state")?.toString() || "";
   const cookieStore = await cookies();
   const consentCookie = cookieStore.get("sso_consent");
 
@@ -74,7 +68,7 @@ export async function approveConsent(
     client_id: consent?.client_id || "",
     scope: consent?.scope,
     redirect_uri: consent?.redirect_uri || "",
-    state: consent?.state || "",
+    state: latestState || consent?.state || "",
     nip: consent?.nip || "",
     username: consent?.username || "",
     level: consent?.level || "",
@@ -94,15 +88,10 @@ export async function approveConsent(
     });
 
     const body = (await response.json()) as ConsentApiResponse;
-    console.log("Consent API Response:", body);
 
     if (!response.ok) {
       const errorMessage =
-        body?.message ||
-        body?.error ||
-        body?.data?.message ||
-        body?.response?.data?.message ||
-        "Gagal mengirim izin akses ke layanan SSO.";
+        body?.message || "Gagal mengirim izin akses ke layanan SSO.";
 
       cookieStore.set("sso_consent_error", errorMessage, {
         path: "/",
@@ -115,13 +104,11 @@ export async function approveConsent(
       };
     }
 
-    const code =
-      body?.code ||
-      body?.data?.code ||
-      body?.response?.data?.code;
+    const code = body?.data?.code;
 
     if (!code) {
-      const errorMessage = "Layanan SSO tidak mengembalikan authorization code.";
+      const errorMessage =
+        "Layanan SSO tidak mengembalikan authorization code.";
 
       cookieStore.set("sso_consent_error", errorMessage, {
         path: "/",
@@ -132,58 +119,26 @@ export async function approveConsent(
         success: false,
         error: errorMessage,
       };
-    }
-
-    const redirectUri = typeof consent.redirect_uri === "string"
-      ? consent.redirect_uri.trim()
-      : "";
-
-    if (!redirectUri) {
-      const errorMessage = "Redirect URI izin akses tidak tersedia.";
-
-      cookieStore.set("sso_consent_error", errorMessage, {
-        path: "/",
-        sameSite: "lax",
-      });
-
-      return {
-        success: false,
-        error: errorMessage,
-      };
-    }
-
-    let target: URL;
-
-    try {
-      target = new URL(redirectUri);
-    } catch {
-      const errorMessage = "Redirect URI izin akses tidak valid.";
-
-      cookieStore.set("sso_consent_error", errorMessage, {
-        path: "/",
-        sameSite: "lax",
-      });
-
-      return {
-        success: false,
-        error: errorMessage,
-      };
-    }
-
-    target.searchParams.set("state", consent.state || "");
-    target.searchParams.set("code", code);
-
-    if (cookieStore.has("sso_consent")) {
-      cookieStore.delete("sso_consent");
     }
 
     if (cookieStore.has("sso_consent_error")) {
       cookieStore.delete("sso_consent_error");
     }
 
+    const redirectBase =
+      body?.data?.redirect_uri ||
+      consent?.redirect_uri ||
+      "";
+
+    const redirectUri = redirectBase
+      ? `${redirectBase}${redirectBase.includes("?") ? "&" : "?"}state=${encodeURIComponent(
+          latestState || consent?.state || "",
+        )}&code=${encodeURIComponent(code)}`
+      : "";
+
     return {
       success: true,
-      redirectUri: target.toString(),
+      redirectUri,
     };
   } catch (error) {
     const errorMessage =

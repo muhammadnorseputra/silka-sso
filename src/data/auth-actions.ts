@@ -137,7 +137,7 @@ export default async function AuthVerify(formData: any) {
 
     const data = await response.json();
 
-    // jika logib berhasil dan tidak perlu izin akses, maka langsung buat access token
+    // jika login berhasil dan tidak perlu izin akses, maka langsung buat access token
     if (data.status && data.data.is_consent === false && data.data.code) {
       const userinfo = await AccessToken(data.data.code);
 
@@ -191,6 +191,12 @@ export default async function AuthVerify(formData: any) {
       cookieStore.set({
         name: "sso_consent",
         value: JSON.stringify(data.data),
+        maxAge: 3600,
+        ...cookieOptions,
+      });
+      cookieStore.set({
+        name: "sso_consent_state",
+        value: JSON.stringify(data.data.state),
         maxAge: 3600,
         ...cookieOptions,
       });

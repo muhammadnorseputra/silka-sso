@@ -46,9 +46,15 @@ export default async function Page({
     unauthorized();
   }
 
-  // Izin Layar
   const cookiestore = await cookies();
-
+  
+  // Izin Akses
+  const consentCookie = cookiestore.get("sso_consent");
+  if (consentCookie?.value) {
+    return permanentRedirect(`/oauth/sso/izin-access?state=${state}`);
+  }
+  
+  // Izin Layar
   if (cookiestore.has("sso_token")) {
     const access_token = AES.decrypt(
       cookiestore.get("sso_token")?.value as string,
@@ -64,6 +70,8 @@ export default async function Page({
       />
     );
   }
+
+
 
   // Type Account Check
   const typeAccount = (await cookies()).get("type_account");
