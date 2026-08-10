@@ -35,31 +35,31 @@ export async function approveConsent(
   const cookieStore = await cookies();
   const consentCookie = cookieStore.get("sso_consent");
 
-  if (!consentCookie?.value) {
-    cookieStore.set("sso_consent_error", "Sesi izin akses tidak ditemukan.", {
-      path: "/",
-      sameSite: "lax",
-    });
-
-    return {
-      success: false,
-      error: "Sesi izin akses tidak ditemukan.",
-    };
-  }
-
   let consent: ConsentPayload | null = null;
 
-  try {
-    consent = JSON.parse(consentCookie.value) as ConsentPayload;
-  } catch {
-    cookieStore.set("sso_consent_error", "Data izin akses tidak valid.", {
-      path: "/",
-      sameSite: "lax",
-    });
+  if (consentCookie?.value) {
+    try {
+      consent = JSON.parse(consentCookie.value) as ConsentPayload;
+    } catch {
+      cookieStore.set("sso_consent_error", "Data izin akses tidak valid.", {
+        path: "/",
+        sameSite: "lax",
+      });
 
-    return {
-      success: false,
-      error: "Data izin akses tidak valid.",
+      return {
+        success: false,
+        error: "Data izin akses tidak valid.",
+      };
+    }
+  } else {
+    consent = {
+      client_id: formData.get("client_id")?.toString() || undefined,
+      scope: formData.get("scope")?.toString() || undefined,
+      redirect_uri: formData.get("redirect_uri")?.toString() || undefined,
+      state: formData.get("state")?.toString() || undefined,
+      nip: formData.get("nip")?.toString() || undefined,
+      username: formData.get("username")?.toString() || undefined,
+      level: formData.get("level")?.toString() || undefined,
     };
   }
 
@@ -75,7 +75,7 @@ export async function approveConsent(
   };
 
   try {
-    const endpoint = `${process.env.NEXT_PUBLIC_SILKA_BASE_URL}/${process.env.NEXT_PUBLIC_VERSION}/oauth/sso/authorize/consent`;
+    const endpoint = `${process.env.NEXT_PUBLIC_SILKA_BASE_URL}/${process.env.NEXT_PUBLIC_VERSION}/oauth/sso/authorize`;
 
     const response = await fetch(endpoint, {
       method: "POST",
@@ -126,14 +126,15 @@ export async function approveConsent(
     }
 
     const redirectBase =
-      body?.data?.redirect_uri ||
-      consent?.redirect_uri ||
-      "";
+      body?.data?.redirect_uri || consent?.redirect_uri || "";
+
+    const cleanState = (latestState || consent?.state || "").replace(
+      /^"+|"+$/g,
+      "",
+    );
 
     const redirectUri = redirectBase
-      ? `${redirectBase}${redirectBase.includes("?") ? "&" : "?"}state=${encodeURIComponent(
-          latestState || consent?.state || "",
-        )}&code=${encodeURIComponent(code)}`
+      ? `${redirectBase}${redirectBase.includes("?") ? "&" : "?"}state=${cleanState}&code=${code}`
       : "";
 
     return {

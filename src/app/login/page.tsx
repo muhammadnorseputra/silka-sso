@@ -16,11 +16,6 @@ export default async function Page({
   const query = await searchParams;
   
   const cookiestore = await cookies();
-  const consentCookie = cookiestore.get("sso_consent");
-
-  if (consentCookie?.value) {
-    return permanentRedirect("/oauth/sso/izin-access");
-  }
 
   const session = await getSession();
 

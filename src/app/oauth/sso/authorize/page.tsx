@@ -50,8 +50,13 @@ export default async function Page({
   
   // Izin Akses
   const consentCookie = cookiestore.get("sso_consent");
+  
   if (consentCookie?.value) {
-    return permanentRedirect(`/oauth/sso/izin-access?state=${state}`);
+    const consent = JSON.parse(consentCookie.value);
+    if(clientId === consent.client_id && redirectUri === consent.redirect_uri)
+    {
+      return permanentRedirect(`/oauth/sso/izin-access?state=${state}`);
+    }
   }
   
   // Izin Layar

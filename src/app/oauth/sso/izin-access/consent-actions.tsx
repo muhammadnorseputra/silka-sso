@@ -38,20 +38,43 @@ function ConsentSubmitButton({
 
 export function ConsentActions({
   state,
+  fallbackParams,
   cancelAction,
   approveAction,
 }: {
   state: string;
-  cancelAction: () => Promise<void>;
+  fallbackParams?: Record<string, string>;
+  cancelAction: (formData: FormData) => Promise<void>;
   approveAction: (formData: FormData) => Promise<ConsentApprovalResult>;
 }) {
   const [isPending, setIsPending] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
+  const buildFormData = (extra: Record<string, string> = {}) => {
+    const formData = new FormData();
+    formData.set("state", state);
+
+    if (fallbackParams) {
+      Object.entries(fallbackParams).forEach(([key, value]) => {
+        if (value) {
+          formData.set(key, value);
+        }
+      });
+    }
+
+    Object.entries(extra).forEach(([key, value]) => {
+      if (value) {
+        formData.set(key, value);
+      }
+    });
+
+    return formData;
+  };
+
   const handleCancel = async () => {
     setIsPending(true);
     try {
-      await cancelAction();
+      await cancelAction(buildFormData());
     } finally {
       setIsPending(false);
     }
@@ -62,8 +85,7 @@ export function ConsentActions({
     setIsPending(true);
 
     try {
-      const formData = new FormData();
-      formData.set("state", state);
+      const formData = buildFormData();
 
       const result = await approveAction(formData);
       console.log("Consent approval result:", result);

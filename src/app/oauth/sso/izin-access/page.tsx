@@ -2,7 +2,8 @@ import { GridPattern } from "@/components/ui/grid-pattern";
 import Image from "next/image";
 import { LinkIcon } from "@heroicons/react/24/outline";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { unauthorized } from "next/navigation";
+import verifyClient from "@/data/verify-client";
 import { cancelConsent } from "@/app/actions/cancel-consent";
 import { approveConsent } from "@/app/actions/approve-consent";
 import { ConsentActions } from "./consent-actions";
@@ -35,28 +36,51 @@ export default async function Page({
 
   const parseParam = (value: string | string[] | undefined) =>
     Array.isArray(value) ? value[0] : value;
-  const state = parseParam(query?.state);
+  const state = (parseParam(query?.state) || "").replace(/^"+|"+$/g, "");
   
   const cookieStore = await cookies();
   const consentCookie = cookieStore.get("sso_consent");
   const consentErrorCookie = cookieStore.get("sso_consent_error");
   const consentStateCookie = cookieStore.get("sso_consent_state");
 
-  if (!consentCookie?.value) {
-    redirect("/login");
-  }
-
   let consent: ConsentPayload | null = null;
-
-  try {
+  if (consentCookie?.value) {
     consent = JSON.parse(consentCookie.value) as ConsentPayload;
-  } catch {
-    redirect("/login");
+  } else {
+    const clientId = parseParam(query?.client_id);
+    const clientName = parseParam(query?.client_name);
+    const responseType = parseParam(query?.response_type);
+    const redirectUri = parseParam(query?.redirect_uri);
+
+    const response = await verifyClient(
+      clientId,
+      responseType,
+      redirectUri,
+      state,
+      clientName,
+    );
+
+    if (!response.status) {
+      unauthorized();
+    }
+
+    consent = {
+      client_id: clientId,
+      client_name: clientName,
+      client_secret: parseParam(query?.client_secret),
+      redirect_uri: redirectUri,
+      state: parseParam(query?.state),
+      scope: parseParam(query?.scope),
+      response_type: responseType,
+      is_consent: query?.is_consent === "true" || query?.is_consent === "1",
+      code: parseParam(query?.code),
+      client_logo_url: parseParam(query?.client_logo_url),
+      nip: parseParam(query?.nip),
+      username: parseParam(query?.username),
+      level: parseParam(query?.level),
+    };
   }
 
-  if (!consent || consent.is_consent !== true) {
-    redirect("/login");
-  }
 
   const appName = consent.client_name || "Aplikasi";
   const redirectUri = consent.redirect_uri || "";
@@ -70,6 +94,20 @@ export default async function Page({
   const consentState = consentStateCookie?.value || "";
   const nip = consent.nip || "-";
   const username = consent.username || "-";
+
+  const fallbackParams: Record<string, string> = {
+    client_id: parseParam(query?.client_id) || "",
+    client_secret: parseParam(query?.client_secret) || "",
+    redirect_uri: parseParam(query?.redirect_uri) || "",
+    state: parseParam(query?.state) || "",
+    scope: parseParam(query?.scope) || "",
+    response_type: parseParam(query?.response_type) || "",
+    code: parseParam(query?.code) || "",
+    client_logo_url: parseParam(query?.client_logo_url) || "",
+    nip: parseParam(query?.nip) || "",
+    username: parseParam(query?.username) || "",
+    level: parseParam(query?.level) || "",
+  };
 
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-linear-to-br from-[#eef8ee] via-[#f8faf7] to-[#d8ebe2] px-4 py-8 sm:px-6 dark:bg-linear-to-br dark:from-[#10251f] dark:via-[#143b34] dark:to-[#071b17]">
@@ -213,7 +251,12 @@ export default async function Page({
               </div>
             </div>
 
-            <ConsentActions state={state || consentState} cancelAction={cancelConsent} approveAction={approveConsent} />
+            <ConsentActions
+              state={state || consentState}
+              fallbackParams={fallbackParams}
+              cancelAction={cancelConsent}
+              approveAction={approveConsent}
+            />
           </div>
         </div>
       </section>

@@ -19,8 +19,8 @@ import { useTheme } from "next-themes";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import toast from "react-hot-toast";
-import { create } from "src/app/actions/izin-layar";
-import { logout } from "src/app/actions/logout";
+import { create } from "../../../actions/izin-layar";
+import { logout } from "../../../actions/logout";
 
 interface Payload extends JwtPayload {
   data: any;
