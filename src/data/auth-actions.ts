@@ -7,12 +7,20 @@ import AccessToken from "./access_token";
 
 async function CaptchaVerify(token: string) {
   const url = `https://www.google.com/recaptcha/api/siteverify`;
+  const secret = process.env.RECAPTCHA_SECRET_KEY;
 
   if (!token) {
     return {
       status: false,
       message:
         "Token captcha tidak ditemukan, pastikan Anda telah menyelesaikan captcha.",
+    };
+  }
+
+  if (!secret) {
+    return {
+      status: false,
+      message: "RECAPTCHA_SECRET_KEY belum dikonfigurasi di server.",
     };
   }
 
@@ -23,10 +31,19 @@ async function CaptchaVerify(token: string) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`,
+      body: `secret=${secret}&response=${token}`,
     });
 
     const result = await req.json();
+
+    if (!result.success) {
+      return {
+        status: false,
+        message: "Verifikasi captcha gagal.",
+        error_codes: result["error-codes"],
+      };
+    }
+
     return result;
   } catch (error) {
     return {
@@ -36,19 +53,66 @@ async function CaptchaVerify(token: string) {
   }
 }
 
+// Verifikasi reCAPTCHA v2 (checkbox) — dipakai sebagai challenge saat skor v3 rendah
+async function CaptchaV2Verify(token: string) {
+  const url = `https://www.google.com/recaptcha/api/siteverify`;
+  const secret = process.env.RECAPTCHA_SECRET_KEY;
+
+  if (!token) {
+    return { success: false };
+  }
+  if (!secret) {
+    return { success: false };
+  }
+
+  try {
+    const req = await fetch(url, {
+      method: "POST",
+      cache: "no-store",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: `secret=${secret}&response=${token}`,
+    });
+    const result = await req.json();
+    return { success: Boolean(result.success) };
+  } catch {
+    return { success: false };
+  }
+}
+
 export default async function AuthVerify(formData: any) {
   const cookieStore = await cookies();
-  // const { device_id } = await GetDevicesInfo();
-  const captchaResult = await CaptchaVerify(formData.token);
 
-  if (!captchaResult.success || captchaResult.score < 0.5) {
-    return {
-      response: {
-        status: false,
-        message:
-          "Verifikasi captcha gagal, pastikan Anda telah menyelesaikan captcha dengan benar.",
-      },
-    };
+  // --- Jika client mengirim captcha_v2_token, verifikasi v2 (checkbox) lalu lanjut ---
+  if (formData.captcha_v2_token) {
+    const v2 = await CaptchaV2Verify(formData.captcha_v2_token);
+    if (!v2.success) {
+      return {
+        response: {
+          status: false,
+          message: "Verifikasi keamanan gagal. Silakan coba lagi.",
+        },
+      };
+    }
+    // v2 lolos → langsung proses login tanpa cek v3
+  } else {
+    // --- Verifikasi v3 (invisible / score-based) ---
+    const captchaResult = await CaptchaVerify(formData.token);
+
+    // Error jaringan / token kosong / secret belum diset
+    if (captchaResult.status === false) {
+      return { response: captchaResult };
+    }
+
+    // Skor v3 rendah → minta checkbox v2 sebagai challenge
+    if (captchaResult.score < 0.5) {
+      return {
+        response: {
+          status: false,
+          requires_captcha: true,
+          message: "Kami mendeteksi aktivitas mencurigakan. Selesaikan verifikasi keamanan untuk melanjutkan.",
+        },
+      };
+    }
   }
 
   // if (!device_id) {

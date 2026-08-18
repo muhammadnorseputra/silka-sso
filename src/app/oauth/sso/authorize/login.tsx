@@ -1,8 +1,8 @@
 "use client";
 
 // Organized imports
-import { useEffect, useState } from "react";
-import { permanentRedirect, useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import toast from "react-hot-toast";
@@ -91,6 +91,62 @@ export default function Login({
   const [loadingBtn, setLoadingBtn] = useState(false);
   const [cooldownSeconds, setCooldownSeconds] = useState(0);
   const [cooldownTotalSeconds, setCooldownTotalSeconds] = useState(0);
+  // Challenge captcha v2 (checkbox) saat skor v3 rendah / terindikasi bot
+  const [showCaptcha, setShowCaptcha] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState("");
+  const captchaContainerRef = useRef<HTMLDivElement>(null);
+  const captchaWidgetIdRef = useRef<number | null>(null);
+
+  // Render widget reCAPTCHA v2 saat challenge dimunculkan
+  useEffect(() => {
+    if (!showCaptcha) {
+      return undefined;
+    }
+
+    const tryRender = () => {
+      const grecaptcha = (window as any).grecaptcha;
+      if (!grecaptcha?.render || !captchaContainerRef.current) {
+        return false;
+      }
+      // Bersihkan isi container agar aman dari double-render (StrictMode)
+      captchaContainerRef.current.innerHTML = "";
+      captchaWidgetIdRef.current = grecaptcha.render(
+        captchaContainerRef.current,
+        {
+          sitekey: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY,
+          callback: (token: string) => setCaptchaToken(token),
+          "expired-callback": () => setCaptchaToken(""),
+        },
+      );
+      return true;
+    };
+
+    if (tryRender()) {
+      return undefined;
+    }
+    // Script recaptcha belum siap — coba lagi sampai berhasil
+    const intervalId = setInterval(() => {
+      if (tryRender()) {
+        clearInterval(intervalId);
+      }
+    }, 300);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [showCaptcha]);
+
+  const resetCaptcha = () => {
+    setCaptchaToken("");
+    const grecaptcha = (window as any).grecaptcha;
+    if (grecaptcha?.reset && captchaWidgetIdRef.current !== null) {
+      try {
+        grecaptcha.reset(captchaWidgetIdRef.current);
+      } catch {
+        // abaikan — widget mungkin belum dirender
+      }
+    }
+  };
 
   const {
     register,
@@ -158,8 +214,62 @@ export default function Login({
       clearErrors();
       setLoadingBtn(true);
 
-      // Generate ReCaptcha token
+      // Alur challenge captcha v2: verifikasi checkbox dulu, baru lanjut login
+      if (showCaptcha) {
+        if (!captchaToken) {
+          throw new Error("Selesaikan verifikasi keamanan terlebih dahulu.");
+        }
+
+        const payload = {
+          captcha_v2_token: captchaToken,
+          ...formData,
+          scope,
+          client_id: client?.data.client_id,
+          client_secret: client?.data.client_secret,
+          state,
+          redirect_uri: redirectUri,
+        };
+
+        const result = await AuthVerify(payload);
+        const apiResponse = result?.response?.response ?? result?.response ?? result;
+        const loginStatus = apiResponse?.status ?? false;
+        const loginMessage = apiResponse?.message ?? "Terjadi kesalahan saat verifikasi";
+        const retrySeconds = Number(apiResponse?.timer ?? 0);
+
+        if (!loginStatus) {
+          resetCaptcha();
+          if (retrySeconds > 0) {
+            setCooldownSeconds(retrySeconds);
+            setCooldownTotalSeconds(retrySeconds);
+            // eslint-disable-next-line react-hooks/purity
+            window.localStorage.setItem(COOLDOWN_STORAGE_KEY, String(Date.now() + retrySeconds * 1000));
+            window.localStorage.setItem(COOLDOWN_TOTAL_STORAGE_KEY, String(retrySeconds));
+          }
+          toast.error(loginMessage, { id: "auth-verify" });
+          return;
+        }
+
+        toast.success(loginMessage || "Login berhasil", { id: "auth-verify" });
+        window.localStorage.removeItem(COOLDOWN_STORAGE_KEY);
+        window.localStorage.removeItem(COOLDOWN_TOTAL_STORAGE_KEY);
+
+        if (apiResponse?.data?.is_consent) {
+          return router.replace("/oauth/sso/izin-access");
+        }
+        const code = result?.response?.data?.code ?? apiResponse?.data?.code;
+        if (code && apiResponse?.data?.is_consent === false) {
+          return router.replace(`${redirectUri}?state=${state}&code=${code}`);
+        }
+        return;
+      }
+
+      // Alur normal: generate ReCaptcha v3 token
       const token = await executeRecaptcha("form_submit");
+      if (!token) {
+        throw new Error(
+          "Verifikasi captcha gagal dimuat, silakan coba lagi dalam beberapa saat.",
+        );
+      }
 
       const payload = {
         token,
@@ -176,6 +286,13 @@ export default function Login({
       const loginStatus = apiResponse?.status ?? false;
       const loginMessage = apiResponse?.message ?? "Terjadi kesalahan saat verifikasi";
       const retrySeconds = Number(apiResponse?.timer ?? 0);
+
+      // Skor rendah → server minta challenge captcha checkbox
+      if (!loginStatus && apiResponse?.requires_captcha) {
+        setShowCaptcha(true);
+        toast(loginMessage, { id: "auth-verify" });
+        return;
+      }
 
       if (!loginStatus) {
         setError("username", {
@@ -268,6 +385,7 @@ export default function Login({
         <CardBody>
           <MagicCard mode="gradient" gradientColor="" gradientFrom="oklch(85.5% 0.138 181.071)" gradientTo="oklch(70.4% 0.14 182.503)" className="relative overflow-hidden rounded-2xl bg-white dark:bg-linear-to-b dark:from-slate-800 dark:to-black p-8">
             <form
+              // eslint-disable-next-line react-hooks/refs
               onSubmit={handleSubmit(handleLogin)}
               method="POST"
               autoComplete="off"
@@ -308,6 +426,19 @@ export default function Login({
                       detik.
                     </p>
                   </div>
+                </div>
+              )}
+
+              {showCaptcha && (
+                <div className="flex flex-col gap-2 rounded-2xl border border-amber-300/70 bg-amber-50 px-4 py-3.5 dark:border-amber-700/40 dark:bg-amber-900/20">
+                  <p className="text-sm font-bold text-amber-800 dark:text-amber-200">
+                    Verifikasi keamanan diperlukan
+                  </p>
+                  <p className="text-sm font-medium text-amber-700 dark:text-amber-300">
+                    Aktivitas mencurigakan terdeteksi. Selesaikan captcha di
+                    bawah ini untuk melanjutkan.
+                  </p>
+                  <div ref={captchaContainerRef} className="mt-1" />
                 </div>
               )}
 

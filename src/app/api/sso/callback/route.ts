@@ -40,6 +40,17 @@ export async function GET(req: any) {
       maxAge: 3600,
       secure: process.env.NODE_ENV === "production",
     });
+    // REFRESH TOKEN
+    if (userinfo.response.refresh_token) {
+      cookieStore.set({
+        name: "sso_refresh_token",
+        value: userinfo.response.refresh_token,
+        httpOnly: true,
+        sameSite: "lax",
+        maxAge: 86400,
+        secure: process.env.NODE_ENV === "production",
+      });
+    }
     return Response.redirect(`${fullHost}/checking`, 302);
   }
 
